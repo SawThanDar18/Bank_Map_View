@@ -7,11 +7,13 @@ import com.example.bank_branch_details.event.RestApiEvents
 import com.example.bank_branch_details.network.api.Data
 import com.example.bank_branch_details.network.api.RequestAuthApi
 import com.example.bank_branch_details.network.api.RequestTouchPointListApi
-import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Token
 import com.example.bank_branch_details.network.model.Access_TouchPointList
 import com.example.bank_branch_details.network.response.TouchPointListResponse
 import com.example.bank_branch_details.ui.utils.Constant
+import com.example.bank_map_view.network.api.RequestBranchDetailApi
+import com.example.bank_map_view.network.model.Access_BranchCode
+import com.example.bank_map_view.network.response.BranchCodeResponse
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
@@ -30,8 +32,9 @@ import javax.net.ssl.X509TrustManager
 open class DataImpl private constructor() : Data{
 
     private  var requestAuthApi : RequestAuthApi
+    private var requestTokenApi : RequestBranchDetailApi
     private var requestTouchListApi : RequestTouchPointListApi
-    private var context : Context? = null
+    private lateinit var context : Context
     private var token : String? = null
 
     companion object{
@@ -93,6 +96,13 @@ open class DataImpl private constructor() : Data{
             .build()
         requestAuthApi = authRetrofit.create(RequestAuthApi::class.java)
 
+        val detailRetrofit = Retrofit.Builder()
+            .baseUrl(Constant.BranchDetail_URL)
+            .addConverterFactory(GsonConverterFactory.create(Gson()))
+            .client(client)
+            .build()
+        requestTokenApi = detailRetrofit.create(RequestBranchDetailApi::class.java)
+
         val touchListRetrofit = Retrofit.Builder()
             .baseUrl(Constant.BranchDetail_URL)
             .addConverterFactory(GsonConverterFactory.create(Gson()))
@@ -117,6 +127,7 @@ open class DataImpl private constructor() : Data{
                  Log.i("login","if")
                  token = response.body()!!.access_token
                  getTouchPointList()
+                 getBranchDetail()
              } else {
                  Log.i("login","else")
                 EventBus.getDefault()
@@ -129,7 +140,7 @@ open class DataImpl private constructor() : Data{
     }
 
     override fun getTouchPointList() {
-        val branch = Access_TouchPointList("All","1","5000","5.01")
+        val branch = Access_TouchPointList("All","1",16.8170872,96.1287845,"5000","5.01")
         requestTouchListApi.getTouchPointList("Bearer ${token}", branch).enqueue(object : Callback<TouchPointListResponse>{
             override fun onFailure(call: Call<TouchPointListResponse>, t: Throwable) {
                 EventBus.getDefault()
@@ -137,19 +148,41 @@ open class DataImpl private constructor() : Data{
             }
 
             override fun onResponse(call: Call<TouchPointListResponse>, response: Response<TouchPointListResponse>) {
-                if(response.isSuccessful){
+                var touchPointListResponse = response.body()
+                //if(response.isSuccessful)
+                 if(touchPointListResponse != null && touchPointListResponse.access_ATM.isNotEmpty() && touchPointListResponse.access_Branch.isNotEmpty()){
+                  // EventBus.getDefault()
+                       //.post(RestApiEvents.ShowCurrentLocation(response.body()!!))
                    EventBus.getDefault()
-                       .post(RestApiEvents.ShowCurrentLocation(response.body()!!))
-                   EventBus.getDefault()
-                       .post(RestApiEvents.ShowATMList(response.body()!!))
-                   EventBus.getDefault()
-                       .post(RestApiEvents.ShowBranchList(response.body()!!))
+                       .post(RestApiEvents.ShowPlaces(touchPointListResponse.access_ATM, touchPointListResponse.access_Branch))
                }
                 else{
                    Toast.makeText(context, "err", Toast.LENGTH_LONG).show()
                }
             }
 
+        })
+    }
+
+    override fun getBranchDetail() {
+        val branch = Access_BranchCode("5.01", "101")
+        requestTokenApi.getBranchDetail("Bearer ${token}", branch).enqueue(object : Callback<BranchCodeResponse>{
+            override fun onFailure(call: Call<BranchCodeResponse>, t: Throwable) {
+                EventBus.getDefault()
+                    .post(RestApiEvents.ErrorInvokingAPIEvent(
+                        t.localizedMessage
+                    ))
+            }
+
+            override fun onResponse(call: Call<BranchCodeResponse>, response: Response<BranchCodeResponse>) {
+                if(response.isSuccessful){
+                    EventBus.getDefault()
+                        .post(RestApiEvents.ShowBranchDetails(response.body()!!))
+                }
+                else{
+
+                }
+            }
         })
     }
 }

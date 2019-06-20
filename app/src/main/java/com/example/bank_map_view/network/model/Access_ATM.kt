@@ -1,5 +1,12 @@
 package com.example.bank_branch_details.network.model
 
-data class Access_ATM (val Terminal_ID : String, val ATM_Type : String, val Location_Name : String,
-                       val Latitude : Double, val Longitude : Double, val Address : String,
-                       val TouchPointType : String, val Distance : Double)
+import com.google.gson.annotations.SerializedName
+
+data class Access_ATM (@SerializedName("Terminal_ID") var Terminal_ID : String,
+                       @SerializedName("ATM_Type") var ATM_Type : String,
+                       @SerializedName("Location_Name") var Location_Name : String,
+                       @SerializedName("Latitude") var Latitude : Double,
+                       @SerializedName("Longitude") var Longitude : Double,
+                       @SerializedName("Address") var Address : String,
+                       @SerializedName("TouchPointType") var TouchPointType : String,
+                       @SerializedName("Distance") var Distance : Double)
