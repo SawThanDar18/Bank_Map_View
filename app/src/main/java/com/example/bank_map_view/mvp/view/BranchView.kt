@@ -10,4 +10,6 @@ interface BranchView {
     fun showLoading()
     fun dismissLoading()
     fun showBranchDetails(branchCodeResponse: BranchCodeResponse)
+    fun viewMap(branchCodeResponse: BranchCodeResponse)
+    fun callBankPhone(branchCodeResponse: BranchCodeResponse)
 }

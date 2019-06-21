@@ -127,7 +127,7 @@ open class DataImpl private constructor() : Data{
                  Log.i("login","if")
                  token = response.body()!!.access_token
                  getTouchPointList()
-                 getBranchDetail()
+                 getBranchDetail(value = "branchCode")
              } else {
                  Log.i("login","else")
                 EventBus.getDefault()
@@ -164,8 +164,8 @@ open class DataImpl private constructor() : Data{
         })
     }
 
-    override fun getBranchDetail() {
-        val branch = Access_BranchCode("5.01", "101")
+    override fun getBranchDetail(value : String) {
+        val branch = Access_BranchCode("5.01", value)
         requestTokenApi.getBranchDetail("Bearer ${token}", branch).enqueue(object : Callback<BranchCodeResponse>{
             override fun onFailure(call: Call<BranchCodeResponse>, t: Throwable) {
                 EventBus.getDefault()

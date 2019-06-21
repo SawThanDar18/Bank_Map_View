@@ -15,9 +15,9 @@ class BranchPresenter constructor(val branchView : BranchView) : BasePresenter()
         }
     }
 
-    fun startLoadingBranchDetails(){
+    fun startLoadingBranchDetails(value : String){
         branchView.showLoading()
-        BranchModel.getInstance().getBranchDetail()
+        BranchModel.getInstance().getBranchDetail(value)
     }
     override fun onStop(){
         if(EventBus.getDefault().isRegistered(this)){
@@ -29,6 +29,8 @@ class BranchPresenter constructor(val branchView : BranchView) : BasePresenter()
     fun onSuccess(event : RestApiEvents.ShowBranchDetails){
         branchView.dismissLoading()
         branchView.showBranchDetails(event.branchCodeResponse)
+        branchView.callBankPhone(event.branchCodeResponse)
+        branchView.viewMap(event.branchCodeResponse)
     }
 
     @Subscribe

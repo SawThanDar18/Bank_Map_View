@@ -24,8 +24,8 @@ class BranchModel {
         DataImpl.getInstance().getTouchPointList()
     }
 
-    fun getBranchDetail(){
-        DataImpl.getInstance().getBranchDetail()
+    fun getBranchDetail(value : String){
+        DataImpl.getInstance().getBranchDetail(value)
     }
 
 }

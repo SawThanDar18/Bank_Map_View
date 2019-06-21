@@ -9,7 +9,6 @@ import com.example.bank_branch_details.mvp.view.TouchPointListView
 import com.example.bank_branch_details.network.DataImpl
 import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Branch
-import com.example.bank_map_view.network.model.Access_BranchCode
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -48,7 +47,7 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        DataImpl.getInstance().getBranchDetail()
+        DataImpl.getInstance().getBranchDetail(value = "branchCode")
     }
 
     override fun showPrompt(message: String) {
@@ -100,10 +99,10 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
             override fun onMarkerClick(marker: Marker?): Boolean {
                 placeMarker = marker
                 var indexNo : Int? = null
-                for(index in 0 until markerBranchList!!.size-1){
+                for(index in 0 until markerBranchList!!.size){
                     var access_Branch = markerBranchList!!.get(index)
-                    if((placeMarker!!.title).compareTo(access_Branch.Branch_Name.toString())>1){
-                            indexNo = index
+                    if(placeMarker!!.title.compareTo(access_Branch.Branch_Name.toString())>-1){
+                           indexNo = index
                     }
                 }
                 val intent = Intent(this@MapsActivity, DetailsActivity::class.java)

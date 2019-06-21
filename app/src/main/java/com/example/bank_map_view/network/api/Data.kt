@@ -5,5 +5,5 @@ interface Data {
 
     fun getRequestAuth()
     fun getTouchPointList()
-    fun getBranchDetail()
+    fun getBranchDetail(value: String)
 }
