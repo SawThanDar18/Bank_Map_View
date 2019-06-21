@@ -24,13 +24,15 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
     private lateinit var presenter : TouchPointListPresenter
 
     private var mMap: GoogleMap? = null
-    private var placeMarker : Marker? = null
+    private var atmMarker : Marker? = null
+    private var branchMarker : Marker? = null
+
+    private lateinit var markerBranchList : List<Access_Branch>
+    private lateinit var markerATMList : List<Access_ATM>
 
     private var currentLatLng : LatLng? = null
     private var atmLatLng : LatLng? = null
     private var branchLatLng : LatLng? = null
-
-    private var markerBranchList : List<Access_Branch>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,18 +76,20 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
     }*/
 
     override fun showPlaces(access_ATM: List<Access_ATM>, access_Branch: List<Access_Branch>) {
-        var markerATMList = access_ATM
-        for(index in 0..markerATMList.size-1){
+        markerATMList = access_ATM
+        for(index in 0 until markerATMList.size){
             atmLatLng = LatLng(markerATMList.get(index).Latitude, markerATMList.get(index).Longitude)
-            placeMarker = mMap!!.addMarker(MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)))
+            atmMarker = mMap!!.addMarker(MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)))
+            atmMarker!!.rotation = 20f
         }
 
         mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(atmLatLng, 16f))
 
         markerBranchList = access_Branch
-        for (index in 0..markerBranchList!!.size-1){
+        for (index in 0 until markerBranchList!!.size){
             branchLatLng = LatLng(markerBranchList!!.get(index).Latitude, markerBranchList!!.get(index).Longitude)
-            placeMarker = mMap!!.addMarker(MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+            branchMarker = mMap!!.addMarker(MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+            branchMarker!!.rotation = -20f
         }
 
         mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 16f))
@@ -97,11 +101,11 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         presenter.startLoadingTouchList()
         mMap!!.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
             override fun onMarkerClick(marker: Marker?): Boolean {
-                placeMarker = marker
+                branchMarker = marker
                 var indexNo : Int? = null
                 for(index in 0 until markerBranchList!!.size){
                     var access_Branch = markerBranchList!!.get(index)
-                    if(placeMarker!!.title.compareTo(access_Branch.Branch_Name.toString())>-1){
+                    if(branchMarker!!.title.compareTo(access_Branch.Branch_Name.toString())>-1){
                            indexNo = index
                     }
                 }
