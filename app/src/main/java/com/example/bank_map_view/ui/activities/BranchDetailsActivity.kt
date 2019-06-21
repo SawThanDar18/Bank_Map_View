@@ -1,4 +1,4 @@
-package com.example.bank_map_view
+package com.example.bank_map_view.ui.activities
 
 import android.content.Intent
 import android.net.Uri
@@ -10,12 +10,13 @@ import android.widget.GridLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.example.bank_branch_details.ui.detail.adapter.RecyclerAdapter
+import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.BranchPresenter
 import com.example.bank_map_view.mvp.view.BranchView
 import com.example.bank_map_view.network.response.BranchCodeResponse
-import kotlinx.android.synthetic.main.bank_branch_detail.*
+import kotlinx.android.synthetic.main.branch_detail.*
 
-class DetailsActivity : AppCompatActivity(), BranchView {
+class BranchDetailsActivity : AppCompatActivity(), BranchView {
 
     private lateinit var presenter : BranchPresenter
 
@@ -30,12 +31,12 @@ class DetailsActivity : AppCompatActivity(), BranchView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.bank_branch_detail)
+        setContentView(R.layout.branch_detail)
 
         val bundle : Bundle? = intent.extras
         val value = bundle!!.getString("branchCode")
         val text : String = intent.getStringExtra("branchCode")
-        Toast.makeText(applicationContext, text, Toast.LENGTH_LONG).show()
+        //Toast.makeText(applicationContext, text, Toast.LENGTH_LONG).show()
 
         presenter = BranchPresenter(this)
         presenter.startLoadingBranchDetails(value)
@@ -59,7 +60,7 @@ class DetailsActivity : AppCompatActivity(), BranchView {
         }
 
         back_press_iv.setOnClickListener {
-            val intent = Intent(this@DetailsActivity, MapsActivity::class.java)
+            val intent = Intent(this@BranchDetailsActivity, MapsActivity::class.java)
             startActivity(intent)
         }
     }
@@ -69,7 +70,7 @@ class DetailsActivity : AppCompatActivity(), BranchView {
     }
 
     override fun showBranchDetails(branchCodeResponse: BranchCodeResponse) {
-        val branch_title_tv = findViewById<TextView>(R.id.branch_title_tv)
+        val branch_title_tv = findViewById<TextView>(R.id.title)
         val branch_title = findViewById<TextView>(R.id.branch_title)
         val branch_address = findViewById<TextView>(R.id.branch_address)
         val branch_phone = findViewById<TextView>(R.id.branch_phone)

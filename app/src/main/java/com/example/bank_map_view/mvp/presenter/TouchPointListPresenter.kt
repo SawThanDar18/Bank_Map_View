@@ -3,8 +3,6 @@ package com.example.bank_branch_details.mvp.presenter
 import com.example.bank_branch_details.event.RestApiEvents
 import com.example.bank_branch_details.mvp.model.BranchModel
 import com.example.bank_branch_details.mvp.view.TouchPointListView
-import com.example.bank_map_view.network.model.Access_BranchCode
-import com.example.bank_map_view.network.response.BranchCodeResponse
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
