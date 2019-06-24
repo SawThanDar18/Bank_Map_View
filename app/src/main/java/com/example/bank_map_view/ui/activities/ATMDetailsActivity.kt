@@ -24,8 +24,6 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
 
     private var atm_name : String? = null
 
-    private var markerATMList : List<Access_ATM>? = null
-
     private lateinit var bundle : Bundle
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +31,6 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
         setContentView(R.layout.atm_detail)
 
         bundle = intent.extras
-        val locationName = bundle!!.getString("Location_Name")
-        val address = bundle!!.getString("Address")
 
         presenter = ATMPresenter(this)
         presenter.startLoadingATMDetails()
