@@ -6,6 +6,6 @@ interface ATMView {
     fun showPrompt(message : String)
     fun showLoading()
     fun dismissLoading()
-    fun showATMDetails(access_ATM : List<Access_ATM>)
-    fun viewMap(access_ATM : List<Access_ATM>)
+    fun showATMDetails()
+    fun viewMap()
 }

@@ -19,8 +19,8 @@ class BranchModel {
         DataImpl.getInstance().getRequestAuth()
     }
 
-    fun getTouchPointList(locationName : String, address : String){
-        DataImpl.getInstance().getTouchPointList(locationName, address)
+    fun getTouchPointList(){
+        DataImpl.getInstance().getTouchPointList()
     }
 
     fun getBranchDetail(value : String){

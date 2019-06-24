@@ -11,6 +11,6 @@ import retrofit2.http.Query
 interface RequestTouchPointListApi {
 
     @POST("api/getTouchpointListByCategory")
-    fun getTouchPointList(@Header("Authorization") authHeader : String, @Body access_TouchPointList: Access_TouchPointList, @Query("Loation_Name") locationName : String, @Query("Address") address: String) : Call<TouchPointListResponse>
+    fun getTouchPointList(@Header("Authorization") authHeader : String, @Body access_TouchPointList: Access_TouchPointList/*, @Query("Loation_Name") locationName : String, @Query("Address") address: String*/) : Call<TouchPointListResponse>
 
 }

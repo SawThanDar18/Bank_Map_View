@@ -15,10 +15,11 @@ class ATMPresenter constructor(val atmView: ATMView) : BasePresenter() {
         }
     }
 
-    fun startLoadingATMDetails(locationName : String, address : String){
+    fun startLoadingATMDetails(){
         atmView.showLoading()
-        BranchModel.getInstance().getTouchPointList(locationName, address)
+        BranchModel.getInstance().getTouchPointList()
     }
+
     override fun onStop(){
         if(EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().unregister(this)
@@ -28,8 +29,8 @@ class ATMPresenter constructor(val atmView: ATMView) : BasePresenter() {
     @Subscribe
     fun onSuccess(event : RestApiEvents.ShowATMDetails){
         atmView.dismissLoading()
-        atmView.showATMDetails(event.access_ATM)
-        atmView.viewMap(event.access_ATM)
+        atmView.showATMDetails()
+        atmView.viewMap()
     }
 
     @Subscribe

@@ -35,18 +35,16 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
         bundle = intent.extras
         val locationName = bundle!!.getString("Location_Name")
         val address = bundle!!.getString("Address")
-        val text : String = intent.getStringExtra("Location_Name")
-        Toast.makeText(applicationContext, text, Toast.LENGTH_LONG).show()
 
         presenter = ATMPresenter(this)
-        presenter.startLoadingATMDetails(locationName, address)
+        presenter.startLoadingATMDetails()
 
         swipeRefresh.setOnRefreshListener {
-            presenter.startLoadingATMDetails(locationName, address)
+            presenter.startLoadingATMDetails()
         }
 
         refresh_iv.setOnClickListener {
-            presenter.startLoadingATMDetails(locationName, address)
+            presenter.startLoadingATMDetails()
         }
 
         map_image.setOnClickListener {
@@ -64,7 +62,7 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun showATMDetails(access_ATM : List<Access_ATM>) {
+    override fun showATMDetails() {
 
         val atm_title_tv = findViewById<TextView>(R.id.atm_title_tv)
         val atm_title = findViewById<TextView>(R.id.atm_title)
@@ -75,7 +73,7 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
         atm_address.text = bundle!!.getString("Address")
     }
 
-    override fun viewMap(access_ATM: List<Access_ATM>) {
+    override fun viewMap() {
 
         latitude = bundle!!.getDouble("Latitude")
         longitude = bundle!!.getDouble("Longitude")

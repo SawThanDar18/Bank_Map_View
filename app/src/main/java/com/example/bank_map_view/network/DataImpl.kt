@@ -126,7 +126,7 @@ open class DataImpl private constructor() : Data{
              if(response.isSuccessful){
                  Log.i("login","if")
                  token = response.body()!!.access_token
-                 getTouchPointList(locationName = "Location_Name", address = "Address")
+                 getTouchPointList()
                  getBranchDetail(value = "branchCode")
              } else {
                  Log.i("login","else")
@@ -139,9 +139,9 @@ open class DataImpl private constructor() : Data{
       })
     }
 
-    override fun getTouchPointList(locationName: String, address: String) {
+    override fun getTouchPointList() {
         val branch = Access_TouchPointList("All","1",16.8170872,96.1287845,"5000","5.01")
-        requestTouchListApi.getTouchPointList("Bearer ${token}", branch, locationName, address).enqueue(object : Callback<TouchPointListResponse>{
+        requestTouchListApi.getTouchPointList("Bearer ${token}", branch).enqueue(object : Callback<TouchPointListResponse>{
             override fun onFailure(call: Call<TouchPointListResponse>, t: Throwable) {
                 EventBus.getDefault()
                     .post(RestApiEvents.ErrorInvokingAPIEvent(t.localizedMessage))

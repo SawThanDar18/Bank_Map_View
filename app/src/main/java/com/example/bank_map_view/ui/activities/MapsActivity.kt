@@ -19,6 +19,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.activity_maps.swipeRefresh
+import kotlinx.android.synthetic.main.branch_detail.*
 
 class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback {
 
@@ -42,7 +44,7 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         presenter.startLoadingTouchList()
 
         swipeRefresh.setOnRefreshListener {
-            presenter.startLoadingTouchList()
+            dismissLoading()
         }
 
         val mapFragment = supportFragmentManager
@@ -50,6 +52,7 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         mapFragment.getMapAsync(this)
 
         DataImpl.getInstance().getBranchDetail(value = "branchCode")
+
     }
 
     override fun showPrompt(message: String) {
@@ -72,7 +75,7 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         markerATMList = access_ATM
         for(index in 0 until markerATMList.size){
             atmLatLng = LatLng(markerATMList.get(index).Latitude!!, markerATMList.get(index).Longitude!!)
-            markers = googleMap!!.addMarker(MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).snippet(markerATMList.get(index).Terminal_ID).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)))
+            markers = googleMap!!.addMarker(MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)))
             markers!!.rotation = 20f
             markers!!.tag = markerATMList.get(index).Terminal_ID
         }
@@ -82,7 +85,7 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         markerBranchList = access_Branch
         for (index in 0 until markerBranchList!!.size){
             branchLatLng = LatLng(markerBranchList!!.get(index).Latitude, markerBranchList!!.get(index).Longitude)
-            markers = googleMap!!.addMarker(MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).snippet(markerBranchList!!.get(index).Branch_Code).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+            markers = googleMap!!.addMarker(MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
             markers!!.rotation = -20f
             markers!!.tag = markerBranchList.get(index).Branch_Code
         }
