@@ -106,10 +106,10 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
                     markers = marker
                     if(markers!!.tag == markerATMList.get(index).Terminal_ID){
                         val atmIntent = Intent(this@MapsActivity, ATMDetailsActivity::class.java)
-                        atmIntent.putExtra("Location_Name", markerATMList[index!!].Location_Name)
-                        atmIntent.putExtra("Address", markerATMList[index!!].Address)
-                        atmIntent.putExtra("Latitude", markerATMList[index!!].Latitude)
-                        atmIntent.putExtra("Longitude", markerATMList[index!!].Longitude)
+                        atmIntent.putExtra("Location_Name", markerATMList[index].Location_Name)
+                        atmIntent.putExtra("Address", markerATMList[index].Address)
+                        atmIntent.putExtra("Latitude", markerATMList[index].Latitude)
+                        atmIntent.putExtra("Longitude", markerATMList[index].Longitude)
                         startActivity(atmIntent)
                     }
                 }
@@ -118,7 +118,7 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
                     markers = marker
                     if(markers!!.tag == markerBranchList.get(index).Branch_Code){
                         val branchIntent = Intent(this@MapsActivity, BranchDetailsActivity::class.java)
-                        branchIntent.putExtra("branchCode", markerBranchList!![index!!].Branch_Code)
+                        branchIntent.putExtra("branchCode", markerBranchList!![index].Branch_Code)
                         startActivity(branchIntent)
                     }
                 }

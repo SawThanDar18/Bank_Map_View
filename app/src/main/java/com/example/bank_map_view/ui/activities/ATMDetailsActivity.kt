@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import android.widget.Toast
-import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.ATMPresenter
 import com.example.bank_map_view.mvp.view.ATMView
