@@ -149,14 +149,12 @@ open class DataImpl private constructor() : Data{
 
             override fun onResponse(call: Call<TouchPointListResponse>, response: Response<TouchPointListResponse>) {
                 var touchPointListResponse = response.body()
-                //if(response.isSuccessful)
                  if(touchPointListResponse != null && touchPointListResponse.access_ATM.isNotEmpty() && touchPointListResponse.access_Branch.isNotEmpty()){
-                  // EventBus.getDefault()
-                       //.post(RestApiEvents.ShowCurrentLocation(response.body()!!))
-                   EventBus.getDefault()
+
+                     EventBus.getDefault()
                        .post(RestApiEvents.ShowPlaces(touchPointListResponse.access_ATM, touchPointListResponse.access_Branch))
 
-                   EventBus.getDefault()
+                     EventBus.getDefault()
                          .post(RestApiEvents.ShowATMDetails(touchPointListResponse.access_ATM))
                  }
                 else{

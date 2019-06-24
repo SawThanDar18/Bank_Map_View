@@ -10,9 +10,6 @@ import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.ATMPresenter
 import com.example.bank_map_view.mvp.view.ATMView
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.atm_detail.*
 import kotlinx.android.synthetic.main.branch_detail.map_image
 import kotlinx.android.synthetic.main.branch_detail.refresh_iv
@@ -24,15 +21,18 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
 
     private var latitude : Double? = null
     private var longitude : Double? = null
+
     private var atm_name : String? = null
 
     private var markerATMList : List<Access_ATM>? = null
+
+    private lateinit var bundle : Bundle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.atm_detail)
 
-        val bundle : Bundle? = intent.extras
+        bundle = intent.extras
         val locationName = bundle!!.getString("Location_Name")
         val address = bundle!!.getString("Address")
         val text : String = intent.getStringExtra("Location_Name")
@@ -65,33 +65,21 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
     }
 
     override fun showATMDetails(access_ATM : List<Access_ATM>) {
-        markerATMList = access_ATM
-        var indexNo : Int? = null
 
         val atm_title_tv = findViewById<TextView>(R.id.atm_title_tv)
         val atm_title = findViewById<TextView>(R.id.atm_title)
         val atm_address = findViewById<TextView>(R.id.atm_address)
 
-        for(index in 0 until markerATMList!!.size){
-            indexNo = index
-        }
-
-        atm_title_tv.text = markerATMList!![indexNo!!].Location_Name
-        atm_title.text = markerATMList!![indexNo!!].Location_Name
-        atm_address.text = markerATMList!![indexNo!!].Address
+        atm_title_tv.text = bundle!!.getString("Location_Name")
+        atm_title.text = bundle!!.getString("Location_Name")
+        atm_address.text = bundle!!.getString("Address")
     }
 
     override fun viewMap(access_ATM: List<Access_ATM>) {
-        markerATMList = access_ATM
-        var indexNo : Int? = null
 
-        for(index in 0 until markerATMList!!.size){
-            indexNo = index
-        }
-
-        latitude = markerATMList!![indexNo!!].Latitude
-        longitude = markerATMList!![indexNo!!].Longitude
-        atm_name = markerATMList!![indexNo!!].Location_Name
+        latitude = bundle!!.getDouble("Latitude")
+        longitude = bundle!!.getDouble("Longitude")
+        atm_name = bundle!!.getString("Location_Name")
     }
 
     override fun showLoading() {

@@ -26,10 +26,8 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
 
     private var googleMap: GoogleMap? = null
 
-    private var atmMarker : Marker? = null
-    private var branchMarker : Marker? = null
+    private var markers : Marker? = null
 
-    private var currentLatLng : LatLng? = null
     private var atmLatLng : LatLng? = null
     private var branchLatLng : LatLng? = null
 
@@ -70,19 +68,13 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         }
     }
 
-    /*override fun showCurrentLocation(touchPointListResponse: TouchPointListResponse) {
-
-        currentLatLng = LatLng(touchPointListResponse.access_TouchPointList!!.currentLat!!, touchPointListResponse.access_TouchPointList!!.currentLong!!)
-        mMap!!.addMarker(MarkerOptions().position(currentLatLng!!).title("current").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)))
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
-    }*/
-
     override fun showPlaces(access_ATM: List<Access_ATM>, access_Branch: List<Access_Branch>) {
         markerATMList = access_ATM
         for(index in 0 until markerATMList.size){
             atmLatLng = LatLng(markerATMList.get(index).Latitude!!, markerATMList.get(index).Longitude!!)
-            atmMarker = googleMap!!.addMarker(MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)))
-            atmMarker!!.rotation = 20f
+            markers = googleMap!!.addMarker(MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).snippet(markerATMList.get(index).Terminal_ID).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)))
+            markers!!.rotation = 20f
+            markers!!.tag = markerATMList.get(index).Terminal_ID
         }
 
         googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(atmLatLng, 16f))
@@ -90,8 +82,9 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         markerBranchList = access_Branch
         for (index in 0 until markerBranchList!!.size){
             branchLatLng = LatLng(markerBranchList!!.get(index).Latitude, markerBranchList!!.get(index).Longitude)
-            branchMarker = googleMap!!.addMarker(MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
-            branchMarker!!.rotation = -20f
+            markers = googleMap!!.addMarker(MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).snippet(markerBranchList!!.get(index).Branch_Code).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+            markers!!.rotation = -20f
+            markers!!.tag = markerBranchList.get(index).Branch_Code
         }
 
         googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 16f))
@@ -101,37 +94,38 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         googleMap = map!!
         presenter.startLoadingTouchList()
 
+        googleMap!!.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener {
+            override fun onInfoWindowClick(marker: Marker?) {
+
+                markers = marker
+
+                for(index in 0 until markerATMList.size){
+                    markers = marker
+                    if(markers!!.tag == markerATMList.get(index).Terminal_ID){
+                        val atmIntent = Intent(this@MapsActivity, ATMDetailsActivity::class.java)
+                        atmIntent.putExtra("Location_Name", markerATMList[index!!].Location_Name)
+                        atmIntent.putExtra("Address", markerATMList[index!!].Address)
+                        atmIntent.putExtra("Latitude", markerATMList[index!!].Latitude)
+                        atmIntent.putExtra("Longitude", markerATMList[index!!].Longitude)
+                        startActivity(atmIntent)
+                    }
+                }
+
+                for(index in 0 until markerBranchList.size){
+                    markers = marker
+                    if(markers!!.tag == markerBranchList.get(index).Branch_Code){
+                        val branchIntent = Intent(this@MapsActivity, BranchDetailsActivity::class.java)
+                        branchIntent.putExtra("branchCode", markerBranchList!![index!!].Branch_Code)
+                        startActivity(branchIntent)
+                    }
+                }
+            }
+        })
+
         googleMap!!.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
             override fun onMarkerClick(marker: Marker?): Boolean {
 
-                branchMarker = marker
-                var branchIndex: Int? = null
-                for (index in 0 until markerBranchList!!.size) {
-                    var access_Branch = markerBranchList!!.get(index)
-                    if (branchMarker!!.title.compareTo(access_Branch.Branch_Name.toString()) > -1) {
-                        branchIndex = index
-                    }
-                }
-                val branchIntent = Intent(this@MapsActivity, BranchDetailsActivity::class.java)
-                branchIntent.putExtra("branchCode", markerBranchList!![branchIndex!!].Branch_Code)
-                startActivity(branchIntent)
-
-                atmMarker = marker
-                var atmIndex: Int? = null
-                for (index in 0 until markerATMList!!.size) {
-                    var access_ATM = markerATMList!!.get(index)
-                    if (branchMarker!!.title.compareTo(access_ATM.Location_Name.toString()) > -1) {
-                        atmIndex = index
-                    }
-                }
-                val atmIntent = Intent(this@MapsActivity, ATMDetailsActivity::class.java)
-                atmIntent.putExtra("Location_Name", markerATMList[atmIndex!!].Location_Name)
-                atmIntent.putExtra("Address", markerATMList[atmIndex!!].Address)
-                startActivity(atmIntent)
-                BranchDetailsActivity().finish()
-
-
-                return true
+                return false
             }
         })
 }
@@ -146,41 +140,3 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         presenter.onStop()
     }
 }
-
-        /*atmMap!!.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener{
-            override fun onMarkerClick(marker: Marker?): Boolean {
-                atmMarker = marker
-                var atmIndex: Int? = null
-                for (index in 0 until markerATMList!!.size) {
-                    var access_ATM = markerATMList!!.get(index)
-                    if (branchMarker!!.title.compareTo(access_ATM.Location_Name.toString()) > -1) {
-                        atmIndex = index
-                    }
-                }
-                val intent = Intent(this@MapsActivity, ATMDetailsActivity::class.java)
-                intent.putExtra("Location_Name", markerATMList[atmIndex!!].Location_Name)
-                intent.putExtra("Address", markerATMList[atmIndex!!].Address)
-                startActivity(intent)
-                return true
-            }
-
-        })*/
-                    /*atmMarker = marker
-                    var atmIndex: Int? = null
-                    for (index in 0 until markerBranchList!!.size) {
-                        var access_Branch = markerBranchList!!.get(index)
-                        if (branchMarker!!.title.compareTo(access_Branch.Branch_Name.toString()) > -1) {
-                            atmIndex = index
-                        }
-                    }
-                    val intent = Intent(this@MapsActivity, ATMDetailsActivity::class.java)
-                    intent.putExtra("Location_Name", markerATMList[atmIndex!!].Location_Name)
-                    intent.putExtra("Address", markerATMList[atmIndex!!].Address)
-                    startActivity(intent)
-                }
-                return true
-            }
-        })
-    }*/
-
-

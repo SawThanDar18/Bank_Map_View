@@ -1,7 +1,6 @@
 package com.example.bank_branch_details.mvp.model
 
 import com.example.bank_branch_details.network.DataImpl
-import com.example.bank_map_view.network.model.Access_BranchCode
 
 class BranchModel {
 
