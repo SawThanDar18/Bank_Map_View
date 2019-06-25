@@ -3,23 +3,16 @@ package com.example.bank_map_view.ui.activities
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
 import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.CoordinatorLayout
-import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.Toast
 import com.example.bank_branch_details.mvp.presenter.TouchPointListPresenter
 import com.example.bank_branch_details.mvp.view.TouchPointListView
 import com.example.bank_branch_details.network.DataImpl
 import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Branch
-import com.example.bank_branch_details.ui.map.locationListener
 import com.example.bank_map_view.R
 import com.example.details_design.branch.Branch
-import com.example.details_design.branch.BranchAdapter
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -28,11 +21,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.activity_maps.swipeRefresh
+import kotlinx.android.synthetic.main.activity_maps.*
+import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.bank_list.*
 
-class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback, locationListener {
 
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
+class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback {
 
     private lateinit var presenter : TouchPointListPresenter
 
@@ -46,21 +40,41 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
     private lateinit var markerBranchList : List<Access_Branch>
     private lateinit var markerATMList : List<Access_ATM>
 
-    private lateinit var recyclerview : RecyclerView
-    private lateinit var branchAdapter: BranchAdapter
+    private var branch : ArrayList<Branch>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
-        val branch = ArrayList<Branch>()
-        branch.add(Branch("Branch","NAMSANG", "No.3/10,National Road,3rd Quarter,NamSang Township,Shan State", "9:30 AM - 3:00 PM"))
-        branch.add(Branch("Branch","YGN-111 SANCHAUNG-PHAPONE STREET", "No.49,KYUNTAW ST,PHAPONE ST CORNER,KYUNTAW SOUTH QTR,SANCHAUNG PHAPONE ST,SANCHUANG TSP", "9:30 AM - 3:00 PM"))
-        branch.add(Branch("ATM","San Chaung Mini", "SANCHAUNG MINI BANK,NO.160/164 GROUND FLOOR,BAHO ROAD,SANCHAUNG.", "Open Now"))
-        branch.add(Branch("ATM","Nation Mart Sat San", "SAT SAN NATION MART,NO.(315/317),UPPER PAZON TAUNG ROAD,MINGALAR TAUNG NYUNT,YANGON.", "Open Now"))
+        val behavior = BottomSheetBehavior.from(bottom_sheet)
 
-        branchAdapter = BranchAdapter(branch)
-        recyclerview.adapter = branchAdapter
+        behavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+            override fun onSlide(p0: View, state: Float) {
+
+            }
+
+            override fun onStateChanged(p0: View, p1: Int) {
+
+                when(p1){
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+
+                    }
+
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+
+                    }
+
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                        BottomSheetMenu(this@MapsActivity, branch!!).show()
+                    }
+
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                    }
+                }
+            }
+        })
+
+        behavior.peekHeight = 100
 
         presenter = TouchPointListPresenter(this)
         presenter.startLoadingTouchList()
@@ -74,7 +88,15 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         mapFragment.getMapAsync(this)
 
         DataImpl.getInstance().getBranchDetail(value = "branchCode")
+    }
 
+    override fun showBottomSheet(){
+
+        branch = arrayListOf(
+            Branch("Branch","NAMSANG", "No.3/10,National Road,3rd Quarter,NamSang Township,Shan State", "9:30 AM - 3:00 PM"),
+            Branch("Branch","YGN-111 SANCHAUNG-PHAPONE STREET", "No.49,KYUNTAW ST,PHAPONE ST CORNER,KYUNTAW SOUTH QTR,SANCHAUNG PHAPONE ST,SANCHUANG TSP", "9:30 AM - 3:00 PM"),
+            Branch("ATM","San Chaung Mini", "SANCHAUNG MINI BANK,NO.160/164 GROUND FLOOR,BAHO ROAD,SANCHAUNG.", "Open Now"),
+            Branch("ATM","Nation Mart Sat San", "SAT SAN NATION MART,NO.(315/317),UPPER PAZON TAUNG ROAD,MINGALAR TAUNG NYUNT,YANGON.", "Open Now"))
     }
 
     override fun showPrompt(message: String) {
@@ -91,12 +113,6 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         if (swipeRefresh.isRefreshing) {
             swipeRefresh.isRefreshing = false
         }
-    }
-
-    override fun locationResponse(locationResult: LocationResult) {
-        val current = LatLng(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
-        googleMap?.addMarker(MarkerOptions().position(current).title("Position").snippet("current"))
-        googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 14f))
     }
 
     override fun showPlaces(access_ATM: List<Access_ATM>, access_Branch: List<Access_Branch>) {

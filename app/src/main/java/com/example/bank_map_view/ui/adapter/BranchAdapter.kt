@@ -10,7 +10,7 @@ import com.example.bank_map_view.R
 class BranchAdapter(val branchList : ArrayList<Branch>) : RecyclerView.Adapter<BranchAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(view: ViewGroup, position: Int): ViewHolder {
-        val layout = LayoutInflater.from(view.context).inflate(R.layout.bank_list_items, view, false)
+        val layout = LayoutInflater.from(view.context).inflate(R.layout.bank_list_item, view, false)
         return ViewHolder(layout)
 
     }

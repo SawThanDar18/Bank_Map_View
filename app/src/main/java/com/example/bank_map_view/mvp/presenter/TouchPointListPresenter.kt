@@ -3,6 +3,7 @@ package com.example.bank_branch_details.mvp.presenter
 import com.example.bank_branch_details.event.RestApiEvents
 import com.example.bank_branch_details.mvp.model.BranchModel
 import com.example.bank_branch_details.mvp.view.TouchPointListView
+import com.google.android.gms.location.LocationResult
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
@@ -29,6 +30,7 @@ class TouchPointListPresenter constructor(val touchPointListView: TouchPointList
         fun onSuccess(event : RestApiEvents.ShowPlaces){
         touchPointListView.dismissLoading()
         touchPointListView.showPlaces(event.access_ATM, event.access_Branch)
+        touchPointListView.showBottomSheet()
     }
 
     @Subscribe

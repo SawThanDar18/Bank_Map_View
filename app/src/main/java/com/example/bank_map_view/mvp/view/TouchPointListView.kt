@@ -9,4 +9,5 @@ interface TouchPointListView {
     fun showLoading()
     fun dismissLoading()
     fun showPlaces(access_ATM : List<Access_ATM>, access_Branch : List<Access_Branch>)
+    fun showBottomSheet()
 }
