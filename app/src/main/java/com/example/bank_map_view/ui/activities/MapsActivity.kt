@@ -4,6 +4,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Toast
 import com.example.bank_branch_details.mvp.presenter.TouchPointListPresenter
@@ -13,6 +14,7 @@ import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Branch
 import com.example.bank_map_view.R
 import com.example.details_design.branch.Branch
+import com.example.details_design.branch.BranchAdapter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -22,7 +24,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_maps.*
-import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.bank_list.*
 
 
@@ -49,13 +50,13 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         val behavior = BottomSheetBehavior.from(bottom_sheet)
 
         behavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
-            override fun onSlide(p0: View, state: Float) {
+            override fun onSlide(view: View, state: Float) {
 
             }
 
-            override fun onStateChanged(p0: View, p1: Int) {
+            override fun onStateChanged(view: View, newState: Int) {
 
-                when(p1){
+                when(newState){
                     BottomSheetBehavior.STATE_COLLAPSED -> {
 
                     }
