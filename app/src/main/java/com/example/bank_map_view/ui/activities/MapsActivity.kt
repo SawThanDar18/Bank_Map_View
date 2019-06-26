@@ -4,8 +4,10 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.GridLayout.VERTICAL
 import android.widget.Toast
 import com.example.bank_branch_details.mvp.presenter.TouchPointListPresenter
 import com.example.bank_branch_details.mvp.view.TouchPointListView
@@ -43,6 +45,9 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
 
     private var branch : ArrayList<Branch>? = null
 
+    private lateinit var recyclerview : RecyclerView
+    private lateinit var branchAdapter : BranchAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
@@ -66,7 +71,12 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
                     }
 
                     BottomSheetBehavior.STATE_DRAGGING -> {
-                        BottomSheetMenu(this@MapsActivity, branch!!).show()
+
+                        //BottomSheet dialog
+                        //BottomSheetMenu(applicationContext, branch!!).show()
+
+                        //BottomSheet fragment
+                        recyclerview.adapter = branchAdapter
                     }
 
                     BottomSheetBehavior.STATE_HIDDEN -> {
@@ -98,6 +108,10 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
             Branch("Branch","YGN-111 SANCHAUNG-PHAPONE STREET", "No.49,KYUNTAW ST,PHAPONE ST CORNER,KYUNTAW SOUTH QTR,SANCHAUNG PHAPONE ST,SANCHUANG TSP", "9:30 AM - 3:00 PM"),
             Branch("ATM","San Chaung Mini", "SANCHAUNG MINI BANK,NO.160/164 GROUND FLOOR,BAHO ROAD,SANCHAUNG.", "Open Now"),
             Branch("ATM","Nation Mart Sat San", "SAT SAN NATION MART,NO.(315/317),UPPER PAZON TAUNG ROAD,MINGALAR TAUNG NYUNT,YANGON.", "Open Now"))
+
+        recyclerview = findViewById(R.id.branch_recyclerview)
+        recyclerview.layoutManager = GridLayoutManager(this, 1, VERTICAL, false)
+        branchAdapter = BranchAdapter(branch!!)
     }
 
     override fun showPrompt(message: String) {

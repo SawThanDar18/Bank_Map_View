@@ -2,7 +2,6 @@ package com.example.bank_map_view.ui.activities
 
 import android.content.Context
 import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import com.example.bank_map_view.R
