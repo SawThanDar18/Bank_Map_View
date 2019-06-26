@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activities.MapsActivity">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="0.0">
+
+        <android.support.constraint.ConstraintLayout
+                android:id="@+id/constraint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            <fragment
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:id="@+id/map_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="630dp"
+                    android:layout_weight="1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/constraint"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintVertical_bias="0.01"/>
+
+
+            <Button
+                    android:layout_width="105dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/button_shape"
+                    android:text="BRANCH"
+                    android:drawableLeft="@drawable/ic_branch_24dp"
+                    android:id="@+id/branch_btn"
+                    app:layout_constraintStart_toStartOf="parent" android:layout_marginBottom="24dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/map_fragment"/>
+
+            <Button
+                    android:layout_width="79dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/button_shape"
+                    android:text="ATM"
+                    android:drawableLeft="@drawable/ic_atm_24dp"
+                    android:id="@+id/atm_btn"
+                    app:layout_constraintBottom_toBottomOf="@+id/branch_btn"
+                    app:layout_constraintTop_toTopOf="@+id/branch_btn"
+                    app:layout_constraintStart_toEndOf="@+id/branch_btn" android:layout_marginStart="4dp"/>
+
+            <Button
+                    android:layout_width="95dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/button_shape"
+                    android:text="AGENT"
+                    android:drawableLeft="@drawable/ic_agent_24dp"
+                    android:id="@+id/agent_btn"
+                    app:layout_constraintBottom_toBottomOf="@+id/atm_btn"
+                    app:layout_constraintTop_toTopOf="@+id/atm_btn" app:layout_constraintStart_toEndOf="@+id/atm_btn"
+                    android:layout_marginStart="4dp"/>
+
+            <Button
+                    android:layout_width="125dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/button_shape"
+                    android:text="MERCHANT"
+                    android:drawableLeft="@drawable/ic_merchant_24dp"
+                    android:id="@+id/merchant_btn"
+                    app:layout_constraintBottom_toBottomOf="@+id/agent_btn"
+                    app:layout_constraintTop_toTopOf="@+id/agent_btn" app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/agent_btn" android:layout_marginStart="4dp"/>
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include layout="@layout/bank_list"/>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,11 +1,18 @@
 package com.example.bank_map_view.ui.activities
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.GridLayout.VERTICAL
 import android.widget.Toast
@@ -14,20 +21,19 @@ import com.example.bank_branch_details.mvp.view.TouchPointListView
 import com.example.bank_branch_details.network.DataImpl
 import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Branch
-import com.example.bank_map_view.R
-import com.example.details_design.branch.Branch
+import com.example.bank_map_view.network.model.Branch
 import com.example.details_design.branch.BranchAdapter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.activity_maps.*
+import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.bank_list.*
-
+import android.graphics.BitmapFactory.decodeResource as decodeResource1
+import android.support.v4.view.MotionEventCompat
+import com.example.bank_map_view.R
+import kotlinx.android.synthetic.main.a.*
+import kotlinx.android.synthetic.main.activity_maps.swipeRefresh
 
 class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback {
 
@@ -43,20 +49,21 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
     private lateinit var markerBranchList : List<Access_Branch>
     private lateinit var markerATMList : List<Access_ATM>
 
-    private var branch : ArrayList<Branch>? = null
-
     private lateinit var recyclerview : RecyclerView
     private lateinit var branchAdapter : BranchAdapter
 
+    private var branch : ArrayList<Branch>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
+        setContentView(R.layout.a)
 
         val behavior = BottomSheetBehavior.from(bottom_sheet)
 
         behavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
-            override fun onSlide(view: View, state: Float) {
-
+            override fun onSlide(bottomSheet: View, state: Float) {
+                Log.e("onSlideChanged","onSlideChaned"+state)
+                behavior.isHideable = true
             }
 
             override fun onStateChanged(view: View, newState: Int) {
@@ -71,12 +78,13 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
                     }
 
                     BottomSheetBehavior.STATE_DRAGGING -> {
-
                         //BottomSheet dialog
                         //BottomSheetMenu(applicationContext, branch!!).show()
 
                         //BottomSheet fragment
-                        recyclerview.adapter = branchAdapter
+                        //recyclerview.adapter = branchAdapter
+
+                        behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
                     }
 
                     BottomSheetBehavior.STATE_HIDDEN -> {
@@ -85,7 +93,8 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
             }
         })
 
-        behavior.peekHeight = 100
+        behavior.peekHeight = 350
+        behavior.isHideable = true
 
         presenter = TouchPointListPresenter(this)
         presenter.startLoadingTouchList()
@@ -99,19 +108,24 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         mapFragment.getMapAsync(this)
 
         DataImpl.getInstance().getBranchDetail(value = "branchCode")
+
+        branch_btn.setOnClickListener {
+            branch_btn.setBackgroundColor(Color.BLUE)
+        }
     }
 
-    override fun showBottomSheet(){
+    override fun showBranches(){
 
         branch = arrayListOf(
-            Branch("Branch","NAMSANG", "No.3/10,National Road,3rd Quarter,NamSang Township,Shan State", "9:30 AM - 3:00 PM"),
-            Branch("Branch","YGN-111 SANCHAUNG-PHAPONE STREET", "No.49,KYUNTAW ST,PHAPONE ST CORNER,KYUNTAW SOUTH QTR,SANCHAUNG PHAPONE ST,SANCHUANG TSP", "9:30 AM - 3:00 PM"),
-            Branch("ATM","San Chaung Mini", "SANCHAUNG MINI BANK,NO.160/164 GROUND FLOOR,BAHO ROAD,SANCHAUNG.", "Open Now"),
-            Branch("ATM","Nation Mart Sat San", "SAT SAN NATION MART,NO.(315/317),UPPER PAZON TAUNG ROAD,MINGALAR TAUNG NYUNT,YANGON.", "Open Now"))
+        Branch("NAMSANG", "No.3/10,National Road,3rd Quarter,NamSang Township,Shan State"),
+        Branch("YGN-111 SANCHAUNG-PHAPONE STREET", "No.49,KYUNTAW ST,PHAPONE ST CORNER,KYUNTAW SOUTH QTR,SANCHAUNG PHAPONE ST,SANCHUANG TSP"),
+        Branch("San Chaung Mini", "SANCHAUNG MINI BANK,NO.160/164 GROUND FLOOR,BAHO ROAD,SANCHAUNG."),
+        Branch("Nation Mart Sat San", "SAT SAN NATION MART,NO.(315/317),UPPER PAZON TAUNG ROAD,MINGALAR TAUNG NYUNT,YANGON."))
 
         recyclerview = findViewById(R.id.branch_recyclerview)
         recyclerview.layoutManager = GridLayoutManager(this, 1, VERTICAL, false)
         branchAdapter = BranchAdapter(branch!!)
+        recyclerview.adapter = branchAdapter
     }
 
     override fun showPrompt(message: String) {
@@ -131,10 +145,11 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
     }
 
     override fun showPlaces(access_ATM: List<Access_ATM>, access_Branch: List<Access_Branch>) {
+
         markerATMList = access_ATM
         for(index in 0 until markerATMList.size){
             atmLatLng = LatLng(markerATMList.get(index).Latitude!!, markerATMList.get(index).Longitude!!)
-            markers = googleMap!!.addMarker(MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)))
+            markers = googleMap!!.addMarker(MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).icon(bitmapDescriptorFromVector(this, R.drawable.ic_atm_24dp)))
             markers!!.rotation = 20f
             markers!!.tag = markerATMList.get(index).Terminal_ID
         }
@@ -144,7 +159,7 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         markerBranchList = access_Branch
         for (index in 0 until markerBranchList!!.size){
             branchLatLng = LatLng(markerBranchList!!.get(index).Latitude, markerBranchList!!.get(index).Longitude)
-            markers = googleMap!!.addMarker(MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+            markers = googleMap!!.addMarker(MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)))
             markers!!.rotation = -20f
             markers!!.tag = markerBranchList.get(index).Branch_Code
         }
@@ -191,6 +206,15 @@ class MapsActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
             }
         })
 }
+
+    private fun bitmapDescriptorFromVector(context: Context, vectorResId : Int) : BitmapDescriptor{
+        var vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
+        vectorDrawable!!.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
+        var bitmap = Bitmap.createBitmap(vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        var canvas = Canvas(bitmap)
+        vectorDrawable.draw(canvas)
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
+    }
 
     override fun onStart(){
         super.onStart()

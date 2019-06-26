@@ -2,19 +2,8 @@
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-    <TextView
-            android:text="Branch"
-            android:textColor="#FF9800"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/bank_type"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="16dp"/>
     <TextView
             android:text="Name"
             android:textColor="#0054A6"
@@ -22,34 +11,34 @@
             android:textStyle="bold"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:id="@+id/bank_name"
+            android:id="@+id/branch_name"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintTop_toBottomOf="@+id/bank_type"/>
+            tools:ignore="MissingConstraints"/>
     <TextView
             android:text="Address"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:id="@+id/bank_address"
-            app:layout_constraintTop_toBottomOf="@+id/bank_name"
-            app:layout_constraintStart_toStartOf="@+id/bank_name"
+            android:id="@+id/branch_address"
+            app:layout_constraintTop_toBottomOf="@+id/branch_name"
+            app:layout_constraintStart_toStartOf="@+id/branch_name"
             android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/bank_name"
+            app:layout_constraintEnd_toEndOf="@+id/branch_name"
             app:layout_constraintHorizontal_bias="0.0"/>
     <ImageView
             android:layout_width="40dp"
             android:layout_height="52dp"
-            app:srcCompat="@drawable/ic_phone_blue_24dp"
+            app:srcCompat="@drawable/ic_call_black_24dp"
             android:id="@+id/imageView3"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="72dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
             app:layout_constraintHorizontal_bias="0.992"
-            app:layout_constraintTop_toBottomOf="@+id/bank_name"/>
+            app:layout_constraintTop_toBottomOf="@+id/branch_name"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,15 +76,15 @@
             app:layout_constraintHorizontal_bias="0.612"
             android:layout_marginTop="4dp"/>
     <TextView
-            android:text="TextView"
+            android:text="9:00 AM - 3:00 PM"
             android:textColor="#13FC1C"
             android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/time"
-            app:layout_constraintTop_toBottomOf="@+id/bank_address"
-            app:layout_constraintStart_toStartOf="@+id/bank_address"
-            app:layout_constraintEnd_toEndOf="@+id/bank_address"
+            app:layout_constraintTop_toBottomOf="@+id/branch_address"
+            app:layout_constraintStart_toStartOf="@+id/branch_address"
+            app:layout_constraintEnd_toEndOf="@+id/branch_address"
             android:layout_marginTop="4dp"
             app:layout_constraintHorizontal_bias="0.0"/>
 

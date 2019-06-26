@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.example.bank_branch_details.network.model.Access_Branch
 import com.example.bank_map_view.R
+import com.example.bank_map_view.network.model.Branch
 
 class BranchAdapter(val bankList : ArrayList<Branch>) : RecyclerView.Adapter<BranchAdapter.ViewHolder>(){
 
@@ -21,16 +23,12 @@ class BranchAdapter(val bankList : ArrayList<Branch>) : RecyclerView.Adapter<Bra
 
     override fun onBindViewHolder(view: ViewHolder, position: Int) {
         val branch : Branch = bankList[position]
-        view.bank_type.text = branch.bank_type
-        view.bank_name.text = branch.bank_name
-        view.bank_address.text = branch.bank_address
-        view.time.text = branch.time
+        view.branch_name.text = branch.name
+        view.branch_address.text = branch.address
     }
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        val bank_type = itemView.findViewById(R.id.bank_type) as TextView
-        val bank_name = itemView.findViewById(R.id.bank_name) as TextView
-        val bank_address = itemView.findViewById(R.id.bank_address) as TextView
-        val time = itemView.findViewById(R.id.time) as TextView
+        val branch_name = itemView.findViewById(R.id.branch_name) as TextView
+        val branch_address = itemView.findViewById(R.id.branch_address) as TextView
     }
 }

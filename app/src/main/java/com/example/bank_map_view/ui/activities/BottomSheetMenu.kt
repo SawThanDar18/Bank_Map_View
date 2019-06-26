@@ -5,7 +5,7 @@ import android.support.design.widget.BottomSheetDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import com.example.bank_map_view.R
-import com.example.details_design.branch.Branch
+import com.example.bank_map_view.network.model.Branch
 import com.example.details_design.branch.BranchAdapter
 import kotlinx.android.synthetic.main.bank_list.view.*
 
