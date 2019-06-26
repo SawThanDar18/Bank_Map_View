@@ -9,6 +9,8 @@ import com.example.details_design.branch.Branch
 import com.example.details_design.branch.BranchAdapter
 import kotlinx.android.synthetic.main.bank_list.view.*
 
+//BottomSheetDialog
+
 class BottomSheetMenu(private val context: Context, private val items: ArrayList<Branch>) {
 
     private val bottomSheetDialog: BottomSheetDialog = BottomSheetDialog(context)
