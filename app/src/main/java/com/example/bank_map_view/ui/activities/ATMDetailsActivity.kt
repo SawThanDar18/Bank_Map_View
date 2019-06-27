@@ -9,7 +9,6 @@ import android.widget.Toast
 import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.ATMPresenter
 import com.example.bank_map_view.mvp.view.ATMView
-import com.example.bank_map_view.ui.activities.branch.MainActivity
 import kotlinx.android.synthetic.main.atm_detail.*
 import kotlinx.android.synthetic.main.branch_detail.map_image
 import kotlinx.android.synthetic.main.branch_detail.refresh_iv

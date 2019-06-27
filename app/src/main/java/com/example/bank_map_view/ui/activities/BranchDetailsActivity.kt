@@ -14,7 +14,6 @@ import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.BranchPresenter
 import com.example.bank_map_view.mvp.view.BranchView
 import com.example.bank_map_view.network.response.BranchCodeResponse
-import com.example.bank_map_view.ui.activities.branch.MainActivity
 import kotlinx.android.synthetic.main.branch_detail.*
 
 class BranchDetailsActivity : AppCompatActivity(), BranchView {

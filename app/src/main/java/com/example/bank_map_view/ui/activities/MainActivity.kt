@@ -1,7 +1,8 @@
-package com.example.bank_map_view.ui.activities.branch
+package com.example.bank_map_view.ui.activities
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -9,6 +10,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.res.ResourcesCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.GridLayout
@@ -19,6 +22,7 @@ import com.example.bank_branch_details.mvp.view.TouchPointListView
 import com.example.bank_branch_details.network.DataImpl
 import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Branch
+import com.example.bank_map_view.R
 import com.example.details_design.branch.BranchAdapter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -26,11 +30,10 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import android.graphics.BitmapFactory.decodeResource as decodeResource1
-import com.example.bank_map_view.R
-import com.example.bank_map_view.ui.activities.ATMDetailsActivity
-import com.example.bank_map_view.ui.activities.BranchDetailsActivity
 import com.example.bank_map_view.ui.adapter.ATMAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+
+
 
 class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback {
 
@@ -79,7 +82,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         branch_btn.setOnClickListener {
 
             branch_btn.setTextColor(Color.WHITE)
-            branch_btn.setBackgroundColor(Color.BLUE)
+            branch_btn.setBackgroundColor(resources.getColor(R.color.branch_color))
             atm_btn.setTextColor(Color.DKGRAY)
             atm_btn.setBackgroundColor(Color.WHITE)
             atm_btn.setBackgroundResource(R.drawable.button_shape)
@@ -106,7 +109,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         atm_btn.setOnClickListener {
 
             atm_btn.setTextColor(Color.WHITE)
-            atm_btn.setBackgroundColor(Color.RED)
+            atm_btn.setBackgroundColor(resources.getColor(R.color.atm_color))
             branch_btn.setTextColor(Color.DKGRAY)
             branch_btn.setBackgroundColor(Color.WHITE)
             branch_btn.setBackgroundResource(R.drawable.button_shape)

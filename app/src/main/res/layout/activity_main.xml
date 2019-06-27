@@ -6,7 +6,7 @@
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.activities.branch.MainActivity">
+        tools:context=".ui.activities.MainActivity">
 
     <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
@@ -72,8 +72,7 @@
                         android:id="@+id/atm_btn"
                         app:layout_constraintBaseline_toBaselineOf="@+id/agent_btn"
                         app:layout_constraintStart_toEndOf="@+id/branch_btn"
-                        app:layout_constraintEnd_toStartOf="@+id/agent_btn"
-                />
+                        app:layout_constraintEnd_toStartOf="@+id/agent_btn"/>
 
                 <Button
                         android:layout_width="95dp"
@@ -85,8 +84,7 @@
                         app:layout_constraintBaseline_toBaselineOf="@+id/merchant_btn"
                         app:layout_constraintTop_toTopOf="@+id/atm_btn"
                         app:layout_constraintStart_toEndOf="@+id/atm_btn"
-                        app:layout_constraintEnd_toStartOf="@+id/merchant_btn"
-                />
+                        app:layout_constraintEnd_toStartOf="@+id/merchant_btn"/>
 
                 <Button
                         android:layout_width="125dp"
@@ -96,8 +94,7 @@
                         android:drawableLeft="@drawable/ic_merchant_24dp"
                         android:id="@+id/merchant_btn"
                         app:layout_constraintTop_toTopOf="@+id/agent_btn"
-                        app:layout_constraintStart_toEndOf="@+id/agent_btn" app:layout_constraintEnd_toEndOf="parent"
-                />
+                        app:layout_constraintStart_toEndOf="@+id/agent_btn" app:layout_constraintEnd_toEndOf="parent"/>
 
             </android.support.constraint.ConstraintLayout>
         </android.support.constraint.ConstraintLayout>
