@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.design.widget.BottomSheetDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
+import com.example.bank_branch_details.network.model.Access_Branch
 import com.example.bank_map_view.R
 import com.example.bank_map_view.network.model.Branch
 import com.example.details_design.branch.BranchAdapter
@@ -11,7 +12,7 @@ import kotlinx.android.synthetic.main.bank_list.view.*
 
 //BottomSheetDialog
 
-class BottomSheetMenu(private val context: Context, private val items: ArrayList<Branch>) {
+class BottomSheetMenu(private val context: Context, private val items: ArrayList<Access_Branch>) {
 
     private val bottomSheetDialog: BottomSheetDialog = BottomSheetDialog(context)
 
@@ -19,8 +20,8 @@ class BottomSheetMenu(private val context: Context, private val items: ArrayList
         val view = LayoutInflater.from(context).inflate(R.layout.bank_list, null)
         bottomSheetDialog.setContentView(view)
         with(view) {
-            branch_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            branch_recyclerview.adapter = BranchAdapter(items)
+            bank_recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            bank_recyclerview.adapter = BranchAdapter(context, items)
         }
     }
 

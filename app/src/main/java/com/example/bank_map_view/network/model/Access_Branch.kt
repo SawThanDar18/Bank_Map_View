@@ -2,12 +2,24 @@ package com.example.bank_branch_details.network.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Access_Branch (@SerializedName("Branch_Code") var Branch_Code : String,
-                          @SerializedName("Branch_Alias") var Branch_Alias : String,
-                          @SerializedName("Branch_Name") var Branch_Name : String,
-                          @SerializedName("Latitude") var Latitude : Double,
-                          @SerializedName("Longitude") var Longitude : Double,
-                          @SerializedName("Phone") var Phone : String,
-                          @SerializedName("Address") var Address : String,
-                          @SerializedName("TouchPointType") var TouchPointType : String,
-                          @SerializedName("Distance") var Distance : Double)
+/*
+data class Access_Branch (@SerializedName("Branch_Code") val Branch_Code : String,
+                          @SerializedName("Branch_Alias") val Branch_Alias : String,
+                          @SerializedName("Branch_Name") val Branch_Name : String,
+                          @SerializedName("Latitude") val Latitude : Double,
+                          @SerializedName("Longitude") val Longitude : Double,
+                          @SerializedName("Phone") val Phone : String,
+                          @SerializedName("Address") val Address : String,
+                          @SerializedName("TouchPointType") val TouchPointType : String,
+                          @SerializedName("Distance") val Distance : Double)*/
+
+class Access_Branch {@SerializedName("Branch_Code") val Branch_Code : String? = null
+                          @SerializedName("Branch_Alias") val Branch_Alias : String? = null
+                          @SerializedName("Branch_Name") val Branch_Name : String? = null
+                          @SerializedName("Latitude") val Latitude : Double? = null
+                          @SerializedName("Longitude") val Longitude : Double? = null
+                          @SerializedName("Phone") val Phone : String? = null
+                          @SerializedName("Address") val Address : String? = null
+                          @SerializedName("TouchPointType") val TouchPointType : String? = null
+                          @SerializedName("Distance") val Distance : Double? = null
+}

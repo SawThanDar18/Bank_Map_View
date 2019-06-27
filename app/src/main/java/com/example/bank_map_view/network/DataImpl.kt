@@ -7,6 +7,8 @@ import com.example.bank_branch_details.event.RestApiEvents
 import com.example.bank_branch_details.network.api.Data
 import com.example.bank_branch_details.network.api.RequestAuthApi
 import com.example.bank_branch_details.network.api.RequestTouchPointListApi
+import com.example.bank_branch_details.network.model.Access_ATM
+import com.example.bank_branch_details.network.model.Access_Branch
 import com.example.bank_branch_details.network.model.Access_Token
 import com.example.bank_branch_details.network.model.Access_TouchPointList
 import com.example.bank_branch_details.network.response.TouchPointListResponse
@@ -54,7 +56,7 @@ open class DataImpl private constructor() : Data{
             try {
                 val sslContext = SSLContext.getInstance("SSL")
 
-                // Create a trust manager that does not validate certificate chains
+                // Create activity_main trust manager that does not validate certificate chains
                 val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
                     override fun getAcceptedIssuers(): Array<X509Certificate> {
                         return arrayOf()
@@ -149,10 +151,10 @@ open class DataImpl private constructor() : Data{
 
             override fun onResponse(call: Call<TouchPointListResponse>, response: Response<TouchPointListResponse>) {
                 var touchPointListResponse = response.body()
-                 if(touchPointListResponse != null && touchPointListResponse.access_ATM.isNotEmpty() && touchPointListResponse.access_Branch.isNotEmpty()){
+                 if(touchPointListResponse != null && touchPointListResponse.access_ATM.isNotEmpty() && touchPointListResponse.access_Branch!!.isNotEmpty()){
 
                      EventBus.getDefault()
-                       .post(RestApiEvents.ShowPlaces(touchPointListResponse.access_ATM, touchPointListResponse.access_Branch))
+                       .post(RestApiEvents.ShowPlaces(touchPointListResponse.access_ATM as ArrayList<Access_ATM>, touchPointListResponse.access_Branch as ArrayList<Access_Branch>))
 
                      EventBus.getDefault()
                          .post(RestApiEvents.ShowATMDetails(touchPointListResponse.access_ATM))

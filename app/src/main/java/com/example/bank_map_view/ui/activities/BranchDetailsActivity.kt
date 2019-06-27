@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.widget.GridLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -15,6 +14,7 @@ import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.BranchPresenter
 import com.example.bank_map_view.mvp.view.BranchView
 import com.example.bank_map_view.network.response.BranchCodeResponse
+import com.example.bank_map_view.ui.activities.branch.MainActivity
 import kotlinx.android.synthetic.main.branch_detail.*
 
 class BranchDetailsActivity : AppCompatActivity(), BranchView {
@@ -59,7 +59,7 @@ class BranchDetailsActivity : AppCompatActivity(), BranchView {
         }
 
         back_press_iv.setOnClickListener {
-            val intent = Intent(this@BranchDetailsActivity, MapsActivity::class.java)
+            val intent = Intent(this@BranchDetailsActivity, MainActivity::class.java)
             startActivity(intent)
         }
     }

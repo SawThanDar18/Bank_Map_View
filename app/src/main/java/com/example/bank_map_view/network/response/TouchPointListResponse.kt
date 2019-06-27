@@ -13,5 +13,5 @@ class TouchPointListResponse (
     val access_ATM : List<Access_ATM> = ArrayList(),
 
     @SerializedName("BRANCH")
-    val access_Branch : List<Access_Branch> = ArrayList()
+    val access_Branch : ArrayList<Access_Branch>? = null
 )
