@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         atm_btn.setOnClickListener {
 
             atm_btn.setTextColor(Color.WHITE)
-            atm_btn.setBackgroundColor(resources.getColor(R.color.atm_color))
+            atm_btn.setBackgroundColor(resources.getColor(R.color.branch_color))
             branch_btn.setTextColor(Color.DKGRAY)
             branch_btn.setBackgroundColor(Color.WHITE)
             branch_btn.setBackgroundResource(R.drawable.button_shape)
