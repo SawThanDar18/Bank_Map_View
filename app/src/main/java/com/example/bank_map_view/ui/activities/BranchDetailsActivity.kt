@@ -113,6 +113,11 @@ class BranchDetailsActivity : AppCompatActivity(), BranchView {
         presenter.onStart()
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.startLoadingBranchDetails(value = "branchCode")
+    }
+
     override fun onStop() {
         super.onStop()
         presenter.onStop()

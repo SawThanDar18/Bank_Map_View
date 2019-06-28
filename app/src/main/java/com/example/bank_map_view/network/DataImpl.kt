@@ -151,13 +151,13 @@ open class DataImpl private constructor() : Data{
 
             override fun onResponse(call: Call<TouchPointListResponse>, response: Response<TouchPointListResponse>) {
                 var touchPointListResponse = response.body()
-                 if(touchPointListResponse != null && touchPointListResponse.access_ATM.isNotEmpty() && touchPointListResponse.access_Branch!!.isNotEmpty()){
+                 if(touchPointListResponse != null && touchPointListResponse.access_ATM!!.isNotEmpty() && touchPointListResponse.access_Branch!!.isNotEmpty()){
 
                      EventBus.getDefault()
                        .post(RestApiEvents.ShowPlaces(touchPointListResponse.access_ATM as ArrayList<Access_ATM>, touchPointListResponse.access_Branch as ArrayList<Access_Branch>))
 
                      EventBus.getDefault()
-                         .post(RestApiEvents.ShowATMDetails(touchPointListResponse.access_ATM))
+                         .post(RestApiEvents.ShowATMDetails(touchPointListResponse.access_ATM!!))
                  }
                 else{
                    Toast.makeText(context, "err", Toast.LENGTH_LONG).show()

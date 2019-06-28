@@ -2,6 +2,7 @@ package com.example.bank_branch_details.event
 
 import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Branch
+import com.example.bank_branch_details.network.response.TouchPointListResponse
 import com.example.bank_map_view.network.response.BranchCodeResponse
 
 object RestApiEvents {

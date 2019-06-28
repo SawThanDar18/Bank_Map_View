@@ -10,7 +10,7 @@ class TouchPointListResponse (
     val access_TouchPointList : Access_TouchPointList? = null,
 
     @SerializedName("ATM")
-    val access_ATM : List<Access_ATM> = ArrayList(),
+    val access_ATM : ArrayList<Access_ATM>? = null,
 
     @SerializedName("BRANCH")
     val access_Branch : ArrayList<Access_Branch>? = null

@@ -8,12 +8,12 @@
             android:bottomLeftRadius="30dp"
             android:bottomRightRadius="30dp"
             android:color="#0054A6"
-            android:radius="80dp"
+            android:radius="20dp"
             android:topLeftRadius="30dp"
             android:topRightRadius="30dp" />
 
             <stroke
-            android:width="4dp"
+            android:width="3dp"
             android:color="#0054A6" />
 
     <solid android:color="#fff" />

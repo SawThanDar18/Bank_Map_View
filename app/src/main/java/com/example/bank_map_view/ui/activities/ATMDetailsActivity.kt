@@ -35,7 +35,7 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
         presenter.startLoadingATMDetails()
 
         swipeRefresh.setOnRefreshListener {
-            presenter.startLoadingATMDetails()
+            dismissLoading()
         }
 
         refresh_iv.setOnClickListener {
@@ -90,6 +90,11 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
     override fun onStart(){
         super.onStart()
         presenter.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.startLoadingATMDetails()
     }
 
     override fun onStop() {

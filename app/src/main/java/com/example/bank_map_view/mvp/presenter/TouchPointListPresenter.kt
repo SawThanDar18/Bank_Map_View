@@ -31,8 +31,8 @@ class TouchPointListPresenter constructor(val touchPointListView: TouchPointList
         fun onSuccess(event : RestApiEvents.ShowPlaces){
         touchPointListView.dismissLoading()
         touchPointListView.showPlaces(event.access_ATM, event.access_Branch)
-        touchPointListView.showBranchPlaces(event.access_Branch)
-        touchPointListView.showATMPlaces(event.access_ATM)
+        touchPointListView.displayBranch(event.access_Branch)
+        touchPointListView.displayATM(event.access_ATM)
     }
 
     @Subscribe

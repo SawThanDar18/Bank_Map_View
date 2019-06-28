@@ -2,7 +2,6 @@ package com.example.bank_map_view.ui.activities
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -10,12 +9,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.GridLayout
-import android.widget.LinearLayout
 import android.widget.Toast
 import com.example.bank_branch_details.mvp.presenter.TouchPointListPresenter
 import com.example.bank_branch_details.mvp.view.TouchPointListView
@@ -23,6 +19,8 @@ import com.example.bank_branch_details.network.DataImpl
 import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Branch
 import com.example.bank_map_view.R
+import com.example.bank_map_view.network.ATMItemClickListener
+import com.example.bank_map_view.network.BranchItemClickListener
 import com.example.details_design.branch.BranchAdapter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -32,7 +30,7 @@ import com.google.android.gms.maps.model.*
 import android.graphics.BitmapFactory.decodeResource as decodeResource1
 import com.example.bank_map_view.ui.adapter.ATMAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-
+import kotlinx.android.synthetic.main.bank_list.*
 
 
 class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback {
@@ -50,20 +48,17 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
     private lateinit var markerATMList : ArrayList<Access_ATM>
 
     private lateinit var recyclerview : RecyclerView
+
     private lateinit var branchAdapter : BranchAdapter
-
     private lateinit var atmAdapter: ATMAdapter
-
-    private lateinit var layout : LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        layout = findViewById(R.id.bottom_sheet)
-        val behavior = BottomSheetBehavior.from(layout)
+        val behavior = BottomSheetBehavior.from(bottom_sheet)
 
-        behavior.peekHeight = 400
+        behavior.peekHeight = 370
         behavior.isHideable = false
 
         presenter = TouchPointListPresenter(this)
@@ -83,13 +78,22 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
 
             branch_btn.setTextColor(Color.WHITE)
             branch_btn.setBackgroundColor(resources.getColor(R.color.branch_color))
+
             atm_btn.setTextColor(Color.DKGRAY)
             atm_btn.setBackgroundColor(Color.WHITE)
             atm_btn.setBackgroundResource(R.drawable.button_shape)
 
+            merchant_btn.setTextColor(Color.DKGRAY)
+            merchant_btn.setBackgroundColor(Color.WHITE)
+            merchant_btn.setBackgroundResource(R.drawable.button_shape)
+
+            agent_btn.setTextColor(Color.DKGRAY)
+            agent_btn.setBackgroundColor(Color.WHITE)
+            agent_btn.setBackgroundResource(R.drawable.button_shape)
+
             if(markerATMList.size>0) {
                 googleMap!!.clear()
-            for (index in 0 until markerBranchList!!.size) {
+                for (index in 0 until markerBranchList!!.size) {
                     branchLatLng = LatLng(markerBranchList.get(index).Latitude!!, markerBranchList.get(index).Longitude!!)
                     markers = googleMap!!.addMarker(MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)))
                     markers!!.rotation = -20f
@@ -99,20 +103,25 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
 
             googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 16f))
 
-            recyclerview = findViewById(R.id.bank_recyclerview)
-            branchAdapter = BranchAdapter(this, markerBranchList!!)
             recyclerview.adapter = branchAdapter
-            var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
-            recyclerview.setLayoutManager(layoutManager)
         }
 
         atm_btn.setOnClickListener {
 
             atm_btn.setTextColor(Color.WHITE)
             atm_btn.setBackgroundColor(resources.getColor(R.color.branch_color))
+
             branch_btn.setTextColor(Color.DKGRAY)
             branch_btn.setBackgroundColor(Color.WHITE)
             branch_btn.setBackgroundResource(R.drawable.button_shape)
+
+            merchant_btn.setTextColor(Color.DKGRAY)
+            merchant_btn.setBackgroundColor(Color.WHITE)
+            merchant_btn.setBackgroundResource(R.drawable.button_shape)
+
+            agent_btn.setTextColor(Color.DKGRAY)
+            agent_btn.setBackgroundColor(Color.WHITE)
+            agent_btn.setBackgroundResource(R.drawable.button_shape)
 
             if(markerBranchList.size>0){
                 googleMap!!.clear()
@@ -126,12 +135,83 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
 
                 googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(atmLatLng, 16f))
 
-            recyclerview = findViewById(R.id.bank_recyclerview)
-            atmAdapter = ATMAdapter(this, markerATMList!!)
             recyclerview.adapter = atmAdapter
-            var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
-            recyclerview.setLayoutManager(layoutManager)
         }
+
+        merchant_btn.setOnClickListener {
+
+            merchant_btn.setTextColor(Color.WHITE)
+            merchant_btn.setBackgroundColor(resources.getColor(R.color.branch_color))
+
+            branch_btn.setTextColor(Color.DKGRAY)
+            branch_btn.setBackgroundColor(Color.WHITE)
+            branch_btn.setBackgroundResource(R.drawable.button_shape)
+
+            atm_btn.setTextColor(Color.DKGRAY)
+            atm_btn.setBackgroundColor(Color.WHITE)
+            atm_btn.setBackgroundResource(R.drawable.button_shape)
+
+            agent_btn.setTextColor(Color.DKGRAY)
+            agent_btn.setBackgroundColor(Color.WHITE)
+            agent_btn.setBackgroundResource(R.drawable.button_shape)
+
+            googleMap!!.clear()
+        }
+
+        agent_btn.setOnClickListener {
+
+            agent_btn.setTextColor(Color.WHITE)
+            agent_btn.setBackgroundColor(resources.getColor(R.color.branch_color))
+
+            branch_btn.setTextColor(Color.DKGRAY)
+            branch_btn.setBackgroundColor(Color.WHITE)
+            branch_btn.setBackgroundResource(R.drawable.button_shape)
+
+            atm_btn.setTextColor(Color.DKGRAY)
+            atm_btn.setBackgroundColor(Color.WHITE)
+            atm_btn.setBackgroundResource(R.drawable.button_shape)
+
+            merchant_btn.setTextColor(Color.DKGRAY)
+            merchant_btn.setBackgroundColor(Color.WHITE)
+            merchant_btn.setBackgroundResource(R.drawable.button_shape)
+
+            googleMap!!.clear()
+        }
+    }
+
+    override fun displayBranch(access_Branch: ArrayList<Access_Branch>) {
+
+        recyclerview = findViewById(R.id.bank_recyclerview)
+        branchAdapter = BranchAdapter(this, object : BranchItemClickListener{
+            override fun onClicked(id: String) {
+                val intent = Intent(applicationContext, BranchDetailsActivity::class.java)
+                intent.putExtra("branchCode", id)
+                startActivity(intent)
+            }
+        })
+
+        var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
+        recyclerview.setLayoutManager(layoutManager)
+        branchAdapter.setNewData(access_Branch)
+    }
+
+    override fun displayATM(access_ATM: ArrayList<Access_ATM>) {
+
+        recyclerview = findViewById(R.id.bank_recyclerview)
+        atmAdapter = ATMAdapter(this, object : ATMItemClickListener{
+            override fun onClicked(name: String, address: String, latitude: Double, Longitude: Double) {
+                val intent = Intent(applicationContext, ATMDetailsActivity::class.java)
+                intent.putExtra("Location_Name",name)
+                intent.putExtra("Address", address)
+                intent.putExtra("Latitude", latitude)
+                intent.putExtra("Longitude", Longitude)
+                startActivity(intent)
+            }
+        })
+
+        var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
+        recyclerview.setLayoutManager(layoutManager)
+        atmAdapter.setNewData(access_ATM)
     }
 
     override fun showPlaces(access_ATM: ArrayList<Access_ATM>, access_Branch: ArrayList<Access_Branch>) {
@@ -157,7 +237,17 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 16f))
 
         recyclerview = findViewById(R.id.bank_recyclerview)
-        branchAdapter = BranchAdapter(this, markerBranchList!!)
+        branchAdapter = BranchAdapter(this, object : BranchItemClickListener{
+            override fun onClicked(id: String) {
+                val intent = Intent(applicationContext, BranchDetailsActivity::class.java)
+                intent.putExtra("branchCode", id)
+                startActivity(intent)
+                Toast.makeText(applicationContext, id, Toast.LENGTH_SHORT).show()
+            }
+
+        })
+
+        branchAdapter.setNewData(access_Branch)
         recyclerview.adapter = branchAdapter
         var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
         recyclerview.setLayoutManager(layoutManager)
@@ -174,10 +264,10 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
                     markers = marker
                     if (markers!!.tag == markerATMList!!.get(index).Terminal_ID) {
                         val atmIntent = Intent(this@MainActivity, ATMDetailsActivity::class.java)
-                        atmIntent.putExtra("Location_Name", markerATMList!![index].Location_Name)
-                        atmIntent.putExtra("Address", markerATMList!![index].Address)
-                        atmIntent.putExtra("Latitude", markerATMList!![index].Latitude)
-                        atmIntent.putExtra("Longitude", markerATMList!![index].Longitude)
+                        atmIntent.putExtra("Location_Name", markerATMList[index].Location_Name)
+                        atmIntent.putExtra("Address", markerATMList[index].Address)
+                        atmIntent.putExtra("Latitude", markerATMList[index].Latitude)
+                        atmIntent.putExtra("Longitude", markerATMList[index].Longitude)
                         startActivity(atmIntent)
                     }
                 }
@@ -197,8 +287,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
     //for bitmap icon
     private fun bitmapDescriptorFromVector(context: Context, vectorResId : Int) : BitmapDescriptor{
         var vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
-        vectorDrawable!!.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)
-        var bitmap = Bitmap.createBitmap(vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        vectorDrawable!!.setBounds(0, 0, vectorDrawable.intrinsicWidth * 2, vectorDrawable.intrinsicHeight * 2)
+        var bitmap = Bitmap.createBitmap(vectorDrawable.intrinsicWidth * 2, vectorDrawable.intrinsicHeight * 2, Bitmap.Config.ARGB_8888)
         var canvas = Canvas(bitmap)
         vectorDrawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
@@ -228,67 +318,5 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
     override fun onStop() {
         super.onStop()
         presenter.onStop()
-    }
-
-
-
-
-    override fun showBranchPlaces(access_Branch: ArrayList<Access_Branch>) {
-
-        /*  markerBranchList = access_Branch
-          for (index in 0 until markerBranchList!!.size) {
-              branchLatLng = LatLng(markerBranchList.get(index).Latitude!!, markerBranchList.get(index).Longitude!!)
-              branchMarkers = googleMap!!.addMarker(
-                  MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(
-                      bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)
-                  )
-              )
-              branchMarkers!!.rotation = -20f
-              branchMarkers!!.tag = markerBranchList.get(index).Branch_Code
-          }
-
-          val branch_name = findViewById<TextView>(R.id.bank_name)
-          val branch_address = findViewById<TextView>(R.id.bank_address)
-
-          for (index in 0 until markerBranchList.size) {
-              branch_name.text = markerBranchList[index].Branch_Name
-              branch_address.text = markerBranchList[index].Address
-          }
-
-          recyclerview = findViewById(R.id.bank_recyclerview)
-          branchAdapter = BranchAdapter(this, markerBranchList!!)
-          recyclerview.adapter = branchAdapter
-          var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
-          recyclerview.setLayoutManager(layoutManager)*/
-    }
-
-    override fun showATMPlaces(access_ATM: ArrayList<Access_ATM>) {
-        /*markerATMList = access_ATM
-        for(index in 0 until markerATMList!!.size){
-            atmLatLng = LatLng(markerATMList!!.get(index).Latitude!!, markerATMList!!.get(index).Longitude!!)
-            atmMarkers = googleMap!!.addMarker(MarkerOptions().position(atmLatLng!!).title(markerATMList!!.get(index).Location_Name).icon(bitmapDescriptorFromVector(this, R.drawable.ic_atm_24dp)))
-            atmMarkers!!.rotation = 20f
-            atmMarkers!!.tag = markerATMList!!.get(index).Terminal_ID
-        }
-
-       if(markerBranchList.size > 0){
-            markerBranchList.get(0)
-           googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(atmLatLng, 16f))
-        }
-
-        val atm_name = findViewById<TextView>(R.id.bank_name)
-        val atm_address = findViewById<TextView>(R.id.bank_address)
-
-        for(index in 0 until markerATMList.size){
-            atm_name.text = markerATMList[index].Location_Name
-            atm_address.text = markerATMList[index].Address
-        }
-
-        recyclerview = findViewById(R.id.bank_recyclerview)
-        atmAdapter = ATMAdapter(this, markerATMList)
-        recyclerview.adapter = atmAdapter
-        var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
-        recyclerview.setLayoutManager(layoutManager)*/
-
     }
 }

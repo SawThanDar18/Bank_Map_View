@@ -2,6 +2,7 @@ package com.example.bank_branch_details.mvp.view
 
 import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Branch
+import com.example.bank_branch_details.network.response.TouchPointListResponse
 
 interface TouchPointListView {
 
@@ -10,10 +11,6 @@ interface TouchPointListView {
     fun dismissLoading()
 
     fun showPlaces(access_ATM: ArrayList<Access_ATM>, access_Branch: ArrayList<Access_Branch>)
-
-    //for branch
-    fun showBranchPlaces(access_Branch : ArrayList<Access_Branch>)
-
-    //for atm
-    fun showATMPlaces(access_ATM: ArrayList<Access_ATM>)
+    fun displayBranch(access_Branch: ArrayList<Access_Branch>)
+    fun displayATM(access_ATM: ArrayList<Access_ATM>)
 }
