@@ -11,6 +11,7 @@ import android.support.design.widget.BottomSheetBehavior
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget.GridLayout
 import android.widget.Toast
 import com.example.bank_branch_details.mvp.presenter.TouchPointListPresenter
@@ -97,7 +98,11 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
                 googleMap!!.clear()
                 for (index in 0 until markerBranchList!!.size) {
                     branchLatLng = LatLng(markerBranchList.get(index).Latitude!!, markerBranchList.get(index).Longitude!!)
-                    markers = googleMap!!.addMarker(MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)))
+                    markers = googleMap!!.addMarker(MarkerOptions().position(branchLatLng!!)
+                                                                   .title(markerBranchList
+                                                                   .get(index).Branch_Name)
+                                                                   .icon(bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)))
+
                     markers!!.rotation = -20f
                     markers!!.tag = markerBranchList.get(index).Branch_Code
                 }
@@ -132,7 +137,11 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
                 googleMap!!.clear()
             for(index in 0 until markerATMList!!.size){
                 atmLatLng = LatLng(markerATMList!!.get(index).Latitude!!, markerATMList!!.get(index).Longitude!!)
-                markers = googleMap!!.addMarker(MarkerOptions().position(atmLatLng!!).title(markerATMList!!.get(index).Location_Name).icon(bitmapDescriptorFromVector(this, R.drawable.ic_atm_24dp)))
+                markers = googleMap!!.addMarker(MarkerOptions().position(atmLatLng!!)
+                                                               .title(markerATMList!!
+                                                               .get(index).Location_Name)
+                                                               .icon(bitmapDescriptorFromVector(this, R.drawable.ic_atm_24dp)))
+
                 markers!!.rotation = 20f
                 markers!!.tag = markerATMList!!.get(index).Terminal_ID
                 }
@@ -164,6 +173,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
             agent_btn.setSelected(false)*/
 
             googleMap!!.clear()
+            recyclerview.removeAllViewsInLayout()
         }
 
         agent_btn.setOnClickListener {
@@ -180,7 +190,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
             merchant_btn.setTextColor(Color.DKGRAY)
             merchant_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
-
             //with change state
             /*agent_btn.setSelected(true)
             branch_btn.setSelected(false)
@@ -188,6 +197,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
             merchant_btn.setSelected(false)*/
 
             googleMap!!.clear()
+            recyclerview.removeAllViewsInLayout()
         }
     }
 
@@ -321,7 +331,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         }
     }
 
-    override fun onStart(){
+    override fun onStart() {
         super.onStart()
         presenter.onStart()
     }
