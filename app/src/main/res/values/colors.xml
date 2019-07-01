@@ -7,4 +7,5 @@
     <color name="branch_color">#0054a6</color>
     <color name="merchant_color">#309627</color>
     <color name="agent_color">#eec90f</color>
+    <color name="color">#fff</color>
 </resources>

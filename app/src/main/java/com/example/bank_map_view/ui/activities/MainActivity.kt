@@ -32,7 +32,6 @@ import com.example.bank_map_view.ui.adapter.ATMAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bank_list.*
 
-
 class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback {
 
     private lateinit var presenter : TouchPointListPresenter
@@ -77,19 +76,22 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         branch_btn.setOnClickListener {
 
             branch_btn.setTextColor(Color.WHITE)
-            branch_btn.setBackgroundColor(resources.getColor(R.color.branch_color))
+            branch_btn.setBackgroundResource(R.drawable.selected_button_shape)
 
             atm_btn.setTextColor(Color.DKGRAY)
-            atm_btn.setBackgroundColor(Color.WHITE)
-            atm_btn.setBackgroundResource(R.drawable.button_shape)
+            atm_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
             merchant_btn.setTextColor(Color.DKGRAY)
-            merchant_btn.setBackgroundColor(Color.WHITE)
-            merchant_btn.setBackgroundResource(R.drawable.button_shape)
+            merchant_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
             agent_btn.setTextColor(Color.DKGRAY)
-            agent_btn.setBackgroundColor(Color.WHITE)
-            agent_btn.setBackgroundResource(R.drawable.button_shape)
+            agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            //with change state
+            /*branch_btn.setSelected(true)
+            atm_btn.setSelected(false)
+            agent_btn.setSelected(false)
+            merchant_btn.setSelected(false)*/
 
             if(markerATMList.size>0) {
                 googleMap!!.clear()
@@ -109,19 +111,22 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         atm_btn.setOnClickListener {
 
             atm_btn.setTextColor(Color.WHITE)
-            atm_btn.setBackgroundColor(resources.getColor(R.color.branch_color))
+            atm_btn.setBackgroundResource(R.drawable.selected_button_shape)
 
             branch_btn.setTextColor(Color.DKGRAY)
-            branch_btn.setBackgroundColor(Color.WHITE)
-            branch_btn.setBackgroundResource(R.drawable.button_shape)
+            branch_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
             merchant_btn.setTextColor(Color.DKGRAY)
-            merchant_btn.setBackgroundColor(Color.WHITE)
-            merchant_btn.setBackgroundResource(R.drawable.button_shape)
+            merchant_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
             agent_btn.setTextColor(Color.DKGRAY)
-            agent_btn.setBackgroundColor(Color.WHITE)
-            agent_btn.setBackgroundResource(R.drawable.button_shape)
+            agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            //with change state
+            /*atm_btn.setSelected(true)
+            branch_btn.setSelected(false)
+            agent_btn.setSelected(false)
+            merchant_btn.setSelected(false)*/
 
             if(markerBranchList.size>0){
                 googleMap!!.clear()
@@ -141,19 +146,22 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         merchant_btn.setOnClickListener {
 
             merchant_btn.setTextColor(Color.WHITE)
-            merchant_btn.setBackgroundColor(resources.getColor(R.color.branch_color))
+            merchant_btn.setBackgroundResource(R.drawable.selected_button_shape)
 
             branch_btn.setTextColor(Color.DKGRAY)
-            branch_btn.setBackgroundColor(Color.WHITE)
-            branch_btn.setBackgroundResource(R.drawable.button_shape)
+            branch_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
             atm_btn.setTextColor(Color.DKGRAY)
-            atm_btn.setBackgroundColor(Color.WHITE)
-            atm_btn.setBackgroundResource(R.drawable.button_shape)
+            atm_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
             agent_btn.setTextColor(Color.DKGRAY)
-            agent_btn.setBackgroundColor(Color.WHITE)
-            agent_btn.setBackgroundResource(R.drawable.button_shape)
+            agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            //with change state
+            /*merchant_btn.setSelected(true)
+            branch_btn.setSelected(false)
+            atm_btn.setSelected(false)
+            agent_btn.setSelected(false)*/
 
             googleMap!!.clear()
         }
@@ -161,19 +169,23 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         agent_btn.setOnClickListener {
 
             agent_btn.setTextColor(Color.WHITE)
-            agent_btn.setBackgroundColor(resources.getColor(R.color.branch_color))
+            agent_btn.setBackgroundResource(R.drawable.selected_button_shape)
 
             branch_btn.setTextColor(Color.DKGRAY)
-            branch_btn.setBackgroundColor(Color.WHITE)
-            branch_btn.setBackgroundResource(R.drawable.button_shape)
+            branch_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
             atm_btn.setTextColor(Color.DKGRAY)
-            atm_btn.setBackgroundColor(Color.WHITE)
-            atm_btn.setBackgroundResource(R.drawable.button_shape)
+            atm_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
             merchant_btn.setTextColor(Color.DKGRAY)
-            merchant_btn.setBackgroundColor(Color.WHITE)
-            merchant_btn.setBackgroundResource(R.drawable.button_shape)
+            merchant_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+
+            //with change state
+            /*agent_btn.setSelected(true)
+            branch_btn.setSelected(false)
+            atm_btn.setSelected(false)
+            merchant_btn.setSelected(false)*/
 
             googleMap!!.clear()
         }
@@ -242,7 +254,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
                 val intent = Intent(applicationContext, BranchDetailsActivity::class.java)
                 intent.putExtra("branchCode", id)
                 startActivity(intent)
-                Toast.makeText(applicationContext, id, Toast.LENGTH_SHORT).show()
             }
 
         })

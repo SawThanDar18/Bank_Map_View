@@ -39,7 +39,6 @@
                     app:layout_constraintBottom_toBottomOf="@id/constraint"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
-                    android:layout_marginTop="4dp"
                     app:layout_constraintVertical_bias="0.01"/>
 
             <HorizontalScrollView
@@ -51,7 +50,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintVertical_bias="0.793"
-                    android:scrollbars="none">
+                    android:scrollbars="none" android:id="@+id/horizontalScrollView">
 
                 <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
@@ -66,42 +65,45 @@
                     <Button
                             android:layout_width="105dp"
                             android:layout_height="50dp"
-                            android:background="@drawable/button_shape"
+                            android:background="@drawable/unselected_button_shape"
                             android:text="BRANCH"
                             android:drawableLeft="@drawable/ic_branch_24dp"
                             android:id="@+id/branch_btn"
                             app:layout_constraintBaseline_toBaselineOf="@+id/atm_btn"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/atm_btn" android:layout_marginStart="8dp"/>
+                            app:layout_constraintEnd_toStartOf="@+id/atm_btn"
+                            android:layout_marginStart="8dp"/>
 
                     <Button
                             android:layout_width="79dp"
                             android:layout_height="50dp"
-                            android:background="@drawable/button_shape"
+                            android:background="@drawable/unselected_button_shape"
                             android:text="ATM"
                             android:drawableLeft="@drawable/ic_atm_24dp"
                             android:id="@+id/atm_btn"
                             app:layout_constraintBaseline_toBaselineOf="@+id/agent_btn"
                             app:layout_constraintStart_toEndOf="@+id/branch_btn"
-                            app:layout_constraintEnd_toStartOf="@+id/agent_btn" android:layout_marginStart="8dp"/>
+                            app:layout_constraintEnd_toStartOf="@+id/agent_btn"
+                            android:layout_marginStart="8dp"/>
 
                     <Button
                             android:layout_width="95dp"
                             android:layout_height="50dp"
-                            android:background="@drawable/button_shape"
+                            android:background="@drawable/unselected_button_shape"
                             android:text="AGENT"
                             android:drawableLeft="@drawable/ic_agent_24dp"
                             android:id="@+id/agent_btn"
                             app:layout_constraintBaseline_toBaselineOf="@+id/merchant_btn"
                             app:layout_constraintTop_toTopOf="@+id/atm_btn"
                             app:layout_constraintStart_toEndOf="@+id/atm_btn"
-                            app:layout_constraintEnd_toStartOf="@+id/merchant_btn" android:layout_marginTop="324dp"
+                            app:layout_constraintEnd_toStartOf="@+id/merchant_btn"
+                            android:layout_marginTop="324dp"
                             android:layout_marginStart="8dp"/>
 
                     <Button
                             android:layout_width="125dp"
                             android:layout_height="50dp"
-                            android:background="@drawable/button_shape"
+                            android:background="@drawable/unselected_button_shape"
                             android:text="MERCHANT"
                             android:drawableLeft="@drawable/ic_merchant_24dp"
                             android:id="@+id/merchant_btn"
@@ -112,6 +114,7 @@
                             android:layout_marginStart="8dp"/>
                 </android.support.constraint.ConstraintLayout>
             </HorizontalScrollView>
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 
