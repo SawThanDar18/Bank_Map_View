@@ -13,7 +13,7 @@
             android:textStyle="bold"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:id="@+id/atm_name"
+            android:id="@+id/agent_name"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -24,11 +24,11 @@
             android:text="Address"
             android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:id="@+id/atm_address"
-            app:layout_constraintTop_toBottomOf="@+id/atm_name"
-            app:layout_constraintStart_toStartOf="@+id/atm_name"
+            android:id="@+id/agent_address"
+            app:layout_constraintTop_toBottomOf="@+id/agent_name"
+            app:layout_constraintStart_toStartOf="@+id/agent_name"
             android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="@+id/atm_name"
+            app:layout_constraintEnd_toEndOf="@+id/agent_name"
             app:layout_constraintHorizontal_bias="0.0"/>
     <ImageView
             android:layout_width="32dp"
@@ -40,7 +40,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
             app:layout_constraintHorizontal_bias="0.992"
-            app:layout_constraintTop_toBottomOf="@+id/atm_name"/>
+            app:layout_constraintTop_toBottomOf="@+id/agent_name"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,9 +84,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/time"
-            app:layout_constraintTop_toBottomOf="@+id/atm_address"
-            app:layout_constraintStart_toStartOf="@+id/atm_address"
-            app:layout_constraintEnd_toEndOf="@+id/atm_address"
+            app:layout_constraintTop_toBottomOf="@+id/agent_address"
+            app:layout_constraintStart_toStartOf="@+id/agent_address"
+            app:layout_constraintEnd_toEndOf="@+id/agent_address"
             android:layout_marginTop="4dp"
             app:layout_constraintHorizontal_bias="0.0"/>
 

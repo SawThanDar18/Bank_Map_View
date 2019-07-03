@@ -20,8 +20,8 @@ class ATMHolder (itemView : View, private val context: Context, private val atmI
 
 
     init {
-        atm_name = itemView.findViewById(R.id.atm_name)
-        atm_address = itemView.findViewById(R.id.atm_address)
+        atm_name = itemView.findViewById(R.id.agent_name)
+        atm_address = itemView.findViewById(R.id.agent_address)
         atm_time = itemView.findViewById(R.id.time)
         direction_iv = itemView.findViewById(R.id.direction_iv)
         }

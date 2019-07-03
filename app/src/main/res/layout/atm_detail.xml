@@ -103,7 +103,7 @@
                     android:text="NO(65), LANMADAW ST, NO(2)QTR, PAREIK, KHAYAR QTR, SIN HPYU KYUN"
                     android:layout_width="305dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/atm_address"
+                    android:id="@+id/agent_address"
                     app:layout_constraintStart_toEndOf="@+id/imageView7"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="20dp"
@@ -117,7 +117,7 @@
                     app:srcCompat="@drawable/ic_access_time_black_24dp"
                     android:id="@+id/imageView8"
                     app:layout_constraintStart_toStartOf="@+id/imageView7"
-                    app:layout_constraintTop_toBottomOf="@+id/atm_address" android:layout_marginTop="44dp"
+                    app:layout_constraintTop_toBottomOf="@+id/agent_address" android:layout_marginTop="44dp"
             />
             <TextView
                     android:text="24-Hour"
@@ -128,7 +128,7 @@
                     android:layout_marginStart="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="8dp" app:layout_constraintHorizontal_bias="0.0"
-                    android:layout_marginTop="44dp" app:layout_constraintTop_toBottomOf="@+id/atm_address"/>
+                    android:layout_marginTop="44dp" app:layout_constraintTop_toBottomOf="@+id/agent_address"/>
 
             <ImageView
                     android:layout_width="50dp"

@@ -119,5 +119,6 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <include layout="@layout/bank_list"/>
+    <include layout="@layout/currency"/>
 
 </android.support.design.widget.CoordinatorLayout>

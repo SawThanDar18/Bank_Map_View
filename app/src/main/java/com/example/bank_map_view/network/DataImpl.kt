@@ -14,7 +14,11 @@ import com.example.bank_branch_details.network.model.Access_TouchPointList
 import com.example.bank_branch_details.network.response.TouchPointListResponse
 import com.example.bank_branch_details.ui.utils.Constant
 import com.example.bank_map_view.network.api.RequestBranchDetailApi
+import com.example.bank_map_view.network.api.RequestCurrencyApi
+import com.example.bank_map_view.network.model.Access_Agent
 import com.example.bank_map_view.network.model.Access_BranchCode
+import com.example.bank_map_view.network.model.Access_Merchant
+import com.example.bank_map_view.network.model.BranchCode
 import com.example.bank_map_view.network.response.BranchCodeResponse
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -36,7 +40,9 @@ open class DataImpl private constructor() : Data{
     private  var requestAuthApi : RequestAuthApi
     private var requestTokenApi : RequestBranchDetailApi
     private var requestTouchListApi : RequestTouchPointListApi
-    private lateinit var context : Context
+    private var requestCurrencyApi : RequestCurrencyApi
+
+    private var context : Context? = null
     private var token : String? = null
 
     companion object{
@@ -112,6 +118,13 @@ open class DataImpl private constructor() : Data{
             .build()
         requestTouchListApi = touchListRetrofit.create(RequestTouchPointListApi::class.java)
 
+        val currencyRetrofit = Retrofit.Builder()
+            .baseUrl(Constant.BranchDetail_URL)
+            .addConverterFactory(GsonConverterFactory.create(Gson()))
+            .client(client)
+            .build()
+        requestCurrencyApi = currencyRetrofit.create(RequestCurrencyApi::class.java)
+
     }
 
     override fun getRequestAuth() {
@@ -151,16 +164,15 @@ open class DataImpl private constructor() : Data{
 
             override fun onResponse(call: Call<TouchPointListResponse>, response: Response<TouchPointListResponse>) {
                 var touchPointListResponse = response.body()
-                 if(touchPointListResponse != null && touchPointListResponse.access_ATM!!.isNotEmpty() && touchPointListResponse.access_Branch!!.isNotEmpty()){
+                 if(touchPointListResponse != null || touchPointListResponse!!.access_ATM!!.isNotEmpty() || touchPointListResponse.access_Branch!!.isNotEmpty() || touchPointListResponse.access_Agent!!.isNotEmpty() || touchPointListResponse.access_Merchant!!.isNotEmpty()){
 
                      EventBus.getDefault()
-                       .post(RestApiEvents.ShowPlaces(touchPointListResponse.access_ATM as ArrayList<Access_ATM>, touchPointListResponse.access_Branch as ArrayList<Access_Branch>))
+                       .post(RestApiEvents.ShowPlaces(touchPointListResponse.access_ATM as ArrayList<Access_ATM>, touchPointListResponse.access_Branch as ArrayList<Access_Branch>, touchPointListResponse.access_Agent as ArrayList<Access_Agent>, touchPointListResponse.access_Merchant as ArrayList<Access_Merchant>))
 
                      EventBus.getDefault()
                          .post(RestApiEvents.ShowATMDetails(touchPointListResponse.access_ATM!!))
                  }
                 else{
-                   Toast.makeText(context, "err", Toast.LENGTH_LONG).show()
                }
             }
 

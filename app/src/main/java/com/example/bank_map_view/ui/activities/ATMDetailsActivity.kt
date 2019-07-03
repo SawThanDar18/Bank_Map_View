@@ -61,7 +61,7 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
 
         val atm_title_tv = findViewById<TextView>(R.id.atm_title_tv)
         val atm_title = findViewById<TextView>(R.id.atm_title)
-        val atm_address = findViewById<TextView>(R.id.atm_address)
+        val atm_address = findViewById<TextView>(R.id.agent_address)
 
         atm_title_tv.text = bundle!!.getString("Location_Name")
         atm_title.text = bundle!!.getString("Location_Name")

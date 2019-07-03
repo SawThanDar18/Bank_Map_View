@@ -26,5 +26,4 @@ class BranchModel {
     fun getBranchDetail(value : String){
         DataImpl.getInstance().getBranchDetail(value)
     }
-
 }
