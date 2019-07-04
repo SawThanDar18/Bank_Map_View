@@ -17,6 +17,6 @@ class Access_Merchant {
     val longitude : Double? = null
 
     @SerializedName("Address")
-    val merchant_address : Double? = null
+    val merchant_address : String? = null
 }
 

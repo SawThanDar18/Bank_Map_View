@@ -7,21 +7,19 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import android.widget.Toast
 import com.example.bank_map_view.R
-import com.example.bank_map_view.mvp.presenter.ATMPresenter
-import com.example.bank_map_view.mvp.view.ATMView
+import com.example.bank_map_view.mvp.presenter.AgentPresenter
+import com.example.bank_map_view.mvp.view.AgentView
+import kotlinx.android.synthetic.main.activity_main.swipeRefresh
 import kotlinx.android.synthetic.main.details.*
-import kotlinx.android.synthetic.main.branch_detail.map_image
-import kotlinx.android.synthetic.main.branch_detail.refresh_iv
-import kotlinx.android.synthetic.main.branch_detail.swipeRefresh
 
-class ATMDetailsActivity : AppCompatActivity(), ATMView {
+class AgentDetailActivity : AppCompatActivity(), AgentView {
 
-    private lateinit var presenter : ATMPresenter
+    private lateinit var presenter : AgentPresenter
 
     private var latitude : Double? = null
     private var longitude : Double? = null
 
-    private var atm_name : String? = null
+    private var agent_name : String? = null
 
     private lateinit var bundle : Bundle
 
@@ -31,24 +29,24 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
 
         bundle = intent.extras
 
-        presenter = ATMPresenter(this)
-        presenter.startLoadingATMDetails()
+        presenter = AgentPresenter(this)
+        presenter.startLoadingAgentDetails()
 
         swipeRefresh.setOnRefreshListener {
             dismissLoading()
         }
 
         refresh_iv.setOnClickListener {
-            presenter.startLoadingATMDetails()
+            presenter.startLoadingAgentDetails()
         }
 
         map_image.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:<$latitude>,<$longitude>?q=<$latitude>,<$longitude>($atm_name)"))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:<$latitude>,<$longitude>?q=<$latitude>,<$longitude>($agent_name)"))
             startActivity(intent)
         }
 
         back_press_iv.setOnClickListener {
-            val intent = Intent(this@ATMDetailsActivity, MainActivity::class.java)
+            val intent = Intent(this@AgentDetailActivity, MainActivity::class.java)
             startActivity(intent)
         }
     }
@@ -57,22 +55,22 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun showATMDetails() {
+    override fun showAgentDetails() {
 
-        val atm_title_tv = findViewById<TextView>(R.id.title)
-        val atm_title = findViewById<TextView>(R.id.title)
-        val atm_address = findViewById<TextView>(R.id.address_tv)
+        val title = findViewById<TextView>(R.id.title)
+        val agent_title = findViewById<TextView>(R.id.title_tv)
+        val agent_address = findViewById<TextView>(R.id.address_tv)
 
-        atm_title_tv.text = bundle!!.getString("Location_Name")
-        atm_title.text = bundle!!.getString("Location_Name")
-        atm_address.text = bundle!!.getString("Address")
+        title.text = bundle!!.getString("Agent_Name")
+        agent_title.text = bundle!!.getString("Agent_Name")
+        agent_address.text = bundle!!.getString("Address")
     }
 
     override fun viewMap() {
 
         latitude = bundle!!.getDouble("Latitude")
         longitude = bundle!!.getDouble("Longitude")
-        atm_name = bundle!!.getString("Location_Name")
+        agent_name = bundle!!.getString("Agent_Name")
     }
 
     override fun showLoading() {
@@ -94,11 +92,12 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
 
     override fun onResume() {
         super.onResume()
-        presenter.startLoadingATMDetails()
+        presenter.onStart()
     }
 
     override fun onStop() {
         super.onStop()
         presenter.onStop()
     }
+
 }

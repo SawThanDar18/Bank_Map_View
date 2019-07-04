@@ -14,4 +14,8 @@ object RestApiEvents {
     class ShowPlaces(val access_ATM: ArrayList<Access_ATM>, val access_Branch : ArrayList<Access_Branch>, val access_Agent: ArrayList<Access_Agent>, val access_Merchant: ArrayList<Access_Merchant>)
     class ShowBranchDetails(val branchCodeResponse: BranchCodeResponse)
     class ShowATMDetails(val access_ATM: ArrayList<Access_ATM>)
+    class ShowAgentDetails(val access_Agent: ArrayList<Access_Agent>)
+    class ShowMerchantDetails(val access_Merchant: ArrayList<Access_Merchant>)
+
+    
 }

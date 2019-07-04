@@ -70,7 +70,7 @@ class BranchDetailsActivity : AppCompatActivity(), BranchView {
     override fun showBranchDetails(branchCodeResponse: BranchCodeResponse) {
         val branch_title_tv = findViewById<TextView>(R.id.title)
         val branch_title = findViewById<TextView>(R.id.branch_title)
-        val branch_address = findViewById<TextView>(R.id.agent_address)
+        val branch_address = findViewById<TextView>(R.id.address_tv)
         val branch_phone = findViewById<TextView>(R.id.branch_phone)
 
         branch_title_tv.text = branchCodeResponse!!.access_BranchInfo!!.branch_name

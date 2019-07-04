@@ -6,16 +6,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_map_view.R
-import com.example.bank_map_view.network.ATMItemClickListener
+import com.example.bank_map_view.network.ItemClickListener
 import com.example.bank_map_view.ui.holders.ATMHolder
 
-class ATMAdapter (val context : Context, val atmItemClickListener: ATMItemClickListener) : RecyclerView.Adapter<ATMHolder>(){
+class ATMAdapter (val context : Context, val itemClickListener: ItemClickListener) : RecyclerView.Adapter<ATMHolder>(){
 
     private var atmList : ArrayList<Access_ATM> = arrayListOf()
 
     override fun onCreateViewHolder(view: ViewGroup, position: Int): ATMHolder {
         val layout = LayoutInflater.from(view.context).inflate(R.layout.atm_list_item, view, false)
-        return ATMHolder(layout, context, atmItemClickListener)
+        return ATMHolder(layout, context, itemClickListener)
 
     }
 

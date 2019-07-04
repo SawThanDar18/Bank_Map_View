@@ -9,9 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_map_view.R
-import com.example.bank_map_view.network.ATMItemClickListener
+import com.example.bank_map_view.network.ItemClickListener
 
-class ATMHolder (itemView : View, private val context: Context, private val atmItemClickListener: ATMItemClickListener) : RecyclerView.ViewHolder(itemView){
+class ATMHolder (itemView : View, private val context: Context, private val itemClickListener: ItemClickListener) : RecyclerView.ViewHolder(itemView){
 
     private val atm_name : TextView
     private val atm_address : TextView
@@ -20,8 +20,8 @@ class ATMHolder (itemView : View, private val context: Context, private val atmI
 
 
     init {
-        atm_name = itemView.findViewById(R.id.agent_name)
-        atm_address = itemView.findViewById(R.id.agent_address)
+        atm_name = itemView.findViewById(R.id.merchant_name)
+        atm_address = itemView.findViewById(R.id.address_tv)
         atm_time = itemView.findViewById(R.id.time)
         direction_iv = itemView.findViewById(R.id.direction_iv)
         }
@@ -42,7 +42,7 @@ class ATMHolder (itemView : View, private val context: Context, private val atmI
         }
 
         itemView.setOnClickListener {
-            atmItemClickListener.onClicked(access_ATM.Location_Name.toString(), access_ATM.Address.toString(), access_ATM.Latitude!!.toDouble(), access_ATM.Longitude!!.toDouble())
+            itemClickListener.onClicked(access_ATM.Location_Name.toString(), access_ATM.Address.toString(), access_ATM.Latitude!!.toDouble(), access_ATM.Longitude!!.toDouble())
         }
     }
 }

@@ -8,9 +8,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.bank_map_view.R
+import com.example.bank_map_view.network.ItemClickListener
 import com.example.bank_map_view.network.model.Access_Agent
 
-class AgentHolder (itemView : View, private val context: Context) : RecyclerView.ViewHolder(itemView){
+class AgentHolder (itemView : View, private val context: Context,  val itemClickListener: ItemClickListener) : RecyclerView.ViewHolder(itemView){
 
     private val agent_name : TextView
     private val agent_address : TextView
@@ -18,8 +19,8 @@ class AgentHolder (itemView : View, private val context: Context) : RecyclerView
 
 
     init {
-        agent_name = itemView.findViewById(R.id.agent_name)
-        agent_address = itemView.findViewById(R.id.agent_address)
+        agent_name = itemView.findViewById(R.id.merchant_name)
+        agent_address = itemView.findViewById(R.id.address_tv)
         direction_iv = itemView.findViewById(R.id.direction_iv)
     }
 
@@ -35,6 +36,10 @@ class AgentHolder (itemView : View, private val context: Context) : RecyclerView
 
             val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:<$latitude>,<$longitude>?q=<$latitude>,<$longitude>($agent_name)"))
             context.startActivity(mapIntent)
+        }
+
+        itemView.setOnClickListener {
+            itemClickListener.onClicked(access_Agent.agent_name.toString(), access_Agent.agent_address.toString(), access_Agent.latitude!!.toDouble(), access_Agent.longitude!!.toDouble())
         }
     }
 }

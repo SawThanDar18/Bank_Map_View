@@ -155,7 +155,7 @@ open class DataImpl private constructor() : Data{
     }
 
     override fun getTouchPointList() {
-        val branch = Access_TouchPointList("All","1",16.8170872,96.1287845,"5000","5.01")
+        val branch = Access_TouchPointList("All","1",16.8170872,96.1287845,"100000","5.01")
         requestTouchListApi.getTouchPointList("Bearer ${token}", branch).enqueue(object : Callback<TouchPointListResponse>{
             override fun onFailure(call: Call<TouchPointListResponse>, t: Throwable) {
                 EventBus.getDefault()
@@ -171,6 +171,12 @@ open class DataImpl private constructor() : Data{
 
                      EventBus.getDefault()
                          .post(RestApiEvents.ShowATMDetails(touchPointListResponse.access_ATM!!))
+
+                     EventBus.getDefault()
+                         .post(RestApiEvents.ShowAgentDetails(touchPointListResponse.access_Agent!!))
+
+                     EventBus.getDefault()
+                         .post(RestApiEvents.ShowMerchantDetails(touchPointListResponse.access_Merchant!!))
                  }
                 else{
                }

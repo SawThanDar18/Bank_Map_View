@@ -20,8 +20,8 @@ class BranchHolder (itemView : View, private val context: Context, private val b
 
 
     init {
-        branch_name = itemView.findViewById(R.id.agent_name)
-        branch_address = itemView.findViewById(R.id.agent_address)
+        branch_name = itemView.findViewById(R.id.merchant_name)
+        branch_address = itemView.findViewById(R.id.address_tv)
         call_iv = itemView.findViewById(R.id.call_iv)
         direction_iv = itemView.findViewById(R.id.direction_iv)
     }
