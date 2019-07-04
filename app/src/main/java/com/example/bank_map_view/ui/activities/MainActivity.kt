@@ -391,11 +391,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
     override fun showCurrencyDetails(currency: ArrayList<Currency>) {
 
-        for(index in 0 until currency!!.size) {
-            var content : String?=null
-            content = currency!![index].buy_rate
-            buy_usd_tv.text = content
-        }
     }
 
     override fun showServiceDetails(serviceResponse: ServiceResponse) {

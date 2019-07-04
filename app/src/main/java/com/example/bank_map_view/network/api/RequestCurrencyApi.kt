@@ -10,5 +10,7 @@ interface RequestCurrencyApi {
     @POST("api/getCurrencyRate")
     fun getCurrency(@Header("Authorization") authHeader: String,
                     @Body branchCode: BranchCode,
-                    @QueryMap parameters: Map<String, String>) : Call<CurrencyResponse>
+                    @QueryMap parameters: Map<String, String>
+                    /*@Query("CurrencyCode") key : String,
+                    @Query("Denomination") keyword : String*/) : Call<CurrencyResponse>
 }
