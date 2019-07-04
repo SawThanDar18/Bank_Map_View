@@ -26,4 +26,12 @@ class BranchModel {
     fun getBranchDetail(value : String){
         DataImpl.getInstance().getBranchDetail(value)
     }
+
+    fun getCurrency(){
+        DataImpl.getInstance().getCurrency()
+    }
+
+    fun getService(){
+        DataImpl.getInstance().getService()
+    }
 }

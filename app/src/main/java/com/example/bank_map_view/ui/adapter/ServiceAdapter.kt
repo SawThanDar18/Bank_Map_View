@@ -6,21 +6,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.bank_map_view.R
 import com.example.bank_map_view.network.model.Service_List
-import com.example.bank_map_view.ui.holders.ServiceListHolder
+import com.example.bank_map_view.ui.holders.ServiceHolder
 
-class ServiceListAdapter(val context : Context, val serviceList : ArrayList<Service_List>) : RecyclerView.Adapter<ServiceListHolder>() {
+class ServiceAdapter(val context : Context, val serviceList : ArrayList<Service_List>) : RecyclerView.Adapter<ServiceHolder>() {
 
-    override fun onCreateViewHolder(view: ViewGroup, position: Int): ServiceListHolder {
+    override fun onCreateViewHolder(view: ViewGroup, position: Int): ServiceHolder {
         val layout = LayoutInflater.from(view.context).inflate(R.layout.currency_list_item, view, false)
-        return ServiceListHolder(layout, context)
-
+        return ServiceHolder(layout, context)
     }
 
     override fun getItemCount(): Int {
         return serviceList!!.size
     }
 
-    override fun onBindViewHolder(view: ServiceListHolder, position: Int) {
+    override fun onBindViewHolder(view: ServiceHolder, position: Int) {
 
         view.index(serviceList!![position])
     }

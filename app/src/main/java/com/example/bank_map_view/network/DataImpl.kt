@@ -2,7 +2,6 @@ package com.example.bank_branch_details.network
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import com.example.bank_branch_details.event.RestApiEvents
 import com.example.bank_branch_details.network.api.Data
 import com.example.bank_branch_details.network.api.RequestAuthApi
@@ -15,11 +14,11 @@ import com.example.bank_branch_details.network.response.TouchPointListResponse
 import com.example.bank_branch_details.ui.utils.Constant
 import com.example.bank_map_view.network.api.RequestBranchDetailApi
 import com.example.bank_map_view.network.api.RequestCurrencyApi
-import com.example.bank_map_view.network.model.Access_Agent
-import com.example.bank_map_view.network.model.Access_BranchCode
-import com.example.bank_map_view.network.model.Access_Merchant
-import com.example.bank_map_view.network.model.BranchCode
+import com.example.bank_map_view.network.api.RequestServiceApi
+import com.example.bank_map_view.network.model.*
 import com.example.bank_map_view.network.response.BranchCodeResponse
+import com.example.bank_map_view.network.response.CurrencyResponse
+import com.example.bank_map_view.network.response.ServiceResponse
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
@@ -41,6 +40,7 @@ open class DataImpl private constructor() : Data{
     private var requestTokenApi : RequestBranchDetailApi
     private var requestTouchListApi : RequestTouchPointListApi
     private var requestCurrencyApi : RequestCurrencyApi
+    private var requestServiceApi : RequestServiceApi
 
     private var context : Context? = null
     private var token : String? = null
@@ -125,6 +125,13 @@ open class DataImpl private constructor() : Data{
             .build()
         requestCurrencyApi = currencyRetrofit.create(RequestCurrencyApi::class.java)
 
+        val serviceRetrofit = Retrofit.Builder()
+            .baseUrl(Constant.BranchDetail_URL)
+            .addConverterFactory(GsonConverterFactory.create(Gson()))
+            .client(client)
+            .build()
+        requestServiceApi = serviceRetrofit.create(RequestServiceApi::class.java)
+
     }
 
     override fun getRequestAuth() {
@@ -143,6 +150,9 @@ open class DataImpl private constructor() : Data{
                  token = response.body()!!.access_token
                  getTouchPointList()
                  getBranchDetail(value = "branchCode")
+                 getCurrency()
+                 getService()
+
              } else {
                  Log.i("login","else")
                 EventBus.getDefault()
@@ -164,13 +174,13 @@ open class DataImpl private constructor() : Data{
 
             override fun onResponse(call: Call<TouchPointListResponse>, response: Response<TouchPointListResponse>) {
                 var touchPointListResponse = response.body()
-                 if(touchPointListResponse != null || touchPointListResponse!!.access_ATM!!.isNotEmpty() || touchPointListResponse.access_Branch!!.isNotEmpty() || touchPointListResponse.access_Agent!!.isNotEmpty() || touchPointListResponse.access_Merchant!!.isNotEmpty()){
+                 if(touchPointListResponse != null /*|| touchPointListResponse!!.access_ATM!!.isNotEmpty() || touchPointListResponse.access_Branch!!.isNotEmpty() || touchPointListResponse.access_Agent!!.isNotEmpty() || touchPointListResponse.access_Merchant!!.isNotEmpty()*/){
 
                      EventBus.getDefault()
                        .post(RestApiEvents.ShowPlaces(touchPointListResponse.access_ATM as ArrayList<Access_ATM>, touchPointListResponse.access_Branch as ArrayList<Access_Branch>, touchPointListResponse.access_Agent as ArrayList<Access_Agent>, touchPointListResponse.access_Merchant as ArrayList<Access_Merchant>))
 
                      EventBus.getDefault()
-                         .post(RestApiEvents.ShowATMDetails(touchPointListResponse.access_ATM!!))
+                         .post(RestApiEvents.ShowATMDetails((touchPointListResponse.access_ATM!!)))
 
                      EventBus.getDefault()
                          .post(RestApiEvents.ShowAgentDetails(touchPointListResponse.access_Agent!!))
@@ -204,6 +214,59 @@ open class DataImpl private constructor() : Data{
 
                 }
             }
+        })
+    }
+
+    override fun getCurrency() {
+
+        var parameters : HashMap<String, String> = HashMap<String, String>()
+        parameters.put("CurrencyCode", "USD")
+        parameters.put("Denomination", "100")
+
+        val branch = BranchCode("5.01")
+        requestCurrencyApi.getCurrency("Bearer ${token}", branch, parameters).enqueue(object : Callback<CurrencyResponse> {
+            override fun onFailure(call: Call<CurrencyResponse>, t: Throwable) {
+                EventBus.getDefault()
+                    .post(RestApiEvents.ErrorInvokingAPIEvent(
+                        t.localizedMessage
+                    ))
+            }
+
+            override fun onResponse(call: Call<CurrencyResponse>, response: Response<CurrencyResponse>) {
+                val currencyResponse = response.body()
+                if(response.isSuccessful){
+                    EventBus.getDefault()
+                        .post(RestApiEvents.ShowCurrency(currencyResponse!!.currency!!))
+                }
+                else{
+
+                }
+            }
+
+        })
+
+    }
+
+    override fun getService() {
+        val branch = BranchCode("5.01")
+        requestServiceApi.getService("Bearer ${token}", branch).enqueue(object : Callback<ServiceResponse> {
+            override fun onFailure(call: Call<ServiceResponse>, t: Throwable) {
+                EventBus.getDefault()
+                    .post(RestApiEvents.ErrorInvokingAPIEvent(
+                        t.localizedMessage
+                    ))
+            }
+
+            override fun onResponse(call: Call<ServiceResponse>, response: Response<ServiceResponse>) {
+                if(response.isSuccessful){
+                    EventBus.getDefault()
+                        .post(RestApiEvents.ShowService(response.body()!!))
+                }
+                else{
+
+                }
+            }
+
         })
     }
 }

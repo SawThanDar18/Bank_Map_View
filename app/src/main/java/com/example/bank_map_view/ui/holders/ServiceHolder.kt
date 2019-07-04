@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.bank_map_view.R
 import com.example.bank_map_view.network.model.Service_List
 
-class ServiceListHolder (itemView : View, private val context: Context) : RecyclerView.ViewHolder(itemView){
+class ServiceHolder (itemView : View, private val context: Context) : RecyclerView.ViewHolder(itemView){
 
     private val title : TextView
     private val description : TextView

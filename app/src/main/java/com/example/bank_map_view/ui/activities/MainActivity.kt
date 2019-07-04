@@ -22,10 +22,17 @@ import com.example.bank_branch_details.network.DataImpl
 import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Branch
 import com.example.bank_map_view.R
+import com.example.bank_map_view.mvp.presenter.CurrencyPresenter
+import com.example.bank_map_view.mvp.presenter.ServicePresenter
+import com.example.bank_map_view.mvp.view.CurrencyView
+import com.example.bank_map_view.mvp.view.ServiceView
 import com.example.bank_map_view.network.ItemClickListener
 import com.example.bank_map_view.network.BranchItemClickListener
 import com.example.bank_map_view.network.model.Access_Agent
 import com.example.bank_map_view.network.model.Access_Merchant
+import com.example.bank_map_view.network.model.Currency
+import com.example.bank_map_view.network.response.CurrencyResponse
+import com.example.bank_map_view.network.response.ServiceResponse
 import com.example.details_design.branch.BranchAdapter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -35,14 +42,17 @@ import com.google.android.gms.maps.model.*
 import android.graphics.BitmapFactory.decodeResource as decodeResource1
 import com.example.bank_map_view.ui.adapter.ATMAdapter
 import com.example.bank_map_view.ui.adapter.AgentAdapter
+import com.example.bank_map_view.ui.adapter.ServiceAdapter
 import com.example.bank_map_view.ui.adapter.MerchantAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bank_list.bottom_sheet
 import kotlinx.android.synthetic.main.currency.*
 
-class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback {
+class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, ServiceView, OnMapReadyCallback {
 
     private lateinit var presenter : TouchPointListPresenter
+    private lateinit var currencyPresenter : CurrencyPresenter
+    private lateinit var servicePresenter: ServicePresenter
 
     private var behavior : BottomSheetBehavior<LinearLayout>? = null
     private  var currecy_behavior : BottomSheetBehavior<ConstraintLayout>? = null
@@ -62,11 +72,13 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
     private lateinit var markerMerchantList : ArrayList<Access_Merchant>
 
     private var recyclerview : RecyclerView? = null
+    private var service_recyclerView : RecyclerView? = null
 
     private lateinit var branchAdapter : BranchAdapter
     private lateinit var atmAdapter: ATMAdapter
     private lateinit var agentAdapter: AgentAdapter
     private lateinit var merchantAdapter : MerchantAdapter
+    private lateinit var serviceAdapter: ServiceAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +93,12 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
 
         presenter = TouchPointListPresenter(this)
         presenter.startLoadingTouchList()
+
+        currencyPresenter = CurrencyPresenter(this)
+        currencyPresenter.startLoadingCurrencyDetails()
+
+        servicePresenter = ServicePresenter(this)
+        servicePresenter.startLoadingServiceDetails()
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
@@ -200,8 +218,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
             bottom_sheet_currency.visibility = View.GONE
             bottom_sheet.visibility = View.VISIBLE
 
-            googleMap!!.clear()
-            recyclerview!!.removeAllViewsInLayout()
+            recyclerview!!.adapter = merchantAdapter
         }
 
         agent_btn.setOnClickListener {
@@ -227,8 +244,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
             bottom_sheet_currency.visibility = View.GONE
             bottom_sheet.visibility = View.VISIBLE
 
-            googleMap!!.clear()
-            recyclerview!!.removeAllViewsInLayout()
+            recyclerview!!.adapter = agentAdapter
         }
     }
 
@@ -283,6 +299,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
 
         var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
         recyclerview!!.setLayoutManager(layoutManager)
+        agentAdapter.setNewData(access_Agent)
     }
 
     override fun displayMerchant(access_Merchant: ArrayList<Access_Merchant>) {
@@ -301,61 +318,94 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
 
         var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
         recyclerview!!.setLayoutManager(layoutManager)
+        merchantAdapter.setNewData(access_Merchant)
     }
 
     override fun showPlaces(access_ATM: ArrayList<Access_ATM>, access_Branch: ArrayList<Access_Branch>, access_Agent: ArrayList<Access_Agent>, access_Merchant: ArrayList<Access_Merchant>) {
 
         markerATMList = access_ATM
-        for(index in 0 until markerATMList.size){
-            atmLatLng = LatLng(markerATMList.get(index).Latitude!!, markerATMList.get(index).Longitude!!)
-            markers = googleMap!!.addMarker(MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).icon(bitmapDescriptorFromVector(this, R.drawable.ic_atm_24dp)))
-            markers!!.rotation = 20f
-            markers!!.tag = markerATMList.get(index).Terminal_ID
+        if(markerATMList.size>0) {
+            for (index in 0 until markerATMList.size) {
+                atmLatLng = LatLng(markerATMList.get(index).Latitude!!, markerATMList.get(index).Longitude!!)
+                markers = googleMap!!.addMarker(
+                    MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).icon(
+                        bitmapDescriptorFromVector(this, R.drawable.ic_atm_24dp)
+                    )
+                )
+                markers!!.rotation = 20f
+                markers!!.tag = markerATMList.get(index).Terminal_ID
+            }
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(atmLatLng, 16f))
         }
-
-        googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(atmLatLng, 16f))
 
         markerBranchList = access_Branch
-        for (index in 0 until markerBranchList.size){
-            branchLatLng = LatLng(markerBranchList.get(index).Latitude!!, markerBranchList.get(index).Longitude!!)
-            markers = googleMap!!.addMarker(MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)))
-            markers!!.rotation = -20f
-            markers!!.tag = markerBranchList.get(index).Branch_Code
+        if(markerBranchList.size>0) {
+            for (index in 0 until markerBranchList.size) {
+                branchLatLng = LatLng(markerBranchList.get(index).Latitude!!, markerBranchList.get(index).Longitude!!)
+                markers = googleMap!!.addMarker(
+                    MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(
+                        bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)
+                    )
+                )
+                markers!!.rotation = -20f
+                markers!!.tag = markerBranchList.get(index).Branch_Code
+            }
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 16f))
         }
 
-        googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 16f))
-
-        /*markerAgentList = access_Agent
-        for(index in 0 until markerAgentList.size){
-            agentLatLng = LatLng(markerAgentList.get(index).latitude!!, markerAgentList.get(index).longitude!!)
-            markers = googleMap!!.addMarker(MarkerOptions().position(agentLatLng!!).title(markerAgentList.get(index).agent_name).icon(bitmapDescriptorFromVector(this, R.drawable.ic_agent_24dp)))
-            markers!!.rotation = 20f
-            markers!!.tag = markerAgentList.get(index).agent_id
+        markerAgentList = access_Agent
+        if(markerAgentList.size>0) {
+            for (index in 0 until markerAgentList.size) {
+                agentLatLng = LatLng(markerAgentList.get(index).latitude!!, markerAgentList.get(index).longitude!!)
+                markers = googleMap!!.addMarker(
+                    MarkerOptions().position(agentLatLng!!).title(markerAgentList.get(index).agent_name).icon(
+                        bitmapDescriptorFromVector(this, R.drawable.ic_agent_24dp)
+                    )
+                )
+                markers!!.rotation = 20f
+                markers!!.tag = markerAgentList.get(index).agent_id
+            }
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(agentLatLng, 16f))
         }
-
-        googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(agentLatLng, 16f))
 
         markerMerchantList = access_Merchant
-        for(index in 0 until markerMerchantList.size){
-            merchantLatLng = LatLng(markerMerchantList.get(index).latitude!!, markerMerchantList.get(index).longitude!!)
-            markers = googleMap!!.addMarker(MarkerOptions().position(merchantLatLng!!).title(markerMerchantList.get(index).merchant_name).icon(bitmapDescriptorFromVector(this, R.drawable.ic_merchant_24dp)))
-            markers!!.rotation = 20f
-            markers!!.tag = markerMerchantList.get(index).merchant_id
+        if(markerMerchantList.size>0) {
+            for (index in 0 until markerMerchantList.size) {
+                merchantLatLng =
+                    LatLng(markerMerchantList.get(index).latitude!!, markerMerchantList.get(index).longitude!!)
+                markers = googleMap!!.addMarker(
+                    MarkerOptions().position(merchantLatLng!!).title(markerMerchantList.get(index).merchant_name).icon(
+                        bitmapDescriptorFromVector(this, R.drawable.ic_merchant_24dp)
+                    )
+                )
+                markers!!.rotation = 20f
+                markers!!.tag = markerMerchantList.get(index).merchant_id
+            }
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(merchantLatLng, 16f))
         }
-
-        googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(merchantLatLng, 16f))
 
         bottom_sheet.visibility = View.GONE
         currecy_behavior!!.peekHeight = 420
         currecy_behavior!!.isHideable = false
+    }
 
-        /*currency_recyclerview = findViewById(R.id.service_recycler)
-        serviceListAdapter = ServiceListAdapter(this, serviceListResponse!!.service_List!!)
+    override fun showCurrencyDetails(currency: ArrayList<Currency>) {
 
-        currency_recyclerview.adapter = serviceListAdapter
+        for(index in 0 until currency!!.size) {
+            var content : String?=null
+            content = currency!![index].buy_rate
+            buy_usd_tv.text = content
+        }
+    }
+
+    override fun showServiceDetails(serviceResponse: ServiceResponse) {
+
+        service_recyclerView = findViewById(R.id.service_recycler)
+        serviceAdapter = ServiceAdapter(this, serviceResponse.service_List!!)
+
+        service_recyclerView!!.adapter = serviceAdapter
         var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
-        currency_recyclerview.setLayoutManager(layoutManager)*/
-        */
+        service_recyclerView!!.setLayoutManager(layoutManager)
     }
 
     override fun onMapReady(map: GoogleMap?) {
@@ -365,50 +415,58 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
         googleMap!!.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener {
             override fun onInfoWindowClick(marker: Marker?) {
 
-                for (index in 0 until markerATMList!!.size) {
-                    markers = marker
-                    if (markers!!.tag == markerATMList!!.get(index).Terminal_ID) {
-                        val atmIntent = Intent(this@MainActivity, ATMDetailsActivity::class.java)
-                        atmIntent.putExtra("Location_Name", markerATMList[index].Location_Name)
-                        atmIntent.putExtra("Address", markerATMList[index].Address)
-                        atmIntent.putExtra("Latitude", markerATMList[index].Latitude)
-                        atmIntent.putExtra("Longitude", markerATMList[index].Longitude)
-                        startActivity(atmIntent)
+                if(markerATMList.size>0) {
+                    for (index in 0 until markerATMList!!.size) {
+                        markers = marker
+                        if (markers!!.tag == markerATMList!!.get(index).Terminal_ID) {
+                            val atmIntent = Intent(this@MainActivity, ATMDetailsActivity::class.java)
+                            atmIntent.putExtra("Location_Name", markerATMList[index].Location_Name)
+                            atmIntent.putExtra("Address", markerATMList[index].Address)
+                            atmIntent.putExtra("Latitude", markerATMList[index].Latitude)
+                            atmIntent.putExtra("Longitude", markerATMList[index].Longitude)
+                            startActivity(atmIntent)
+                        }
                     }
                 }
 
-                for(index in 0 until markerBranchList.size){
-                    markers = marker
-                    if(markers!!.tag == markerBranchList.get(index).Branch_Code){
-                        val branchIntent = Intent(this@MainActivity, BranchDetailsActivity::class.java)
-                        branchIntent.putExtra("branchCode", markerBranchList!![index].Branch_Code)
-                        startActivity(branchIntent)
+                if(markerBranchList.size>0) {
+                    for (index in 0 until markerBranchList.size) {
+                        markers = marker
+                        if (markers!!.tag == markerBranchList.get(index).Branch_Code) {
+                            val branchIntent = Intent(this@MainActivity, BranchDetailsActivity::class.java)
+                            branchIntent.putExtra("branchCode", markerBranchList!![index].Branch_Code)
+                            startActivity(branchIntent)
+                        }
                     }
                 }
 
-                /*for(index in 0 until markerAgentList.size){
-                    markers = marker
-                    if(markers!!.tag == markerAgentList.get(index).agent_id){
-                        val agentIntent = Intent(this@MainActivity, AgentDetailActivity::class.java)
-                        agentIntent.putExtra("Agent_Name", markerAgentList[index].agent_name)
-                        agentIntent.putExtra("Address", markerAgentList[index].agent_address)
-                        agentIntent.putExtra("Latitude", markerAgentList[index].latitude)
-                        agentIntent.putExtra("Longitude", markerAgentList[index].longitude)
-                        startActivity(agentIntent)
+                if(markerAgentList.size>0) {
+                    for (index in 0 until markerAgentList.size) {
+                        markers = marker
+                        if (markers!!.tag == markerAgentList.get(index).agent_id) {
+                            val agentIntent = Intent(this@MainActivity, AgentDetailActivity::class.java)
+                            agentIntent.putExtra("Agent_Name", markerAgentList[index].agent_name)
+                            agentIntent.putExtra("Address", markerAgentList[index].agent_address)
+                            agentIntent.putExtra("Latitude", markerAgentList[index].latitude)
+                            agentIntent.putExtra("Longitude", markerAgentList[index].longitude)
+                            startActivity(agentIntent)
+                        }
                     }
                 }
 
-                for(index in 0 until markerMerchantList.size){
-                    markers = marker
-                    if(markers!!.tag == markerMerchantList.get(index).merchant_id){
-                        val merchantIntent = Intent(this@MainActivity, MerchantDetailActivity::class.java)
-                        merchantIntent.putExtra("Merchant_Name", markerMerchantList[index].merchant_name)
-                        merchantIntent.putExtra("Address", markerMerchantList[index].merchant_address)
-                        merchantIntent.putExtra("Latitude", markerMerchantList[index].latitude)
-                        merchantIntent.putExtra("Longitude", markerMerchantList[index].longitude)
-                        startActivity(merchantIntent)
+                if(markerMerchantList.size>0) {
+                    for (index in 0 until markerMerchantList.size) {
+                        markers = marker
+                        if (markers!!.tag == markerMerchantList.get(index).merchant_id) {
+                            val merchantIntent = Intent(this@MainActivity, MerchantDetailActivity::class.java)
+                            merchantIntent.putExtra("Merchant_Name", markerMerchantList[index].merchant_name)
+                            merchantIntent.putExtra("Address", markerMerchantList[index].merchant_address)
+                            merchantIntent.putExtra("Latitude", markerMerchantList[index].latitude)
+                            merchantIntent.putExtra("Longitude", markerMerchantList[index].longitude)
+                            startActivity(merchantIntent)
+                        }
                     }
-                }*/
+                }
             }
         })
     }
@@ -446,10 +504,14 @@ class MainActivity : AppCompatActivity(), TouchPointListView, OnMapReadyCallback
     override fun onStart() {
         super.onStart()
         presenter.onStart()
+        currencyPresenter.onStart()
+        servicePresenter.onStart()
     }
 
     override fun onStop() {
         super.onStop()
         presenter.onStop()
+        currencyPresenter.onStop()
+        servicePresenter.onStop()
     }
 }

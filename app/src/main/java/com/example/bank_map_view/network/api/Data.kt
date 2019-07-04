@@ -6,4 +6,7 @@ interface Data {
     fun getRequestAuth()
     fun getTouchPointList()
     fun getBranchDetail(value: String)
+
+    fun getCurrency()
+    fun getService()
 }
