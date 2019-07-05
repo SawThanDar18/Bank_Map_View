@@ -4,11 +4,14 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import com.example.bank_branch_details.mvp.view.TouchPointListView
 import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.ATMPresenter
 import com.example.bank_map_view.mvp.view.ATMView
+import kotlinx.android.synthetic.main.bank_list.*
 import kotlinx.android.synthetic.main.details.*
 import kotlinx.android.synthetic.main.branch_detail.map_image
 import kotlinx.android.synthetic.main.branch_detail.refresh_iv
@@ -48,8 +51,7 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
         }
 
         back_press_iv.setOnClickListener {
-            val intent = Intent(this@ATMDetailsActivity, MainActivity::class.java)
-            startActivity(intent)
+            this.finish()
         }
     }
 
@@ -63,16 +65,16 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
         val atm_title = findViewById<TextView>(R.id.title)
         val atm_address = findViewById<TextView>(R.id.address_tv)
 
-        atm_title_tv.text = bundle!!.getString("Location_Name")
-        atm_title.text = bundle!!.getString("Location_Name")
-        atm_address.text = bundle!!.getString("Address")
+        atm_title_tv.text = bundle.getString("Location_Name")
+        atm_title.text = bundle.getString("Location_Name")
+        atm_address.text = bundle.getString("Address")
     }
 
     override fun viewMap() {
 
-        latitude = bundle!!.getDouble("Latitude")
-        longitude = bundle!!.getDouble("Longitude")
-        atm_name = bundle!!.getString("Location_Name")
+        latitude = bundle.getDouble("Latitude")
+        longitude = bundle.getDouble("Longitude")
+        atm_name = bundle.getString("Location_Name")
     }
 
     override fun showLoading() {
@@ -90,11 +92,6 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
     override fun onStart(){
         super.onStart()
         presenter.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        presenter.startLoadingATMDetails()
     }
 
     override fun onStop() {

@@ -9,7 +9,6 @@ import android.widget.Toast
 import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.AgentPresenter
 import com.example.bank_map_view.mvp.view.AgentView
-import kotlinx.android.synthetic.main.activity_main.swipeRefresh
 import kotlinx.android.synthetic.main.details.*
 
 class AgentDetailActivity : AppCompatActivity(), AgentView {

@@ -1,5 +1,6 @@
 package com.example.bank_map_view.ui.activities
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -15,6 +16,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.GridLayout
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.example.bank_branch_details.mvp.presenter.TouchPointListPresenter
 import com.example.bank_branch_details.mvp.view.TouchPointListView
@@ -46,13 +48,18 @@ import com.example.bank_map_view.ui.adapter.ServiceAdapter
 import com.example.bank_map_view.ui.adapter.MerchantAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bank_list.bottom_sheet
+import kotlinx.android.synthetic.main.branch_detail.*
+import kotlinx.android.synthetic.main.branch_detail.back_press_iv
 import kotlinx.android.synthetic.main.currency.*
+import kotlinx.android.synthetic.main.details.*
 
 class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, ServiceView, OnMapReadyCallback {
 
     private lateinit var presenter : TouchPointListPresenter
     private lateinit var currencyPresenter : CurrencyPresenter
     private lateinit var servicePresenter: ServicePresenter
+
+    private lateinit var progressDialog : ProgressDialog
 
     private var behavior : BottomSheetBehavior<LinearLayout>? = null
     private  var currecy_behavior : BottomSheetBehavior<ConstraintLayout>? = null
@@ -91,6 +98,10 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         behavior!!.peekHeight = 390
         behavior!!.isHideable = false
 
+        progressDialog =  ProgressDialog(this)
+        progressDialog.setMessage("loading")
+        progressDialog.setCancelable(false)
+
         presenter = TouchPointListPresenter(this)
         presenter.startLoadingTouchList()
 
@@ -106,10 +117,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
         DataImpl.getInstance().getBranchDetail(value = "branchCode")
 
-        swipeRefresh.setOnRefreshListener {
-            dismissLoading()
-        }
-
         branch_btn.setOnClickListener {
 
             branch_btn.setTextColor(Color.WHITE)
@@ -123,7 +130,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
             agent_btn.setTextColor(Color.DKGRAY)
             agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
-
 
             //with change state
             /*branch_btn.setSelected(true)
@@ -145,12 +151,13 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
                 }
             }
 
-            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 16f))
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 14f))
 
             bottom_sheet_currency.visibility = View.GONE
             bottom_sheet.visibility = View.VISIBLE
 
             recyclerview!!.adapter = branchAdapter
+
         }
 
         atm_btn.setOnClickListener {
@@ -187,7 +194,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
                 }
             }
 
-                googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(atmLatLng, 16f))
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(atmLatLng, 14f))
 
             bottom_sheet_currency.visibility = View.GONE
             bottom_sheet.visibility = View.VISIBLE
@@ -215,6 +222,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             atm_btn.setSelected(false)
             agent_btn.setSelected(false)*/
 
+            googleMap!!.clear()
+
             bottom_sheet_currency.visibility = View.GONE
             bottom_sheet.visibility = View.VISIBLE
 
@@ -241,6 +250,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             atm_btn.setSelected(false)
             merchant_btn.setSelected(false)*/
 
+            googleMap!!.clear()
+
             bottom_sheet_currency.visibility = View.GONE
             bottom_sheet.visibility = View.VISIBLE
 
@@ -249,6 +260,9 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
     }
 
     override fun displayBranch(access_Branch: ArrayList<Access_Branch>) {
+
+        googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 14f))
+
         recyclerview = findViewById(R.id.bank_recyclerview)
         branchAdapter = BranchAdapter(this, object : BranchItemClickListener{
             override fun onClicked(id: String) {
@@ -323,6 +337,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
     override fun showPlaces(access_ATM: ArrayList<Access_ATM>, access_Branch: ArrayList<Access_Branch>, access_Agent: ArrayList<Access_Agent>, access_Merchant: ArrayList<Access_Merchant>) {
 
+        progressDialog.dismiss()
+
         markerATMList = access_ATM
         if(markerATMList.size>0) {
             for (index in 0 until markerATMList.size) {
@@ -335,7 +351,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
                 markers!!.rotation = 20f
                 markers!!.tag = markerATMList.get(index).Terminal_ID
             }
-            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(atmLatLng, 16f))
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(atmLatLng, 14f))
         }
 
         markerBranchList = access_Branch
@@ -343,14 +359,14 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             for (index in 0 until markerBranchList.size) {
                 branchLatLng = LatLng(markerBranchList.get(index).Latitude!!, markerBranchList.get(index).Longitude!!)
                 markers = googleMap!!.addMarker(
-                    MarkerOptions().position(branchLatLng!!).title(markerBranchList!!.get(index).Branch_Name).icon(
+                    MarkerOptions().position(branchLatLng!!).title(markerBranchList.get(index).Branch_Name).icon(
                         bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)
                     )
                 )
                 markers!!.rotation = -20f
                 markers!!.tag = markerBranchList.get(index).Branch_Code
             }
-            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 16f))
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 14f))
         }
 
         markerAgentList = access_Agent
@@ -365,7 +381,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
                 markers!!.rotation = 20f
                 markers!!.tag = markerAgentList.get(index).agent_id
             }
-            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(agentLatLng, 16f))
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(agentLatLng, 14f))
         }
 
         markerMerchantList = access_Merchant
@@ -381,7 +397,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
                 markers!!.rotation = 20f
                 markers!!.tag = markerMerchantList.get(index).merchant_id
             }
-            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(merchantLatLng, 16f))
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(merchantLatLng, 14f))
         }
 
         bottom_sheet.visibility = View.GONE
@@ -435,6 +451,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
     }
 
     override fun onMapReady(map: GoogleMap?) {
+
         googleMap = map!!
         presenter.startLoadingTouchList()
 
@@ -442,9 +459,9 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             override fun onInfoWindowClick(marker: Marker?) {
 
                 if(markerATMList.size>0) {
-                    for (index in 0 until markerATMList!!.size) {
+                    for (index in 0 until markerATMList.size) {
                         markers = marker
-                        if (markers!!.tag == markerATMList!!.get(index).Terminal_ID) {
+                        if (markers!!.tag == markerATMList.get(index).Terminal_ID) {
                             val atmIntent = Intent(this@MainActivity, ATMDetailsActivity::class.java)
                             atmIntent.putExtra("Location_Name", markerATMList[index].Location_Name)
                             atmIntent.putExtra("Address", markerATMList[index].Address)
@@ -460,7 +477,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
                         markers = marker
                         if (markers!!.tag == markerBranchList.get(index).Branch_Code) {
                             val branchIntent = Intent(this@MainActivity, BranchDetailsActivity::class.java)
-                            branchIntent.putExtra("branchCode", markerBranchList!![index].Branch_Code)
+                            branchIntent.putExtra("branchCode", markerBranchList[index].Branch_Code)
                             startActivity(branchIntent)
                         }
                     }
@@ -512,19 +529,41 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
     }
 
     override fun showLoading() {
-        if (!swipeRefresh.isRefreshing) {
-            swipeRefresh.isRefreshing = true
-        }
+        progressDialog.show()
     }
 
     override fun dismissLoading() {
-        if (swipeRefresh.isRefreshing) {
-            swipeRefresh.isRefreshing = false
-        }
+        progressDialog.dismiss()
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+
+        if(bottom_sheet_currency.visibility == View.GONE){
+
+            progressDialog.dismiss()
+            bottom_sheet.visibility = View.GONE
+            bottom_sheet_currency.visibility = View.VISIBLE
+            behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+
+            presenter.startLoadingTouchList()
+
+            branch_btn.setTextColor(Color.DKGRAY)
+            branch_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            atm_btn.setTextColor(Color.DKGRAY)
+            atm_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            merchant_btn.setTextColor(Color.DKGRAY)
+            merchant_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            agent_btn.setTextColor(Color.DKGRAY)
+            agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+        }
+
+        else{
+            super.onBackPressed()
+            finish()
+        }
     }
 
     override fun onStart() {

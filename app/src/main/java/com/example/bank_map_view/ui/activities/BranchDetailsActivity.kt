@@ -58,8 +58,7 @@ class BranchDetailsActivity : AppCompatActivity(), BranchView {
         }
 
         back_press_iv.setOnClickListener {
-            val intent = Intent(this@BranchDetailsActivity, MainActivity::class.java)
-            startActivity(intent)
+            this.finish()
         }
     }
 
@@ -111,11 +110,6 @@ class BranchDetailsActivity : AppCompatActivity(), BranchView {
     override fun onStart(){
         super.onStart()
         presenter.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        presenter.startLoadingBranchDetails(value = "branchCode")
     }
 
     override fun onStop() {
