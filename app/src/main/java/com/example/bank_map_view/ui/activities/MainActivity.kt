@@ -389,8 +389,39 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         currecy_behavior!!.isHideable = false
     }
 
-    override fun showCurrencyDetails(currency: ArrayList<Currency>) {
+    override fun showCurrencyDetails(currencyResponse: CurrencyResponse) {
 
+            var currencyDenominationList = arrayListOf<Currency>()
+            for (currencyData in currencyResponse.currency!!) {
+                val splitDenomination = currencyData.denomination!!.split(",")
+                for (denomination in splitDenomination) {
+                    if (denomination.contentEquals("100")) {
+                        currencyDenominationList.add(currencyData)
+
+                        for (index in 0 until currencyDenominationList.size) {
+                            if (currencyDenominationList[index].currecyCode == "USD") {
+                                buy_usd_tv.text = currencyDenominationList[index].buy_rate
+                                sell_usd_tv.text = currencyDenominationList[index].sell_rate
+                            }
+
+                            if (currencyDenominationList[index].currecyCode == "SGD") {
+                                buy_sgd_tv.text = currencyDenominationList[index].buy_rate
+                                sell_sgd_tv.text = currencyDenominationList[index].sell_rate
+                            }
+
+                            if (currencyDenominationList[index].currecyCode == "EUR") {
+                                buy_eur_tv.text = currencyDenominationList[index].buy_rate
+                                sell_eur_tv.text = currencyDenominationList[index].sell_rate
+                            }
+
+                            if (currencyDenominationList[index].currecyCode == "THB") {
+                                buy_thb_tv.text = currencyDenominationList[index].buy_rate
+                                sell_thb_tv.text = currencyDenominationList[index].sell_rate
+                            }
+                        }
+                    }
+                }
+            }
     }
 
     override fun showServiceDetails(serviceResponse: ServiceResponse) {

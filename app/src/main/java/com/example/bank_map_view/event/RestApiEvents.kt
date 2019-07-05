@@ -18,6 +18,6 @@ object RestApiEvents {
     class ShowAgentDetails(val access_Agent: ArrayList<Access_Agent>)
     class ShowMerchantDetails(val access_Merchant: ArrayList<Access_Merchant>)
 
-    class ShowCurrency(val currency : ArrayList<Currency>)
+    class ShowCurrency(val currencyResponse: CurrencyResponse)
     class ShowService(val serviceResponse: ServiceResponse)
 }

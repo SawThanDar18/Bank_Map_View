@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 class Currency {
 
+    @SerializedName("CurrencyCode")
+    val currecyCode : String? = null
+
     @SerializedName("Denomination")
     val denomination : String? = null
 

@@ -218,13 +218,8 @@ open class DataImpl private constructor() : Data{
     }
 
     override fun getCurrency() {
-
-        var parameters : HashMap<String, String> = HashMap<String, String>()
-        parameters.put("CurrencyCode", "USD")
-        parameters.put("Denomination", "100")
-
         val branch = BranchCode("5.01")
-        requestCurrencyApi.getCurrency("Bearer ${token}", branch, parameters).enqueue(object : Callback<CurrencyResponse> {
+        requestCurrencyApi.getCurrency("Bearer ${token}", branch).enqueue(object : Callback<CurrencyResponse> {
             override fun onFailure(call: Call<CurrencyResponse>, t: Throwable) {
                 EventBus.getDefault()
                     .post(RestApiEvents.ErrorInvokingAPIEvent(
@@ -233,10 +228,10 @@ open class DataImpl private constructor() : Data{
             }
 
             override fun onResponse(call: Call<CurrencyResponse>, response: Response<CurrencyResponse>) {
-                val currencyResponse = response.body()
                 if(response.isSuccessful){
+
                     EventBus.getDefault()
-                        .post(RestApiEvents.ShowCurrency(currencyResponse!!.currency!!))
+                        .post(RestApiEvents.ShowCurrency(response.body()!!))
                 }
                 else{
 

@@ -8,5 +8,5 @@ interface CurrencyView {
     fun showPrompt(message : String)
     fun showLoading()
     fun dismissLoading()
-    fun showCurrencyDetails(currency : ArrayList<Currency>)
+    fun showCurrencyDetails(currencyResponse: CurrencyResponse)
 }

@@ -30,7 +30,7 @@ class CurrencyPresenter(val currencyView: CurrencyView) : BasePresenter() {
     @Subscribe
     fun onSuccess(event : RestApiEvents.ShowCurrency){
         currencyView.dismissLoading()
-        currencyView.showCurrencyDetails(event.currency)
+        currencyView.showCurrencyDetails(event.currencyResponse)
     }
 
     @Subscribe
