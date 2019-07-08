@@ -20,7 +20,7 @@ class MerchantAdapter (val context : Context, val itemClickListener: ItemClickLi
     }
 
     override fun getItemCount(): Int {
-        return access_Merchant!!.size
+        return access_Merchant.size
     }
 
     override fun onBindViewHolder(view: MerchantHolder, position: Int) {

@@ -15,6 +15,7 @@ import com.example.bank_branch_details.ui.utils.Constant
 import com.example.bank_map_view.network.api.RequestBranchDetailApi
 import com.example.bank_map_view.network.api.RequestCurrencyApi
 import com.example.bank_map_view.network.api.RequestServiceApi
+import com.example.bank_map_view.network.api.RequestServiceDetailApi
 import com.example.bank_map_view.network.model.*
 import com.example.bank_map_view.network.response.BranchCodeResponse
 import com.example.bank_map_view.network.response.CurrencyResponse
@@ -41,6 +42,7 @@ open class DataImpl private constructor() : Data{
     private var requestTouchListApi : RequestTouchPointListApi
     private var requestCurrencyApi : RequestCurrencyApi
     private var requestServiceApi : RequestServiceApi
+    private var requestServiceDetailApi : RequestServiceDetailApi
 
     private var context : Context? = null
     private var token : String? = null
@@ -132,6 +134,13 @@ open class DataImpl private constructor() : Data{
             .build()
         requestServiceApi = serviceRetrofit.create(RequestServiceApi::class.java)
 
+        val serviceDetailRetrofit = Retrofit.Builder()
+            .baseUrl(Constant.BranchDetail_URL)
+            .addConverterFactory(GsonConverterFactory.create(Gson()))
+            .client(client)
+            .build()
+        requestServiceDetailApi = serviceDetailRetrofit.create(RequestServiceDetailApi::class.java)
+
     }
 
     override fun getRequestAuth() {
@@ -152,6 +161,7 @@ open class DataImpl private constructor() : Data{
                  getBranchDetail(value = "branchCode")
                  getCurrency()
                  getService()
+                 getServiceDetail(value = "service_code")
 
              } else {
                  Log.i("login","else")
@@ -256,6 +266,29 @@ open class DataImpl private constructor() : Data{
                 if(response.isSuccessful){
                     EventBus.getDefault()
                         .post(RestApiEvents.ShowService(response.body()!!))
+                }
+                else{
+
+                }
+            }
+
+        })
+    }
+
+    override fun getServiceDetail(value : String) {
+        val branch = ServiceCode("5.01", value)
+        requestServiceDetailApi.getServiceDetail("Bearer ${token}", branch).enqueue(object : Callback<ServiceResponse>{
+            override fun onFailure(call: Call<ServiceResponse>, t: Throwable) {
+                EventBus.getDefault()
+                    .post(RestApiEvents.ErrorInvokingAPIEvent(
+                        t.localizedMessage
+                    ))
+            }
+
+            override fun onResponse(call: Call<ServiceResponse>, response: Response<ServiceResponse>) {
+                if(response.isSuccessful){
+                    EventBus.getDefault()
+                        .post(RestApiEvents.ShowServiceDetail(response.body()!!))
                 }
                 else{
 

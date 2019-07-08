@@ -1,8 +1,8 @@
 package com.example.bank_map_view.network.response
 
 import com.example.bank_branch_details.network.model.Access_BranchInfo
-import com.example.bank_branch_details.network.model.Access_BranchServices
 import com.example.bank_map_view.network.model.Access_BranchCode
+import com.example.bank_map_view.network.model.Service_List
 import com.google.gson.annotations.SerializedName
 
 class BranchCodeResponse {
@@ -14,5 +14,5 @@ class BranchCodeResponse {
     val access_BranchInfo : Access_BranchInfo? = null
 
     @SerializedName("Services")
-    val access_BranchServices : ArrayList<Access_BranchServices>? = null
+    val service_List : ArrayList<Service_List>? = null
 }

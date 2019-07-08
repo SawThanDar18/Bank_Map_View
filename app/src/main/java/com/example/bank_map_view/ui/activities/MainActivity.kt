@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         behavior = BottomSheetBehavior.from(bottom_sheet)
         currecy_behavior = BottomSheetBehavior.from(bottom_sheet_currency)
 
-        bottom_sheet.visibility = View.GONE
+        //bottom_sheet.visibility = View.GONE
         behavior!!.peekHeight = 390
         behavior!!.isHideable = false
 
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         currencyPresenter.startLoadingCurrencyDetails()
 
         servicePresenter = ServicePresenter(this)
-        servicePresenter.startLoadingServiceDetails()
+        servicePresenter.startLoadingServiceList()
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
@@ -387,8 +387,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         markerMerchantList = access_Merchant
         if(markerMerchantList.size>0) {
             for (index in 0 until markerMerchantList.size) {
-                merchantLatLng =
-                    LatLng(markerMerchantList.get(index).latitude!!, markerMerchantList.get(index).longitude!!)
+                merchantLatLng = LatLng(markerMerchantList.get(index).latitude!!, markerMerchantList.get(index).longitude!!)
                 markers = googleMap!!.addMarker(
                     MarkerOptions().position(merchantLatLng!!).title(markerMerchantList.get(index).merchant_name).icon(
                         bitmapDescriptorFromVector(this, R.drawable.ic_merchant_24dp)
@@ -440,20 +439,26 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             }
     }
 
-    override fun showServiceDetails(serviceResponse: ServiceResponse) {
+    override fun showServiceList(serviceResponse: ServiceResponse) {
 
         service_recyclerView = findViewById(R.id.service_recycler)
-        serviceAdapter = ServiceAdapter(this, serviceResponse.service_List!!)
+        serviceAdapter = ServiceAdapter(this, object : BranchItemClickListener{
+            override fun onClicked(id: String) {
+                val intent = Intent(applicationContext, ServiceDetailActivity::class.java)
+                intent.putExtra("service_code",id)
+                startActivity(intent)
+            }
+        })
 
-        service_recyclerView!!.adapter = serviceAdapter
         var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
         service_recyclerView!!.setLayoutManager(layoutManager)
+        serviceAdapter.setNewData(serviceResponse.service_List!!)
+        service_recyclerView!!.adapter = serviceAdapter
     }
 
     override fun onMapReady(map: GoogleMap?) {
 
         googleMap = map!!
-        presenter.startLoadingTouchList()
 
         googleMap!!.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener {
             override fun onInfoWindowClick(marker: Marker?) {
@@ -562,7 +567,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
         else{
             super.onBackPressed()
-            finish()
         }
     }
 

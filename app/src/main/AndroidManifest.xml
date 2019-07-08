@@ -32,6 +32,7 @@
         <activity android:name=".ui.activities.MainActivity"/>
         <activity android:name=".ui.activities.BranchDetailsActivity"/>
         <activity android:name=".ui.activities.ATMDetailsActivity"/>
+        <activity android:name=".ui.activities.ServiceDetailActivity"/>
     </application>
 
 </manifest>

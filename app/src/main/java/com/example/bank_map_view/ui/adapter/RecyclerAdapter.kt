@@ -3,31 +3,33 @@ package com.example.bank_branch_details.ui.detail.adapter
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.example.bank_branch_details.network.model.Access_BranchServices
 import com.example.bank_map_view.R
+import com.example.bank_map_view.network.BranchItemClickListener
+import com.example.bank_map_view.network.model.Service_List
+import com.example.bank_map_view.ui.holders.RecyclerHolder
 
-class RecyclerAdapter(val branch_service : ArrayList<Access_BranchServices>, val mContext : Context) : RecyclerView.Adapter<RecyclerAdapter.MyHolder>() {
+class RecyclerAdapter(val context : Context, val itemClickListener: BranchItemClickListener) : RecyclerView.Adapter<RecyclerHolder>() {
 
-    override fun onCreateViewHolder(view: ViewGroup, viewType: Int): MyHolder {
+    private var service_List : ArrayList<Service_List> = arrayListOf()
+
+    override fun onCreateViewHolder(view: ViewGroup, viewType: Int): RecyclerHolder {
 
         val view = LayoutInflater.from(view.context).inflate(R.layout.branch_details_recycler_items, view, false)
-        return MyHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: MyHolder, position: Int) {
-
-        val branch_services : Access_BranchServices = branch_service[position]
-        holder.service_title.text = branch_services.service_title
-    }
-
-    class MyHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        val service_title = itemView.findViewById(R.id.branch_detail_tv) as TextView
+        return RecyclerHolder(view, context, itemClickListener)
     }
 
     override fun getItemCount(): Int {
-        return branch_service.size
+        return service_List.size
+    }
+
+    override fun onBindViewHolder(holder: RecyclerHolder, position: Int) {
+
+        holder.index(service_List[position])
+    }
+
+    fun setNewData(serviceList : ArrayList<Service_List>){
+        service_List = serviceList
+        notifyDataSetChanged()
     }
 }

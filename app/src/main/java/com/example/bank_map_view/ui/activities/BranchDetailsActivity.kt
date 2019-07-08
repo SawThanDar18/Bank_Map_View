@@ -13,6 +13,7 @@ import com.example.bank_branch_details.ui.detail.adapter.RecyclerAdapter
 import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.BranchPresenter
 import com.example.bank_map_view.mvp.view.BranchView
+import com.example.bank_map_view.network.BranchItemClickListener
 import com.example.bank_map_view.network.response.BranchCodeResponse
 import kotlinx.android.synthetic.main.branch_detail.*
 
@@ -72,16 +73,24 @@ class BranchDetailsActivity : AppCompatActivity(), BranchView {
         val branch_address = findViewById<TextView>(R.id.address_tv)
         val branch_phone = findViewById<TextView>(R.id.branch_phone)
 
-        branch_title_tv.text = branchCodeResponse!!.access_BranchInfo!!.branch_name
-        branch_title.text = branchCodeResponse!!.access_BranchInfo!!.branch_name
-        branch_address.text = branchCodeResponse.access_BranchInfo!!.branch_address
-        branch_phone.text = branchCodeResponse.access_BranchInfo!!.branch_phone
+        branch_title_tv.text = branchCodeResponse.access_BranchInfo!!.branch_name
+        branch_title.text = branchCodeResponse.access_BranchInfo.branch_name
+        branch_address.text = branchCodeResponse.access_BranchInfo.branch_address
+        branch_phone.text = branchCodeResponse.access_BranchInfo.branch_phone
 
         recyclerview = findViewById(R.id.recyclerview)
-        recyclerAdapter = RecyclerAdapter(branchCodeResponse.access_BranchServices!!, this)
-        recyclerview.adapter = recyclerAdapter
+        recyclerAdapter = RecyclerAdapter(this, object : BranchItemClickListener{
+            override fun onClicked(id: String) {
+                val intent = Intent(applicationContext, ServiceDetailActivity::class.java)
+                intent.putExtra("service_code",id)
+                startActivity(intent)
+            }
+
+        })
         var layoutManager = GridLayoutManager(this, 1, GridLayout.VERTICAL, false)
         recyclerview.setLayoutManager(layoutManager)
+        recyclerAdapter.setNewData(branchCodeResponse.service_List!!)
+        recyclerview.adapter = recyclerAdapter
     }
 
     override fun viewMap(branchCodeResponse: BranchCodeResponse) {

@@ -3,11 +3,11 @@ package com.example.bank_map_view.mvp.presenter
 import com.example.bank_branch_details.event.RestApiEvents
 import com.example.bank_branch_details.mvp.model.BranchModel
 import com.example.bank_branch_details.mvp.presenter.BasePresenter
-import com.example.bank_map_view.mvp.view.ServiceView
+import com.example.bank_map_view.mvp.view.ServiceDetailView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
-class ServicePresenter constructor(val serviceView: ServiceView) : BasePresenter() {
+class ServiceDetailPresenter  constructor(val serviceDetailView: ServiceDetailView) : BasePresenter() {
 
     override fun onStart(){
         if(!EventBus.getDefault().isRegistered(this)){
@@ -15,9 +15,9 @@ class ServicePresenter constructor(val serviceView: ServiceView) : BasePresenter
         }
     }
 
-    fun startLoadingServiceList(){
-        serviceView.showLoading()
-        BranchModel.getInstance().getRequestAuth()
+    fun startLoadingServiceDetails(value : String){
+        serviceDetailView.showLoading()
+        BranchModel.getInstance().getServiceDetail(value)
     }
 
     override fun onStop(){
@@ -27,14 +27,14 @@ class ServicePresenter constructor(val serviceView: ServiceView) : BasePresenter
     }
 
     @Subscribe
-    fun onSuccess(event : RestApiEvents.ShowService){
-        serviceView.dismissLoading()
-        serviceView.showServiceList(event.serviceResponse)
+    fun onSuccess(event : RestApiEvents.ShowServiceDetail){
+        serviceDetailView.dismissLoading()
+        serviceDetailView.showServiceDetails(event.serviceResponse)
     }
 
     @Subscribe
     fun onError(event: RestApiEvents.ErrorInvokingAPIEvent){
-        serviceView.dismissLoading()
-        serviceView.showPrompt(event.message)
+        serviceDetailView.dismissLoading()
+        serviceDetailView.showPrompt(event.message)
     }
 }

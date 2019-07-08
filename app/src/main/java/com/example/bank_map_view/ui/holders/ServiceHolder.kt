@@ -7,9 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.bank_map_view.R
+import com.example.bank_map_view.network.BranchItemClickListener
 import com.example.bank_map_view.network.model.Service_List
 
-class ServiceHolder (itemView : View, private val context: Context) : RecyclerView.ViewHolder(itemView){
+class ServiceHolder (itemView : View, private val context: Context, val itemClickListener: BranchItemClickListener) : RecyclerView.ViewHolder(itemView){
 
     private val title : TextView
     private val description : TextView
@@ -27,5 +28,10 @@ class ServiceHolder (itemView : View, private val context: Context) : RecyclerVi
         title.text = service_List.title
         description.text = service_List.description
         Glide.with(context).load(service_List.image_path).into(image_path)
+
+        itemView.setOnClickListener{
+            itemClickListener.onClicked(service_List.service_code!!)
+        }
     }
+
 }
