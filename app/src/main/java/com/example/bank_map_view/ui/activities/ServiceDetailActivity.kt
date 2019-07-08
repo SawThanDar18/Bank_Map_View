@@ -51,12 +51,9 @@ class ServiceDetailActivity : AppCompatActivity(), ServiceDetailView {
         val service_detail_webview = findViewById<WebView>(R.id.service_detail_webview)
         val detail_tv = findViewById<TextView>(R.id.detail_tv)
 
-        var i : Int? = null
-
         for(index in 0 until serviceList!!.size) {
             if(serviceList[index].service_code.equals(value)) {
 
-                i = index
                 service_title.text = serviceList[index].title
                 Glide.with(applicationContext).load(serviceList[index].image_path).into(image_path)
                 service_detail_webview.loadData(serviceList[index].service_detail, "text/html", null)
