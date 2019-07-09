@@ -1,6 +1,7 @@
 package com.example.bank_map_view.ui.activities
 
 import android.os.Bundle
+import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v7.app.AppCompatActivity
 import android.webkit.WebView
 import android.widget.ImageView
@@ -11,6 +12,7 @@ import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.ServiceDetailPresenter
 import com.example.bank_map_view.mvp.view.ServiceDetailView
 import com.example.bank_map_view.network.response.ServiceResponse
+import kotlinx.android.synthetic.main.activity_scrolling.*
 import kotlinx.android.synthetic.main.service_detail_webview.*
 import kotlinx.android.synthetic.main.service_detail_webview.swipeRefresh
 
@@ -25,7 +27,7 @@ class ServiceDetailActivity : AppCompatActivity(), ServiceDetailView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.service_detail_webview)
+        setContentView(R.layout.activity_scrolling)
 
         bundle = intent.extras
         value = bundle.getString("service_code")
@@ -37,7 +39,7 @@ class ServiceDetailActivity : AppCompatActivity(), ServiceDetailView {
             presenter.startLoadingServiceDetails(value!!)
         }
 
-        back.setOnClickListener {
+        back_iv.setOnClickListener {
             this.finish()
         }
     }
@@ -49,7 +51,7 @@ class ServiceDetailActivity : AppCompatActivity(), ServiceDetailView {
         val service_title = findViewById<TextView>(R.id.title)
         val image_path = findViewById<ImageView>(R.id.image_path)
         val service_detail_webview = findViewById<WebView>(R.id.service_detail_webview)
-        val detail_tv = findViewById<TextView>(R.id.detail_tv)
+        val detail_tv = findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)
 
         for(index in 0 until serviceList!!.size) {
             if(serviceList[index].service_code.equals(value)) {
@@ -57,7 +59,7 @@ class ServiceDetailActivity : AppCompatActivity(), ServiceDetailView {
                 service_title.text = serviceList[index].title
                 Glide.with(applicationContext).load(serviceList[index].image_path).into(image_path)
                 service_detail_webview.loadData(serviceList[index].service_detail, "text/html", null)
-                detail_tv.append(serviceList[index].title)
+                detail_tv.title = "More Details about " + serviceList[index].title
             }
         }
     }

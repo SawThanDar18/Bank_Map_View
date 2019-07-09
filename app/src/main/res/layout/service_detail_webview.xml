@@ -94,7 +94,7 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 android:id="@+id/service_detail_webview"/>
         <TextView
-                android:text="More Details about "
+                android:text="@string/link"
                 android:textColor="@color/branch_color"
                 android:textSize="15sp"
                 android:layout_width="match_parent"
