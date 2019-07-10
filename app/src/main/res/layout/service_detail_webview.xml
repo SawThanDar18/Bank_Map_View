@@ -75,7 +75,7 @@
                     android:textColor="#fff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/title"
+                    android:id="@+id/title_text"
                     app:layout_constraintTop_toBottomOf="@+id/image_path" android:layout_marginBottom="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
