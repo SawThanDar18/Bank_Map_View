@@ -14,10 +14,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.GridLayout
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import com.example.bank_branch_details.mvp.presenter.TouchPointListPresenter
 import com.example.bank_branch_details.mvp.view.TouchPointListView
 import com.example.bank_branch_details.network.DataImpl
@@ -25,8 +22,10 @@ import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Branch
 import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.CurrencyPresenter
+import com.example.bank_map_view.mvp.presenter.SearchListPresenter
 import com.example.bank_map_view.mvp.presenter.ServicePresenter
 import com.example.bank_map_view.mvp.view.CurrencyView
+import com.example.bank_map_view.mvp.view.SearchListView
 import com.example.bank_map_view.mvp.view.ServiceView
 import com.example.bank_map_view.network.ItemClickListener
 import com.example.bank_map_view.network.BranchItemClickListener
@@ -34,6 +33,7 @@ import com.example.bank_map_view.network.model.Access_Agent
 import com.example.bank_map_view.network.model.Access_Merchant
 import com.example.bank_map_view.network.model.Currency
 import com.example.bank_map_view.network.response.CurrencyResponse
+import com.example.bank_map_view.network.response.SearchResponse
 import com.example.bank_map_view.network.response.ServiceResponse
 import com.example.details_design.branch.BranchAdapter
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -94,8 +94,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         behavior = BottomSheetBehavior.from(bottom_sheet)
         currecy_behavior = BottomSheetBehavior.from(bottom_sheet_currency)
 
-        //bottom_sheet.visibility = View.GONE
-        behavior!!.peekHeight = 390
+        behavior!!.peekHeight = 370
         behavior!!.isHideable = false
 
         progressDialog =  ProgressDialog(this)
@@ -400,7 +399,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         }
 
         bottom_sheet.visibility = View.GONE
-        currecy_behavior!!.peekHeight = 420
+        currecy_behavior!!.peekHeight = 350
         currecy_behavior!!.isHideable = false
     }
 
@@ -543,12 +542,13 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
     override fun onBackPressed() {
 
-        if(bottom_sheet_currency.visibility == View.GONE){
+         if(bottom_sheet_currency.visibility == View.GONE){
 
             progressDialog.dismiss()
-            bottom_sheet.visibility = View.GONE
+
             bottom_sheet_currency.visibility = View.VISIBLE
             behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
 
             presenter.startLoadingTouchList()
 
@@ -564,11 +564,11 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             agent_btn.setTextColor(Color.DKGRAY)
             agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
         }
-
-        else{
-            super.onBackPressed()
+            else {
+             super.onBackPressed()
+                this.finish()
+            }
         }
-    }
 
     override fun onStart() {
         super.onStart()

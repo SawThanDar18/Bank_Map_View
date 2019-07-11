@@ -39,4 +39,8 @@ class BranchModel {
     fun getServiceDetail(value : String){
         DataImpl.getInstance().getServiceDetail(value)
     }
+
+    fun getSearchList(value: String){
+        DataImpl.getInstance().getSearchList(value)
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.bank_map_view.ui.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -28,17 +29,23 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
 
     private lateinit var bundle : Bundle
 
+    private lateinit var progressDialog : ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.details)
 
         bundle = intent.extras
 
+        progressDialog =  ProgressDialog(this)
+        progressDialog.setMessage("loading")
+        progressDialog.setCancelable(false)
+
         presenter = ATMPresenter(this)
         presenter.startLoadingATMDetails()
 
         swipeRefresh.setOnRefreshListener {
-            dismissLoading()
+            presenter.startLoadingATMDetails()
         }
 
         refresh_iv.setOnClickListener {
@@ -61,10 +68,12 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
 
     override fun showATMDetails() {
 
+        val type = findViewById<TextView>(R.id.type_tv)
         val atm_title_tv = findViewById<TextView>(R.id.title)
-        val atm_title = findViewById<TextView>(R.id.title)
+        val atm_title = findViewById<TextView>(R.id.title_tv)
         val atm_address = findViewById<TextView>(R.id.address_tv)
 
+        type.text = bundle.getString("TouchPointType")
         atm_title_tv.text = bundle.getString("Location_Name")
         atm_title.text = bundle.getString("Location_Name")
         atm_address.text = bundle.getString("Address")
@@ -78,12 +87,13 @@ class ATMDetailsActivity : AppCompatActivity(), ATMView {
     }
 
     override fun showLoading() {
-        if (!swipeRefresh.isRefreshing) {
-            swipeRefresh.isRefreshing = true
-        }
+
+        progressDialog.show()
     }
 
     override fun dismissLoading() {
+
+        progressDialog.dismiss()
         if (swipeRefresh.isRefreshing) {
             swipeRefresh.isRefreshing = false
         }

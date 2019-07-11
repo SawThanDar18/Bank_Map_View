@@ -19,7 +19,7 @@ class AgentHolder (itemView : View, private val context: Context,  val itemClick
 
 
     init {
-        agent_name = itemView.findViewById(R.id.merchant_name)
+        agent_name = itemView.findViewById(R.id.name)
         agent_address = itemView.findViewById(R.id.address_tv)
         direction_iv = itemView.findViewById(R.id.direction_iv)
     }

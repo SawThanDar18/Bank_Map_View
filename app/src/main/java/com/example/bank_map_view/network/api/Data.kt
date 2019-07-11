@@ -9,4 +9,5 @@ interface Data {
     fun getCurrency()
     fun getService()
     fun getServiceDetail(value : String)
+    fun getSearchList(value : String)
 }

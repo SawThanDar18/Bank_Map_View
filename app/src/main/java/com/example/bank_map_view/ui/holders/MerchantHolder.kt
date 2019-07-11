@@ -19,7 +19,7 @@ class MerchantHolder (itemView : View, private val context: Context, val itemCli
 
 
     init {
-        merchant_name = itemView.findViewById(R.id.merchant_name)
+        merchant_name = itemView.findViewById(R.id.name)
         merchant_address = itemView.findViewById(R.id.address_tv)
         direction_iv = itemView.findViewById(R.id.direction_iv)
     }

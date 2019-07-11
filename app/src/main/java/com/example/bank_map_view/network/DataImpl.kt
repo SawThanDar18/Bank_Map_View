@@ -12,13 +12,12 @@ import com.example.bank_branch_details.network.model.Access_Token
 import com.example.bank_branch_details.network.model.Access_TouchPointList
 import com.example.bank_branch_details.network.response.TouchPointListResponse
 import com.example.bank_branch_details.ui.utils.Constant
+import com.example.bank_map_view.network.api.*
 import com.example.bank_map_view.network.api.RequestBranchDetailApi
-import com.example.bank_map_view.network.api.RequestCurrencyApi
-import com.example.bank_map_view.network.api.RequestServiceApi
-import com.example.bank_map_view.network.api.RequestServiceDetailApi
 import com.example.bank_map_view.network.model.*
 import com.example.bank_map_view.network.response.BranchCodeResponse
 import com.example.bank_map_view.network.response.CurrencyResponse
+import com.example.bank_map_view.network.response.SearchResponse
 import com.example.bank_map_view.network.response.ServiceResponse
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -43,6 +42,7 @@ open class DataImpl private constructor() : Data{
     private var requestCurrencyApi : RequestCurrencyApi
     private var requestServiceApi : RequestServiceApi
     private var requestServiceDetailApi : RequestServiceDetailApi
+    private var requestSearchListApi : RequestSearchListApi
 
     private var context : Context? = null
     private var token : String? = null
@@ -141,6 +141,13 @@ open class DataImpl private constructor() : Data{
             .build()
         requestServiceDetailApi = serviceDetailRetrofit.create(RequestServiceDetailApi::class.java)
 
+        val searchListRetrofit = Retrofit.Builder()
+            .baseUrl(Constant.BranchDetail_URL)
+            .addConverterFactory(GsonConverterFactory.create(Gson()))
+            .client(client)
+            .build()
+        requestSearchListApi = searchListRetrofit.create(RequestSearchListApi::class.java)
+
     }
 
     override fun getRequestAuth() {
@@ -162,6 +169,7 @@ open class DataImpl private constructor() : Data{
                  getCurrency()
                  getService()
                  getServiceDetail(value = "service_code")
+                 getSearchList(value = "Keyword")
 
              } else {
                  Log.i("login","else")
@@ -289,6 +297,34 @@ open class DataImpl private constructor() : Data{
                 if(response.isSuccessful){
                     EventBus.getDefault()
                         .post(RestApiEvents.ShowServiceDetail(response.body()!!))
+                }
+                else{
+
+                }
+            }
+
+        })
+    }
+
+    override fun getSearchList(value: String) {
+
+        getRequestAuth()
+        val branch = SearchCode("5.01", value, "1")
+        requestSearchListApi.getSearchList("Bearer ${token}", branch).enqueue(object : Callback<SearchResponse>{
+            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                EventBus.getDefault()
+                    .post(RestApiEvents.ErrorInvokingAPIEvent(
+                        t.localizedMessage
+                    ))
+            }
+
+            override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
+                val searchResponse = response.body()
+                if (searchResponse != null && searchResponse.search_List!!.isNotEmpty()) {
+                    EventBus.getDefault()
+                        .post(
+                            RestApiEvents.ShowSearchList(response.body()!!)
+                        )
                 }
                 else{
 

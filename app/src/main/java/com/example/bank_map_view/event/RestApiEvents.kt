@@ -6,6 +6,7 @@ import com.example.bank_map_view.network.model.Access_Agent
 import com.example.bank_map_view.network.model.Access_Merchant
 import com.example.bank_map_view.network.response.BranchCodeResponse
 import com.example.bank_map_view.network.response.CurrencyResponse
+import com.example.bank_map_view.network.response.SearchResponse
 import com.example.bank_map_view.network.response.ServiceResponse
 
 object RestApiEvents {
@@ -20,5 +21,6 @@ object RestApiEvents {
     class ShowCurrency(val currencyResponse: CurrencyResponse)
     class ShowService(val serviceResponse: ServiceResponse)
     class ShowServiceDetail(val serviceResponse: ServiceResponse)
+    class ShowSearchList(val searchResponse: SearchResponse)
 
 }

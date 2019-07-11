@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_margin="8dp">
     <TextView
             android:text="Name"
             android:textColor="#0054A6"
@@ -19,7 +19,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             app:layout_constraintHorizontal_bias="0.0"
-            tools:ignore="MissingConstraints"/>
+            tools:ignore="MissingConstraints" app:layout_constraintTop_toBottomOf="@+id/touchpointname"/>
     <TextView
             android:text="Address"
             android:layout_width="260dp"
@@ -104,5 +104,14 @@
             android:layout_marginEnd="8dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@+id/time"/>
+    <TextView
+            android:text="ATM"
+            android:textColor="@color/agent_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/touchpointname" android:layout_marginEnd="16dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"/>
 
 </android.support.constraint.ConstraintLayout>

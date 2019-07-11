@@ -1,5 +1,6 @@
 package com.example.bank_map_view.ui.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -22,17 +23,23 @@ class AgentDetailActivity : AppCompatActivity(), AgentView {
 
     private lateinit var bundle : Bundle
 
+    private lateinit var progressDialog : ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.details)
 
         bundle = intent.extras
 
+        progressDialog =  ProgressDialog(this)
+        progressDialog.setMessage("loading")
+        progressDialog.setCancelable(false)
+
         presenter = AgentPresenter(this)
         presenter.startLoadingAgentDetails()
 
         swipeRefresh.setOnRefreshListener {
-            dismissLoading()
+            presenter.startLoadingAgentDetails()
         }
 
         refresh_iv.setOnClickListener {
@@ -73,12 +80,13 @@ class AgentDetailActivity : AppCompatActivity(), AgentView {
     }
 
     override fun showLoading() {
-        if (!swipeRefresh.isRefreshing) {
-            swipeRefresh.isRefreshing = true
-        }
+
+        progressDialog.show()
     }
 
     override fun dismissLoading() {
+
+        progressDialog.dismiss()
         if (swipeRefresh.isRefreshing) {
             swipeRefresh.isRefreshing = false
         }
