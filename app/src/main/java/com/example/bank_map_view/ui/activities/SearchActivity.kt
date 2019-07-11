@@ -40,6 +40,7 @@ class SearchActivity : AppCompatActivity(), SearchListView {
         searchListPresenter.startLoadingSearchList(search_editText.text.toString())
 
         refresh.setOnClickListener {
+
             progressDialog.show()
 
             val value = search_editText.text.toString()
@@ -48,6 +49,7 @@ class SearchActivity : AppCompatActivity(), SearchListView {
         }
 
         search_iv.setOnClickListener {
+
             progressDialog.show()
 
             val value = search_editText.text.toString()
@@ -80,11 +82,11 @@ class SearchActivity : AppCompatActivity(), SearchListView {
     }
 
     override fun showPrompt(message: String) {
-
+        Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
 
     override fun showLoading() {
-        
+
     }
 
     override fun dismissLoading() {
@@ -98,7 +100,6 @@ class SearchActivity : AppCompatActivity(), SearchListView {
 
     override fun onResume() {
         super.onResume()
-        searchListPresenter.startLoadingSearchList(search_editText.text.toString())
     }
 
     override fun onStop() {

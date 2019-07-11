@@ -8,9 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.bank_map_view.R
-import com.example.bank_map_view.network.BranchItemClickListener
 import com.example.bank_map_view.network.ClickListener
-import com.example.bank_map_view.network.ItemClickListener
 import com.example.bank_map_view.network.model.Search_List
 
 class SearchHolder (itemView : View, private val context: Context, val itemClickListener: ClickListener) : RecyclerView.ViewHolder(itemView){
@@ -18,6 +16,7 @@ class SearchHolder (itemView : View, private val context: Context, val itemClick
     private val touchpointname : TextView
     private val name : TextView
     private val address : TextView
+    private val time : TextView
     private val call_iv : ImageView
     private val direction_iv : ImageView
 
@@ -26,6 +25,7 @@ class SearchHolder (itemView : View, private val context: Context, val itemClick
         touchpointname = itemView.findViewById(R.id.touchpointname)
         name = itemView.findViewById(R.id.name)
         address = itemView.findViewById(R.id.address_tv)
+        time = itemView.findViewById(R.id.time_tv)
         call_iv = itemView.findViewById(R.id.call_iv)
         direction_iv = itemView.findViewById(R.id.direction_iv)
     }
@@ -35,6 +35,7 @@ class SearchHolder (itemView : View, private val context: Context, val itemClick
         touchpointname.text = search_List.touchPointType
         name.text = search_List.location_Name
         address.text = search_List.address
+        time.text = "Open Now"
 
         call_iv.setOnClickListener {
 
