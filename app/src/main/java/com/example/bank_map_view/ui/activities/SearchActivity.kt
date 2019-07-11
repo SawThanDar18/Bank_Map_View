@@ -7,13 +7,16 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.KeyEvent
+import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.SearchListPresenter
 import com.example.bank_map_view.mvp.view.SearchListView
 import com.example.bank_map_view.network.ClickListener
-import com.example.bank_map_view.network.ItemClickListener
 import com.example.bank_map_view.network.response.SearchResponse
 import com.example.bank_map_view.ui.adapter.SearchAdapter
 import kotlinx.android.synthetic.main.search_activity.*
@@ -37,24 +40,36 @@ class SearchActivity : AppCompatActivity(), SearchListView {
         progressDialog.setCancelable(false)
 
         searchListPresenter = SearchListPresenter(this)
-        searchListPresenter.startLoadingSearchList(search_editText.text.toString())
+        searchListPresenter.startLoadingSearchList(search.text.toString())
 
         refresh.setOnClickListener {
 
             progressDialog.show()
 
-            val value = search_editText.text.toString()
+            val value = search.text.toString()
             searchListPresenter.startLoadingSearchList(value)
 
         }
 
-        search_iv.setOnClickListener {
+        back_iv.setOnClickListener {
 
             progressDialog.show()
-
-            val value = search_editText.text.toString()
-            searchListPresenter.startLoadingSearchList(value)
+            this.finish()
         }
+
+        search.setOnEditorActionListener(object : TextView.OnEditorActionListener{
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+
+                    val value = search.text.toString()
+                    searchListPresenter.startLoadingSearchList(value)
+
+                    return true
+                }
+                return false
+            }
+
+        })
 
     }
 

@@ -308,7 +308,6 @@ open class DataImpl private constructor() : Data{
 
     override fun getSearchList(value: String) {
 
-        getRequestAuth()
         val branch = SearchCode("5.01", value, "1")
         requestSearchListApi.getSearchList("Bearer ${token}", branch).enqueue(object : Callback<SearchResponse>{
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {

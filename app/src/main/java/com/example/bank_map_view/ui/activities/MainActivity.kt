@@ -22,10 +22,8 @@ import com.example.bank_branch_details.network.model.Access_ATM
 import com.example.bank_branch_details.network.model.Access_Branch
 import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.CurrencyPresenter
-import com.example.bank_map_view.mvp.presenter.SearchListPresenter
 import com.example.bank_map_view.mvp.presenter.ServicePresenter
 import com.example.bank_map_view.mvp.view.CurrencyView
-import com.example.bank_map_view.mvp.view.SearchListView
 import com.example.bank_map_view.mvp.view.ServiceView
 import com.example.bank_map_view.network.ItemClickListener
 import com.example.bank_map_view.network.BranchItemClickListener
@@ -33,7 +31,6 @@ import com.example.bank_map_view.network.model.Access_Agent
 import com.example.bank_map_view.network.model.Access_Merchant
 import com.example.bank_map_view.network.model.Currency
 import com.example.bank_map_view.network.response.CurrencyResponse
-import com.example.bank_map_view.network.response.SearchResponse
 import com.example.bank_map_view.network.response.ServiceResponse
 import com.example.details_design.branch.BranchAdapter
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -48,10 +45,7 @@ import com.example.bank_map_view.ui.adapter.ServiceAdapter
 import com.example.bank_map_view.ui.adapter.MerchantAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bank_list.bottom_sheet
-import kotlinx.android.synthetic.main.branch_detail.*
-import kotlinx.android.synthetic.main.branch_detail.back_press_iv
 import kotlinx.android.synthetic.main.currency.*
-import kotlinx.android.synthetic.main.details.*
 
 class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, ServiceView, OnMapReadyCallback {
 
@@ -97,6 +91,26 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         behavior!!.peekHeight = 370
         behavior!!.isHideable = false
 
+        currecy_behavior!!.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+            override fun onSlide(p0: View, p1: Float) {
+
+            }
+
+            override fun onStateChanged(view: View, newState: Int) {
+                when(newState){
+
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        Toast.makeText(applicationContext, "collapsed", Toast.LENGTH_LONG).show()
+                    }
+
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        Toast.makeText(applicationContext, "expand", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+        })
+
         progressDialog =  ProgressDialog(this)
         progressDialog.setMessage("loading")
         progressDialog.setCancelable(false)
@@ -110,11 +124,35 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         servicePresenter = ServicePresenter(this)
         servicePresenter.startLoadingServiceList()
 
+        val search = findViewById<TextView>(R.id.search)
+        search.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         DataImpl.getInstance().getBranchDetail(value = "branchCode")
+
+        val refresh = findViewById<ImageView>(R.id.refresh)
+        refresh.setOnClickListener {
+            presenter.startLoadingTouchList()
+            bottom_sheet_currency.visibility = View.VISIBLE
+
+            branch_btn.setTextColor(Color.DKGRAY)
+            branch_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            atm_btn.setTextColor(Color.DKGRAY)
+            atm_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            merchant_btn.setTextColor(Color.DKGRAY)
+            merchant_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            agent_btn.setTextColor(Color.DKGRAY)
+            agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+        }
 
         branch_btn.setOnClickListener {
 
@@ -129,12 +167,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
             agent_btn.setTextColor(Color.DKGRAY)
             agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
-
-            //with change state
-            /*branch_btn.setSelected(true)
-            atm_btn.setSelected(false)
-            agent_btn.setSelected(false)
-            merchant_btn.setSelected(false)*/
 
             if(markerATMList.size>0) {
                 googleMap!!.clear()
@@ -173,12 +205,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             agent_btn.setTextColor(Color.DKGRAY)
             agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
-            //with change state
-            /*atm_btn.setSelected(true)
-            branch_btn.setSelected(false)
-            agent_btn.setSelected(false)
-            merchant_btn.setSelected(false)*/
-
             if(markerBranchList.size>0){
                 googleMap!!.clear()
             for(index in 0 until markerATMList.size){
@@ -215,12 +241,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             agent_btn.setTextColor(Color.DKGRAY)
             agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
-            //with change state
-            /*merchant_btn.setSelected(true)
-            branch_btn.setSelected(false)
-            atm_btn.setSelected(false)
-            agent_btn.setSelected(false)*/
-
             googleMap!!.clear()
 
             bottom_sheet_currency.visibility = View.GONE
@@ -242,12 +262,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
             merchant_btn.setTextColor(Color.DKGRAY)
             merchant_btn.setBackgroundResource(R.drawable.unselected_button_shape)
-
-            //with change state
-            /*agent_btn.setSelected(true)
-            branch_btn.setSelected(false)
-            atm_btn.setSelected(false)
-            merchant_btn.setSelected(false)*/
 
             googleMap!!.clear()
 

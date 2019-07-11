@@ -21,7 +21,7 @@
                 android:value="@string/google_maps_key"/>
 
         <activity
-                android:name=".ui.activities.SearchActivity"
+                android:name=".ui.activities.SplashActivity"
                 android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -33,6 +33,7 @@
         <activity android:name=".ui.activities.BranchDetailsActivity"/>
         <activity android:name=".ui.activities.ATMDetailsActivity"/>
         <activity android:name=".ui.activities.ServiceDetailActivity"/>
+        <activity android:name=".ui.activities.SearchActivity"/>
     </application>
 
 </manifest>

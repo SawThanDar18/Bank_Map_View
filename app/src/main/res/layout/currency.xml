@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         android:background="#fff"
         app:behavior_peekHeight="150dp"
+        android:maxHeight="670dp"
         app:behavior_hideable="true"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
@@ -34,7 +35,7 @@
                     android:visibility="gone"
                     app:cardCornerRadius="40dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="50dp"
                     tools:ignore="MissingConstraints"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="8dp"
@@ -50,29 +51,29 @@
                         android:orientation="horizontal">
 
                     <ImageView
-                            android:id="@+id/search_iv"
-                            android:layout_margin="5dp"
+                            android:id="@+id/back_iv"
                             android:src="@drawable/ic_search_black_24dp"
                             android:layout_width="50dp"
-                            android:layout_height="46dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="16dp"
                             android:layout_weight="1"/>
 
                     <EditText
-                            android:id="@+id/search_et"
+                            android:id="@+id/search"
                             android:layout_width="292dp"
-                            android:layout_height="40dp"
+                            android:layout_height="50dp"
                             android:layout_weight="1"
-                            android:layout_marginTop="8dp"
                             android:hint="What do you need?"
                             android:layout_gravity="center"
                             android:textColor="#665E5E"/>
 
                     <ImageView
                             android:id="@+id/refresh"
-                            android:layout_margin="5dp"
                             android:src="@drawable/ic_refresh_black_24dp"
-                            android:layout_width="50dp"
-                            android:layout_height="46dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginRight="6dp"
+                            android:layout_marginTop="16dp"
                             android:layout_weight="1"/>
                 </LinearLayout>
 

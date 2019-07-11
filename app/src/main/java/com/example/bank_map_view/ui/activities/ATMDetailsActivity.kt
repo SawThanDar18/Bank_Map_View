@@ -1,6 +1,7 @@
 package com.example.bank_map_view.ui.activities
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
