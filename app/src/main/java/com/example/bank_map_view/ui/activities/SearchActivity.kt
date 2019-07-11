@@ -84,7 +84,7 @@ class SearchActivity : AppCompatActivity(), SearchListView {
     }
 
     override fun showLoading() {
-        //progressDialog.show()
+        
     }
 
     override fun dismissLoading() {
