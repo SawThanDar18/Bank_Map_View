@@ -6,14 +6,20 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Point
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.CoordinatorLayout
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.CardView
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
+import android.view.Display
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import com.example.bank_branch_details.mvp.presenter.TouchPointListPresenter
 import com.example.bank_branch_details.mvp.view.TouchPointListView
@@ -44,8 +50,12 @@ import com.example.bank_map_view.ui.adapter.AgentAdapter
 import com.example.bank_map_view.ui.adapter.ServiceAdapter
 import com.example.bank_map_view.ui.adapter.MerchantAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.bank_list.bottom_sheet
+import kotlinx.android.synthetic.main.bank_list.view.*
 import kotlinx.android.synthetic.main.currency.*
+import kotlinx.android.synthetic.main.currency.view.*
+import kotlinx.android.synthetic.main.currency.view.cardView
 
 class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, ServiceView, OnMapReadyCallback {
 
@@ -55,7 +65,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
     private lateinit var progressDialog : ProgressDialog
 
-    private var behavior : BottomSheetBehavior<LinearLayout>? = null
+    private var behavior : BottomSheetBehavior<ConstraintLayout>? = null
     private  var currecy_behavior : BottomSheetBehavior<ConstraintLayout>? = null
 
     private var googleMap : GoogleMap? = null
@@ -88,8 +98,17 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         behavior = BottomSheetBehavior.from(bottom_sheet)
         currecy_behavior = BottomSheetBehavior.from(bottom_sheet_currency)
 
+       /* //calculate screen size
+        val display : Display = getWindowManager().getDefaultDisplay()
+        val size = Point()
+        display.getSize(size)
+        val height : Int = size.y*/
+
         behavior!!.peekHeight = 370
         behavior!!.isHideable = false
+
+        currecy_behavior!!.peekHeight = 370
+        currecy_behavior!!.isHideable = false
 
         currecy_behavior!!.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
             override fun onSlide(p0: View, p1: Float) {
@@ -100,15 +119,34 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
                 when(newState){
 
                     BottomSheetBehavior.STATE_COLLAPSED -> {
-                        Toast.makeText(applicationContext, "collapsed", Toast.LENGTH_LONG).show()
+                        bottom_sheet_currency.cardView.visibility = View.GONE
                     }
 
                     BottomSheetBehavior.STATE_EXPANDED -> {
-                        Toast.makeText(applicationContext, "expand", Toast.LENGTH_LONG).show()
+                        bottom_sheet_currency.cardView.visibility = View.VISIBLE
                     }
                 }
             }
 
+        })
+
+        behavior!!.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+            override fun onSlide(p0: View, p1: Float) {
+
+            }
+
+            override fun onStateChanged(view: View, newState: Int) {
+                when(newState){
+
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                         bottom_sheet.cardView.visibility = View.GONE
+                    }
+
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        bottom_sheet.cardView.visibility = View.VISIBLE
+                    }
+                }
+            }
         })
 
         progressDialog =  ProgressDialog(this)
@@ -124,22 +162,85 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         servicePresenter = ServicePresenter(this)
         servicePresenter.startLoadingServiceList()
 
-        val search = findViewById<TextView>(R.id.search)
-        search.setOnClickListener {
-            val intent = Intent(this, SearchActivity::class.java)
-            startActivity(intent)
-        }
+        DataImpl.getInstance().getBranchDetail(value = "branchCode")
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        DataImpl.getInstance().getBranchDetail(value = "branchCode")
 
-        val refresh = findViewById<ImageView>(R.id.refresh)
+        //for activity_main layout
+        val search_tv = findViewById<TextView>(R.id.search_tv)
+        search_tv.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
+
+        val refresh = findViewById<ImageView>(R.id.refresh_iv)
         refresh.setOnClickListener {
+
             presenter.startLoadingTouchList()
             bottom_sheet_currency.visibility = View.VISIBLE
+
+            behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+
+            branch_btn.setTextColor(Color.DKGRAY)
+            branch_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            atm_btn.setTextColor(Color.DKGRAY)
+            atm_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            merchant_btn.setTextColor(Color.DKGRAY)
+            merchant_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            agent_btn.setTextColor(Color.DKGRAY)
+            agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+        }
+
+        //for currency_layout
+        val search_tv_currency = findViewById<TextView>(R.id.search_currency)
+        search_tv_currency.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
+
+        val refresh_iv_currency = findViewById<ImageView>(R.id.refresh_iv_currency)
+        refresh_iv_currency.setOnClickListener {
+            presenter.startLoadingTouchList()
+            bottom_sheet_currency.visibility = View.VISIBLE
+
+            currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+
+            branch_btn.setTextColor(Color.DKGRAY)
+            branch_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            atm_btn.setTextColor(Color.DKGRAY)
+            atm_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            merchant_btn.setTextColor(Color.DKGRAY)
+            merchant_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            agent_btn.setTextColor(Color.DKGRAY)
+            agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+        }
+
+        //for bank_list_layout
+        val search_tv_list = findViewById<TextView>(R.id.search_tv_list)
+        search_tv_list.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
+
+        val refresh_iv_list = findViewById<ImageView>(R.id.refresh_iv_list)
+        refresh_iv_list.setOnClickListener {
+            presenter.startLoadingTouchList()
+            bottom_sheet_currency.visibility = View.VISIBLE
+
+            currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
 
             branch_btn.setTextColor(Color.DKGRAY)
             branch_btn.setBackgroundResource(R.drawable.unselected_button_shape)
@@ -413,8 +514,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         }
 
         bottom_sheet.visibility = View.GONE
-        currecy_behavior!!.peekHeight = 350
-        currecy_behavior!!.isHideable = false
     }
 
     override fun showCurrencyDetails(currencyResponse: CurrencyResponse) {
