@@ -30,7 +30,7 @@ class ATMHolder (itemView : View, private val context: Context, private val item
 
         atm_name.text = access_ATM.Location_Name
         atm_address.text = access_ATM.Address
-        atm_time.text = "24-Hour"
+        atm_time.text = "Open Now"
 
         direction_iv.setOnClickListener {
             val latitude = access_ATM.Latitude

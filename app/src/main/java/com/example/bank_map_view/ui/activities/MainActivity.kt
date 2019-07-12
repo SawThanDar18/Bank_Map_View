@@ -6,20 +6,14 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Point
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.CoordinatorLayout
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.CardView
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
-import android.view.Display
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import com.example.bank_branch_details.mvp.presenter.TouchPointListPresenter
 import com.example.bank_branch_details.mvp.view.TouchPointListView
@@ -50,11 +44,8 @@ import com.example.bank_map_view.ui.adapter.AgentAdapter
 import com.example.bank_map_view.ui.adapter.ServiceAdapter
 import com.example.bank_map_view.ui.adapter.MerchantAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.bank_list.bottom_sheet
-import kotlinx.android.synthetic.main.bank_list.view.*
 import kotlinx.android.synthetic.main.currency.*
-import kotlinx.android.synthetic.main.currency.view.*
 import kotlinx.android.synthetic.main.currency.view.cardView
 
 class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, ServiceView, OnMapReadyCallback {
@@ -98,17 +89,36 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         behavior = BottomSheetBehavior.from(bottom_sheet)
         currecy_behavior = BottomSheetBehavior.from(bottom_sheet_currency)
 
-       /* //calculate screen size
-        val display : Display = getWindowManager().getDefaultDisplay()
-        val size = Point()
-        display.getSize(size)
-        val height : Int = size.y*/
+        /* //calculate screen size
+         val display : Display = getWindowManager().getDefaultDisplay()
+         val size = Point()
+         display.getSize(size)
+         val height : Int = size.y*/
 
         behavior!!.peekHeight = 370
         behavior!!.isHideable = false
 
         currecy_behavior!!.peekHeight = 370
         currecy_behavior!!.isHideable = false
+
+        /*behavior!!.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
+            override fun onSlide(p0: View, p1: Float) {
+
+            }
+
+            override fun onStateChanged(view: View, newState: Int) {
+                when(newState){
+
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        bottom_sheet.cardView.visibility = View.GONE
+                    }
+
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        bottom_sheet.cardView.visibility = View.VISIBLE
+                    }
+                }
+            }
+        })*/
 
         currecy_behavior!!.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
             override fun onSlide(p0: View, p1: Float) {
@@ -128,25 +138,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
                 }
             }
 
-        })
-
-        behavior!!.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
-            override fun onSlide(p0: View, p1: Float) {
-
-            }
-
-            override fun onStateChanged(view: View, newState: Int) {
-                when(newState){
-
-                    BottomSheetBehavior.STATE_COLLAPSED -> {
-                         bottom_sheet.cardView.visibility = View.GONE
-                    }
-
-                    BottomSheetBehavior.STATE_EXPANDED -> {
-                        bottom_sheet.cardView.visibility = View.VISIBLE
-                    }
-                }
-            }
         })
 
         progressDialog =  ProgressDialog(this)
@@ -257,6 +248,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
         branch_btn.setOnClickListener {
 
+            behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+
             branch_btn.setTextColor(Color.WHITE)
             branch_btn.setBackgroundResource(R.drawable.selected_button_shape)
 
@@ -294,6 +287,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
         atm_btn.setOnClickListener {
 
+            behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+
             atm_btn.setTextColor(Color.WHITE)
             atm_btn.setBackgroundResource(R.drawable.selected_button_shape)
 
@@ -330,6 +325,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
         merchant_btn.setOnClickListener {
 
+            behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+
             merchant_btn.setTextColor(Color.WHITE)
             merchant_btn.setBackgroundResource(R.drawable.selected_button_shape)
 
@@ -351,6 +348,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         }
 
         agent_btn.setOnClickListener {
+
+            behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
 
             agent_btn.setTextColor(Color.WHITE)
             agent_btn.setBackgroundResource(R.drawable.selected_button_shape)
