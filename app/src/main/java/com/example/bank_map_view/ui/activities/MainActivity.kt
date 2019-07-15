@@ -187,6 +187,30 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
         }
 
+        val clear = findViewById<ImageView>(R.id.clear_iv)
+        clear.setOnClickListener {
+
+            presenter.startLoadingTouchList()
+            bottom_sheet_currency.visibility = View.VISIBLE
+            clear_iv.visibility = View.GONE
+            refresh.visibility = View.VISIBLE
+
+            behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+
+            branch_btn.setTextColor(Color.DKGRAY)
+            branch_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            atm_btn.setTextColor(Color.DKGRAY)
+            atm_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            merchant_btn.setTextColor(Color.DKGRAY)
+            merchant_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+
+            agent_btn.setTextColor(Color.DKGRAY)
+            agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
+        }
+
         //for currency layout
         val search_tv_currency = findViewById<TextView>(R.id.search_currency)
         search_tv_currency.setOnClickListener {
@@ -200,6 +224,9 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             presenter.startLoadingTouchList()
             bottom_sheet_currency.visibility = View.VISIBLE
             bottom_sheet_currency.cardView.visibility = View.GONE
+
+            refresh_iv.visibility = View.VISIBLE
+            clear_iv.visibility = View.GONE
 
             currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
             behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -255,6 +282,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         branch_btn.setOnClickListener {
 
             behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            refresh.visibility = View.GONE
+            clear.visibility = View.VISIBLE
 
             branch_btn.setTextColor(Color.WHITE)
             branch_btn.setBackgroundResource(R.drawable.selected_button_shape)
@@ -295,6 +324,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         atm_btn.setOnClickListener {
 
             behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            refresh_iv.visibility = View.GONE
+            clear.visibility = View.VISIBLE
 
             atm_btn.setTextColor(Color.WHITE)
             atm_btn.setBackgroundResource(R.drawable.selected_button_shape)
@@ -334,6 +365,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         merchant_btn.setOnClickListener {
 
             behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            refresh_iv.visibility = View.GONE
+            clear.visibility = View.VISIBLE
 
             merchant_btn.setTextColor(Color.WHITE)
             merchant_btn.setBackgroundResource(R.drawable.selected_button_shape)
@@ -358,6 +391,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         agent_btn.setOnClickListener {
 
             behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            refresh_iv.visibility = View.GONE
+            clear.visibility = View.VISIBLE
 
             agent_btn.setTextColor(Color.WHITE)
             agent_btn.setBackgroundResource(R.drawable.selected_button_shape)
@@ -667,6 +702,9 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
             currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
 
+            refresh_iv.visibility = View.VISIBLE
+            clear_iv.visibility = View.GONE
+
             presenter.startLoadingTouchList()
 
             branch_btn.setTextColor(Color.DKGRAY)
@@ -684,6 +722,9 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         } else if(currecy_behavior!!.state == BottomSheetBehavior.STATE_EXPANDED) {
              bottom_sheet_currency.cardView.visibility = View.GONE
              currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+
+             refresh_iv.visibility = View.VISIBLE
+             clear_iv.visibility = View.GONE
 
          } else if(currecy_behavior!!.state == BottomSheetBehavior.STATE_COLLAPSED) {
              super.onBackPressed()
