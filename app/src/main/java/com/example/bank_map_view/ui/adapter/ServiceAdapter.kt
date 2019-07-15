@@ -6,17 +6,30 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.bank_map_view.R
 import com.example.bank_map_view.network.BranchItemClickListener
-import com.example.bank_map_view.network.ItemClickListener
 import com.example.bank_map_view.network.model.Service_List
 import com.example.bank_map_view.ui.holders.ServiceHolder
 
+
 class ServiceAdapter(val context : Context, val itemClickListener: BranchItemClickListener) : RecyclerView.Adapter<ServiceHolder>() {
 
-    private var serviceList : ArrayList<Service_List> = arrayListOf()
+    private var serviceList: ArrayList<Service_List> = arrayListOf()
+
+    private var isReverse = false
 
     override fun onCreateViewHolder(view: ViewGroup, position: Int): ServiceHolder {
-        val layout = LayoutInflater.from(view.context).inflate(R.layout.currency_list_item, view, false)
-        return ServiceHolder(layout, context, itemClickListener)
+
+        if (isReverse == false) {
+
+            isReverse = true
+            val layout = LayoutInflater.from(view.context).inflate(R.layout.currency_list_item, view, false)
+            return ServiceHolder(layout, context, itemClickListener)
+
+        } else {
+
+            isReverse = false
+            val layout = LayoutInflater.from(view.context).inflate(R.layout.currency_reverse_list_item, view, false)
+            return ServiceHolder(layout, context, itemClickListener)
+        }
     }
 
     override fun getItemCount(): Int {

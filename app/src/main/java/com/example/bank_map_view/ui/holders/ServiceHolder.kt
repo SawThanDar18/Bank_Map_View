@@ -16,7 +16,6 @@ class ServiceHolder (itemView : View, private val context: Context, val itemClic
     private val description : TextView
     private val image_path : ImageView
 
-
     init {
         title = itemView.findViewById(R.id.service_title_tv)
         description = itemView.findViewById(R.id.service_desc_tv)

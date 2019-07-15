@@ -1,6 +1,5 @@
 package com.example.bank_map_view.mvp.view
 
-import com.example.bank_branch_details.network.model.Access_Branch
 import com.example.bank_map_view.network.response.NearestCurrencyExchangeResponse
 
 interface NearestCurrencyExchangeView {

@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.widget.GridLayout
 import android.widget.Toast
 import com.example.bank_branch_details.network.model.Access_Branch
@@ -20,7 +19,6 @@ import com.example.bank_map_view.R
 import com.example.bank_map_view.mvp.presenter.NearestCurrencyExchangePresenter
 import com.example.bank_map_view.mvp.view.NearestCurrencyExchangeView
 import com.example.bank_map_view.network.BranchItemClickListener
-import com.example.bank_map_view.network.ItemClickListener
 import com.example.bank_map_view.network.response.NearestCurrencyExchangeResponse
 import com.example.details_design.branch.BranchAdapter
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -29,7 +27,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.bank_list.*
-import kotlinx.android.synthetic.main.branch_detail.*
 import kotlinx.android.synthetic.main.neaestexchange_activity.*
 
 class NearestExchangeActivity : AppCompatActivity(), NearestCurrencyExchangeView, OnMapReadyCallback {
@@ -79,7 +76,7 @@ class NearestExchangeActivity : AppCompatActivity(), NearestCurrencyExchangeView
     override fun showNearestCurrencyExchange(nearestCurrencyExchangeResponse: NearestCurrencyExchangeResponse) {
 
         recyclerView = findViewById(R.id.bank_recyclerview)
-        branchAdapter = BranchAdapter(this, object : BranchItemClickListener{
+        branchAdapter = BranchAdapter(this, object : BranchItemClickListener {
             override fun onClicked(id: String) {
                 val intent = Intent(applicationContext, BranchDetailsActivity::class.java)
                 intent.putExtra("branchCode", id)
@@ -91,8 +88,6 @@ class NearestExchangeActivity : AppCompatActivity(), NearestCurrencyExchangeView
         recyclerView.setLayoutManager(layoutManager)
         branchAdapter.setNewData(nearestCurrencyExchangeResponse.access_Branch!!)
         recyclerView.adapter = branchAdapter
-
-        bottom_sheet.visibility = View.VISIBLE
     }
 
     override fun showPlaces(nearestCurrencyExchangeResponse: NearestCurrencyExchangeResponse) {
@@ -110,7 +105,7 @@ class NearestExchangeActivity : AppCompatActivity(), NearestCurrencyExchangeView
                 markers!!.rotation = -20f
                 markers!!.tag = markerBranchList.get(index).Branch_Code
             }
-            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 13f))
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 6.5f))
         }
     }
 

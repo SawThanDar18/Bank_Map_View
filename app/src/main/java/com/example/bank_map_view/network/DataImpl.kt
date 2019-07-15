@@ -338,7 +338,7 @@ open class DataImpl private constructor() : Data{
     }
 
     override fun getNearestCurrencyExchange() {
-        val exchange = Access_NearestCurrencyExchange("5.01", "KBZPay", "1",16.8170872, 96.1287845, "500000")
+        val exchange = Access_NearestCurrencyExchange("5.01", "Current_EUR_USD_SGD", "1",16.8170872, 96.1287845, "500000")
         requestNearestCurrencyExchangeApi.getNearestCurrencyExchange("Bearer ${token}", exchange).enqueue(object : Callback<NearestCurrencyExchangeResponse>{
             override fun onFailure(call: Call<NearestCurrencyExchangeResponse>, t: Throwable) {
                 EventBus.getDefault()

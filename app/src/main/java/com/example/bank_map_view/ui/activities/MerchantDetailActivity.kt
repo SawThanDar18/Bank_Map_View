@@ -67,16 +67,16 @@ class MerchantDetailActivity: AppCompatActivity(), MerchantView {
         val merchant_title = findViewById<TextView>(R.id.title_tv)
         val merchant_address = findViewById<TextView>(R.id.address_tv)
 
-        title.text = bundle!!.getString("Merchant_Name")
-        merchant_title.text = bundle!!.getString("Merchant_Name")
-        merchant_address.text = bundle!!.getString("Address")
+        title.text = bundle.getString("Merchant_Name")
+        merchant_title.text = bundle.getString("Merchant_Name")
+        merchant_address.text = bundle.getString("Address")
     }
 
     override fun viewMap() {
 
-        latitude = bundle!!.getDouble("Latitude")
-        longitude = bundle!!.getDouble("Longitude")
-        merchant_name = bundle!!.getString("Merchant_Name")
+        latitude = bundle.getDouble("Latitude")
+        longitude = bundle.getDouble("Longitude")
+        merchant_name = bundle.getString("Merchant_Name")
     }
 
     override fun showLoading() {
