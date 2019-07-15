@@ -48,6 +48,7 @@ class ServiceDetailActivity : AppCompatActivity(), ServiceDetailView {
 
         exchange_constraintLayout.setOnClickListener {
             val intent = Intent(this, NearestExchangeActivity::class.java)
+            intent.putExtra("serviceCode", value)
             startActivity(intent)
         }
     }

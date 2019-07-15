@@ -15,9 +15,9 @@ class NearestCurrencyExchangePresenter constructor(val nearestCurrencyExchangeVi
         }
     }
 
-    fun startLoadingNearestExchangeDetails(){
+    fun startLoadingNearestExchangeDetails(value : String){
         nearestCurrencyExchangeView.showLoading()
-        BranchModel.getInstance().getNearestCurrencyExchange()
+        BranchModel.getInstance().getNearestExchange(value)
     }
 
     override fun onStop(){

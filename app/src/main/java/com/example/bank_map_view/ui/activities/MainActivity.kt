@@ -248,6 +248,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
         bottom_sheet_currency.constraint.setOnClickListener {
             val intent = Intent(this, NearestExchangeActivity::class.java)
+            intent.putExtra("serviceCode", "Current_EUR_USD_SGD")
             startActivity(intent)
         }
 
@@ -274,6 +275,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
                     markers = googleMap!!.addMarker(MarkerOptions().position(branchLatLng!!)
                                                                    .title(markerBranchList
                                                                    .get(index).Branch_Name)
+                                                                   .snippet(markerBranchList.get(index).TouchPointType)
                                                                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)))
 
                     markers!!.rotation = -20f
@@ -313,6 +315,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
                 markers = googleMap!!.addMarker(MarkerOptions().position(atmLatLng!!)
                                                                .title(markerATMList
                                                                .get(index).Location_Name)
+                                                               .snippet(markerATMList.get(index).TouchPointType)
                                                                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_atm_24dp)))
 
                 markers!!.rotation = 20f
@@ -462,9 +465,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             for (index in 0 until markerATMList.size) {
                 atmLatLng = LatLng(markerATMList.get(index).Latitude!!, markerATMList.get(index).Longitude!!)
                 markers = googleMap!!.addMarker(
-                    MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).icon(
-                        bitmapDescriptorFromVector(this, R.drawable.ic_atm_24dp)
-                    )
+                    MarkerOptions().position(atmLatLng!!).title(markerATMList.get(index).Location_Name).snippet(markerATMList.get(index).TouchPointType)
+                        .icon(bitmapDescriptorFromVector(this, R.drawable.ic_atm_24dp))
                 )
                 markers!!.rotation = 20f
                 markers!!.tag = markerATMList.get(index).Terminal_ID
@@ -477,9 +479,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             for (index in 0 until markerBranchList.size) {
                 branchLatLng = LatLng(markerBranchList.get(index).Latitude!!, markerBranchList.get(index).Longitude!!)
                 markers = googleMap!!.addMarker(
-                    MarkerOptions().position(branchLatLng!!).title(markerBranchList.get(index).Branch_Name).icon(
-                        bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)
-                    )
+                    MarkerOptions().position(branchLatLng!!).title(markerBranchList.get(index).Branch_Name).snippet(markerBranchList.get(index).TouchPointType)
+                        .icon(bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp))
                 )
                 markers!!.rotation = -20f
                 markers!!.tag = markerBranchList.get(index).Branch_Code
@@ -492,10 +493,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             for (index in 0 until markerAgentList.size) {
                 agentLatLng = LatLng(markerAgentList.get(index).latitude!!, markerAgentList.get(index).longitude!!)
                 markers = googleMap!!.addMarker(
-                    MarkerOptions().position(agentLatLng!!).title(markerAgentList.get(index).agent_name).icon(
-                        bitmapDescriptorFromVector(this, R.drawable.ic_agent_24dp)
-                    )
-                )
+                    MarkerOptions().position(agentLatLng!!).title(markerAgentList.get(index).agent_name)
+                        .icon(bitmapDescriptorFromVector(this, R.drawable.ic_agent_24dp)))
                 markers!!.rotation = 20f
                 markers!!.tag = markerAgentList.get(index).agent_id
             }
@@ -556,6 +555,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
     }
 
     override fun showServiceList(serviceResponse: ServiceResponse) {
+
 
         service_recyclerView = findViewById(R.id.service_recycler)
         serviceAdapter = ServiceAdapter(this, object : BranchItemClickListener{

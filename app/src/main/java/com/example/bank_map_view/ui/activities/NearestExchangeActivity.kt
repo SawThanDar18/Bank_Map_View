@@ -45,6 +45,10 @@ class NearestExchangeActivity : AppCompatActivity(), NearestCurrencyExchangeView
     private var branchLatLng : LatLng? = null
     private lateinit var markerBranchList : ArrayList<Access_Branch>
 
+    private lateinit var bundle: Bundle
+
+    private var value : String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.neaestexchange_activity)
@@ -57,8 +61,11 @@ class NearestExchangeActivity : AppCompatActivity(), NearestCurrencyExchangeView
         progressDialog.setMessage("loading")
         progressDialog.setCancelable(false)
 
+        bundle = intent!!.extras
+        value = bundle.getString("serviceCode")
+
         presenter = NearestCurrencyExchangePresenter(this)
-        presenter.startLoadingNearestExchangeDetails()
+        presenter.startLoadingNearestExchangeDetails(value!!)
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
@@ -69,7 +76,7 @@ class NearestExchangeActivity : AppCompatActivity(), NearestCurrencyExchangeView
         }
 
         refresh_exchange_iv.setOnClickListener {
-            presenter.startLoadingNearestExchangeDetails()
+            presenter.startLoadingNearestExchangeDetails(value!!)
         }
     }
 
@@ -98,14 +105,13 @@ class NearestExchangeActivity : AppCompatActivity(), NearestCurrencyExchangeView
             for (index in 0 until markerBranchList.size) {
                 branchLatLng = LatLng(markerBranchList.get(index).Latitude!!, markerBranchList.get(index).Longitude!!)
                 markers = googleMap!!.addMarker(
-                    MarkerOptions().position(branchLatLng!!).title(markerBranchList.get(index).Branch_Name).icon(
-                        bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)
-                    )
-                )
+                    MarkerOptions().position(branchLatLng!!).title(markerBranchList.get(index).Branch_Name)
+                        .snippet(markerBranchList.get(index).TouchPointType)
+                        .icon(bitmapDescriptorFromVector(this, R.drawable.ic_branch_24dp)))
                 markers!!.rotation = -20f
                 markers!!.tag = markerBranchList.get(index).Branch_Code
             }
-            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 6.5f))
+            googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(branchLatLng, 13f))
         }
     }
 

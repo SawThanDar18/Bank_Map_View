@@ -44,7 +44,7 @@ class BranchModel {
         DataImpl.getInstance().getSearchList(value)
     }
 
-    fun getNearestCurrencyExchange(){
-        DataImpl.getInstance().getNearestCurrencyExchange()
+    fun getNearestExchange(value : String){
+        DataImpl.getInstance().getNearestExchange(value)
     }
 }

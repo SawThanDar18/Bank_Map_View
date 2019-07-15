@@ -10,6 +10,6 @@ import retrofit2.http.POST
 interface RequestNearestCurrencyExchangeApi {
 
     @POST("api/serviceTouchpoints")
-    fun getNearestCurrencyExchange(@Header("Authorization") authHeader: String,
-                    @Body access_Nearest_CurrencyExchange: Access_NearestCurrencyExchange) : Call<NearestCurrencyExchangeResponse>
+    fun getNearestExchange(@Header("Authorization") authHeader: String,
+                                   @Body access_Nearest_CurrencyExchange: Access_NearestCurrencyExchange) : Call<NearestCurrencyExchangeResponse>
 }

@@ -173,7 +173,7 @@ open class DataImpl private constructor() : Data{
                  getService()
                  getServiceDetail(value = "service_code")
                  getSearchList(value = "Keyword")
-                 getNearestCurrencyExchange()
+                 getNearestExchange(value = "service_code")
 
              } else {
                  Log.i("login","else")
@@ -337,9 +337,9 @@ open class DataImpl private constructor() : Data{
         })
     }
 
-    override fun getNearestCurrencyExchange() {
-        val exchange = Access_NearestCurrencyExchange("5.01", "Current_EUR_USD_SGD", "1",16.8170872, 96.1287845, "500000")
-        requestNearestCurrencyExchangeApi.getNearestCurrencyExchange("Bearer ${token}", exchange).enqueue(object : Callback<NearestCurrencyExchangeResponse>{
+    override fun getNearestExchange(value: String) {
+        val exchange = Access_NearestCurrencyExchange("5.01", value, "1",16.8170872, 96.1287845, "500000")
+        requestNearestCurrencyExchangeApi.getNearestExchange("Bearer ${token}", exchange).enqueue(object : Callback<NearestCurrencyExchangeResponse>{
             override fun onFailure(call: Call<NearestCurrencyExchangeResponse>, t: Throwable) {
                 EventBus.getDefault()
                     .post(RestApiEvents.ErrorInvokingAPIEvent(
