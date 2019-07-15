@@ -34,6 +34,7 @@
         <activity android:name=".ui.activities.ATMDetailsActivity"/>
         <activity android:name=".ui.activities.ServiceDetailActivity"/>
         <activity android:name=".ui.activities.SearchActivity"/>
+        <activity android:name=".ui.activities.NearestExchangeActivity"/>
     </application>
 
 </manifest>

@@ -88,19 +88,18 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         setContentView(R.layout.activity_main)
 
         behavior = BottomSheetBehavior.from(bottom_sheet)
+        behavior!!.peekHeight = 370
+        behavior!!.isHideable = false
+
         currecy_behavior = BottomSheetBehavior.from(bottom_sheet_currency)
+        currecy_behavior!!.peekHeight = 370
+        currecy_behavior!!.isHideable = false
 
         /* //calculate screen size
          val display : Display = getWindowManager().getDefaultDisplay()
          val size = Point()
          display.getSize(size)
          val height : Int = size.y*/
-
-        behavior!!.peekHeight = 370
-        behavior!!.isHideable = false
-
-        currecy_behavior!!.peekHeight = 370
-        currecy_behavior!!.isHideable = false
 
         /*behavior!!.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback(){
             override fun onSlide(p0: View, p1: Float) {
@@ -189,7 +188,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
         }
 
-        //for currency_layout
+        //for currency layout
         val search_tv_currency = findViewById<TextView>(R.id.search_currency)
         search_tv_currency.setOnClickListener {
             val intent = Intent(this, SearchActivity::class.java)
@@ -247,6 +246,11 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             agent_btn.setTextColor(Color.DKGRAY)
             agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
         }*/
+
+        bottom_sheet_currency.constraint.setOnClickListener {
+            val intent = Intent(this, NearestExchangeActivity::class.java)
+            startActivity(intent)
+        }
 
         branch_btn.setOnClickListener {
 

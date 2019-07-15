@@ -1,6 +1,5 @@
 package com.example.bank_branch_details.network
 
-import android.content.Context
 import android.util.Log
 import com.example.bank_branch_details.event.RestApiEvents
 import com.example.bank_branch_details.network.api.Data
@@ -15,10 +14,7 @@ import com.example.bank_branch_details.ui.utils.Constant
 import com.example.bank_map_view.network.api.*
 import com.example.bank_map_view.network.api.RequestBranchDetailApi
 import com.example.bank_map_view.network.model.*
-import com.example.bank_map_view.network.response.BranchCodeResponse
-import com.example.bank_map_view.network.response.CurrencyResponse
-import com.example.bank_map_view.network.response.SearchResponse
-import com.example.bank_map_view.network.response.ServiceResponse
+import com.example.bank_map_view.network.response.*
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
@@ -43,8 +39,8 @@ open class DataImpl private constructor() : Data{
     private var requestServiceApi : RequestServiceApi
     private var requestServiceDetailApi : RequestServiceDetailApi
     private var requestSearchListApi : RequestSearchListApi
+    private var requestNearestCurrencyExchangeApi : RequestNearestCurrencyExchangeApi
 
-    private var context : Context? = null
     private var token : String? = null
 
     companion object{
@@ -148,6 +144,13 @@ open class DataImpl private constructor() : Data{
             .build()
         requestSearchListApi = searchListRetrofit.create(RequestSearchListApi::class.java)
 
+        val nearestCurrencyExchangeRetrofit = Retrofit.Builder()
+            .baseUrl(Constant.BranchDetail_URL)
+            .addConverterFactory(GsonConverterFactory.create(Gson()))
+            .client(client)
+            .build()
+        requestNearestCurrencyExchangeApi = nearestCurrencyExchangeRetrofit.create(RequestNearestCurrencyExchangeApi::class.java)
+
     }
 
     override fun getRequestAuth() {
@@ -170,6 +173,7 @@ open class DataImpl private constructor() : Data{
                  getService()
                  getServiceDetail(value = "service_code")
                  getSearchList(value = "Keyword")
+                 getNearestCurrencyExchange()
 
              } else {
                  Log.i("login","else")
@@ -323,6 +327,32 @@ open class DataImpl private constructor() : Data{
                     EventBus.getDefault()
                         .post(
                             RestApiEvents.ShowSearchList(response.body()!!)
+                        )
+                }
+                else{
+
+                }
+            }
+
+        })
+    }
+
+    override fun getNearestCurrencyExchange() {
+        val exchange = Access_NearestCurrencyExchange("5.01", "KBZPay", "1",16.8170872, 96.1287845, "500000")
+        requestNearestCurrencyExchangeApi.getNearestCurrencyExchange("Bearer ${token}", exchange).enqueue(object : Callback<NearestCurrencyExchangeResponse>{
+            override fun onFailure(call: Call<NearestCurrencyExchangeResponse>, t: Throwable) {
+                EventBus.getDefault()
+                    .post(RestApiEvents.ErrorInvokingAPIEvent(
+                        t.localizedMessage
+                    ))
+            }
+
+            override fun onResponse(call: Call<NearestCurrencyExchangeResponse>, response: Response<NearestCurrencyExchangeResponse>) {
+                val nearestResponse = response.body()
+                if (nearestResponse != null && nearestResponse.access_Branch!!.isNotEmpty()) {
+                    EventBus.getDefault()
+                        .post(
+                            RestApiEvents.ShowNearestCurrencyExchange(response.body()!!)
                         )
                 }
                 else{

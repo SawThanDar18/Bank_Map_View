@@ -10,4 +10,5 @@ interface Data {
     fun getService()
     fun getServiceDetail(value : String)
     fun getSearchList(value : String)
+    fun getNearestCurrencyExchange()
 }

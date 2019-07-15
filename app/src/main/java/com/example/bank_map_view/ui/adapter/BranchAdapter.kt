@@ -19,12 +19,12 @@ class BranchAdapter(val context: Context, val branchItemClickListener: BranchIte
     }
 
     override fun getItemCount(): Int {
-        return branchList!!.size
+        return branchList.size
     }
 
     override fun onBindViewHolder(view: BranchHolder, position: Int) {
 
-        view.index(branchList!![position])
+        view.index(branchList[position])
     }
 
     fun setNewData(access_Branch: ArrayList<Access_Branch>){

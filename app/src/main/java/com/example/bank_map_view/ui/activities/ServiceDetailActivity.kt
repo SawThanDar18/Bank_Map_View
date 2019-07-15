@@ -1,6 +1,7 @@
 package com.example.bank_map_view.ui.activities
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
@@ -43,6 +44,11 @@ class ServiceDetailActivity : AppCompatActivity(), ServiceDetailView {
 
         back_iv.setOnClickListener {
             this.finish()
+        }
+
+        exchange_constraintLayout.setOnClickListener {
+            val intent = Intent(this, NearestExchangeActivity::class.java)
+            startActivity(intent)
         }
     }
 

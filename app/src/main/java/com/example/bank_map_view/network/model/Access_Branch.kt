@@ -2,17 +2,6 @@ package com.example.bank_branch_details.network.model
 
 import com.google.gson.annotations.SerializedName
 
-/*
-data class Access_Branch (@SerializedName("Branch_Code") val Branch_Code : String,
-                          @SerializedName("Branch_Alias") val Branch_Alias : String,
-                          @SerializedName("Branch_Name") val Branch_Name : String,
-                          @SerializedName("Latitude") val Latitude : Double,
-                          @SerializedName("Longitude") val Longitude : Double,
-                          @SerializedName("Phone") val Phone : String,
-                          @SerializedName("Address") val Address : String,
-                          @SerializedName("TouchPointType") val TouchPointType : String,
-                          @SerializedName("Distance") val Distance : Double)*/
-
 class Access_Branch {@SerializedName("Branch_Code") val Branch_Code : String? = null
                           @SerializedName("Branch_Alias") val Branch_Alias : String? = null
                           @SerializedName("Branch_Name") val Branch_Name : String? = null

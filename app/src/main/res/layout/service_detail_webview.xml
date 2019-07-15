@@ -108,7 +108,7 @@
         <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/constraint2"
+                android:id="@+id/constraint"
                 android:background="@drawable/card_view_shape"
                 android:orientation="horizontal"
                 tools:ignore="MissingConstraints"
