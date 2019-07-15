@@ -680,8 +680,12 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
             agent_btn.setTextColor(Color.DKGRAY)
             agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
-        }
-            else {
+
+        } else if(currecy_behavior!!.state == BottomSheetBehavior.STATE_EXPANDED) {
+             bottom_sheet_currency.cardView.visibility = View.GONE
+             currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+
+         } else if(currecy_behavior!!.state == BottomSheetBehavior.STATE_COLLAPSED) {
              super.onBackPressed()
                 this.finish()
             }
