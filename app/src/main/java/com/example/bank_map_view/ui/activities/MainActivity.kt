@@ -1,6 +1,8 @@
 package com.example.bank_map_view.ui.activities
 
+import android.Manifest
 import android.app.ProgressDialog
+import android.arch.persistence.room.Room
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -47,6 +49,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bank_list.bottom_sheet
 import kotlinx.android.synthetic.main.currency.*
 import kotlinx.android.synthetic.main.currency.view.*
+import com.google.android.gms.maps.model.LatLng
+import android.content.pm.PackageManager
+import android.location.Location
+import android.widget.Toast
+import android.support.v4.app.ActivityCompat
+import com.example.bank_map_view.roomdb.Services
+import com.example.bank_map_view.roomdb.ServicesDatabase
 
 class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, ServiceView, OnMapReadyCallback {
 
@@ -60,6 +69,8 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
     private  var currecy_behavior : BottomSheetBehavior<ConstraintLayout>? = null
 
     private var googleMap : GoogleMap? = null
+
+    private var LOCATION_PERMISSION_REQUEST_CODE = 1
 
     private var markers : Marker? = null
 
@@ -81,6 +92,9 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
     private lateinit var agentAdapter: AgentAdapter
     private lateinit var merchantAdapter : MerchantAdapter
     private lateinit var serviceAdapter: ServiceAdapter
+
+    private lateinit var servicesDatabase: ServicesDatabase
+    private lateinit var servicesList : ArrayList<Services>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -244,34 +258,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
         }
-
-        /*//for bank_list_layout
-        val search_tv_list = findViewById<TextView>(R.id.search_tv_list)
-        search_tv_list.setOnClickListener {
-            val intent = Intent(this, SearchActivity::class.java)
-            startActivity(intent)
-        }
-
-        val refresh_iv_list = findViewById<ImageView>(R.id.refresh_iv_list)
-        refresh_iv_list.setOnClickListener {
-            presenter.startLoadingTouchList()
-            bottom_sheet_currency.visibility = View.VISIBLE
-
-            currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
-            behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
-
-            branch_btn.setTextColor(Color.DKGRAY)
-            branch_btn.setBackgroundResource(R.drawable.unselected_button_shape)
-
-            atm_btn.setTextColor(Color.DKGRAY)
-            atm_btn.setBackgroundResource(R.drawable.unselected_button_shape)
-
-            merchant_btn.setTextColor(Color.DKGRAY)
-            merchant_btn.setBackgroundResource(R.drawable.unselected_button_shape)
-
-            agent_btn.setTextColor(Color.DKGRAY)
-            agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
-        }*/
 
         bottom_sheet_currency.constraint.setOnClickListener {
             val intent = Intent(this, NearestExchangeActivity::class.java)
@@ -607,9 +593,35 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         service_recyclerView!!.adapter = serviceAdapter
     }
 
+    override fun saveToRoomDb(serviceResponse: ServiceResponse) {
+
+        var service_code : String? = null
+        var title : String? = null
+        var services : Services? = null
+
+        if(serviceResponse.service_List!!.size>0){
+            for(index in 0 until serviceResponse.service_List.size) {
+                service_code = serviceResponse.service_List[index].service_code!!
+                title = serviceResponse.service_List[index].title!!
+                services = Services(service_code, title)
+                servicesDatabase = ServicesDatabase.getDatabase(this)
+                servicesDatabase.getServicesDao().addServices(services)
+
+                Toast.makeText(applicationContext, "saved", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
     override fun onMapReady(map: GoogleMap?) {
 
         googleMap = map!!
+
+        googleMap!!.setOnMyLocationButtonClickListener(onMyLocationButtonClickListener);
+        googleMap!!.setOnMyLocationClickListener(onMyLocationClickListener);
+        enableMyLocationIfPermitted();
+
+        googleMap!!.getUiSettings().setZoomControlsEnabled(true);
+        googleMap!!.setMinZoomPreference(11f);
 
         googleMap!!.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener {
             override fun onInfoWindowClick(marker: Marker?) {
@@ -720,6 +732,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
             agent_btn.setBackgroundResource(R.drawable.unselected_button_shape)
 
         } else if(currecy_behavior!!.state == BottomSheetBehavior.STATE_EXPANDED) {
+
              bottom_sheet_currency.cardView.visibility = View.GONE
              currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
 
@@ -745,4 +758,70 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         currencyPresenter.onStop()
         servicePresenter.onStop()
     }
+
+    private fun enableMyLocationIfPermitted() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        } else if (googleMap != null) {
+            googleMap!!.setMyLocationEnabled(true)
+        }
+    }
+
+    private fun showDefaultLocation() {
+        Toast.makeText(
+            this, "Location permission not granted, " + "showing default location",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    enableMyLocationIfPermitted()
+                } else {
+                    showDefaultLocation()
+                }
+                return
+            }
+        }
+    }
+
+    private val onMyLocationButtonClickListener = GoogleMap.OnMyLocationButtonClickListener {
+        googleMap!!.setMinZoomPreference(15f)
+        false
+    }
+
+    private val onMyLocationClickListener = object : GoogleMap.OnMyLocationClickListener {
+        override fun onMyLocationClick(location: Location) {
+
+            googleMap!!.setMinZoomPreference(12f)
+
+            val circleOptions = CircleOptions()
+            circleOptions.center(
+                LatLng(
+                    location.getLatitude(),
+                    location.getLongitude()
+                )
+            )
+
+            circleOptions.radius(200.0)
+            circleOptions.fillColor(Color.RED)
+            circleOptions.strokeWidth(6f)
+
+            googleMap!!.addCircle(circleOptions)
+        }
+    }
+
 }

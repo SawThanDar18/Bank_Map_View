@@ -8,4 +8,5 @@ interface ServiceView {
     fun showLoading()
     fun dismissLoading()
     fun showServiceList(serviceResponse: ServiceResponse)
+    fun saveToRoomDb(serviceResponse: ServiceResponse)
 }

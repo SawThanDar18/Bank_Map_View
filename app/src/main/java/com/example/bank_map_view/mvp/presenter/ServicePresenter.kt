@@ -30,6 +30,7 @@ class ServicePresenter constructor(val serviceView: ServiceView) : BasePresenter
     fun onSuccess(event : RestApiEvents.ShowService){
         serviceView.dismissLoading()
         serviceView.showServiceList(event.serviceResponse)
+        serviceView.saveToRoomDb(event.serviceResponse)
     }
 
     @Subscribe
