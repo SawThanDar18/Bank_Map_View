@@ -719,6 +719,9 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
         } else if(currecy_behavior!!.state == BottomSheetBehavior.STATE_EXPANDED) {
 
+             scrollview.post(Thread(Runnable {
+                 scrollview.fullScroll(View.FOCUS_UP)
+             }))
 
              bottom_sheet_currency.cardView.visibility = View.GONE
              currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -770,10 +773,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         ).show()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

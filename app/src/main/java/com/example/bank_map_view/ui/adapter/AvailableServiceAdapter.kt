@@ -9,9 +9,7 @@ import com.example.bank_map_view.network.BranchItemClickListener
 import com.example.bank_map_view.network.model.Service_List
 import com.example.bank_map_view.ui.holders.AvailableServiceHolder
 
-class AvailableServiceAdapter (val context: Context, val branchItemClickListener: BranchItemClickListener) : RecyclerView.Adapter<AvailableServiceHolder>(){
-
-    private var services : ArrayList<Service_List> = arrayListOf()
+class AvailableServiceAdapter (val context: Context, var services : ArrayList<Service_List>, val branchItemClickListener: BranchItemClickListener) : RecyclerView.Adapter<AvailableServiceHolder>(){
 
     override fun onCreateViewHolder(view: ViewGroup, position: Int): AvailableServiceHolder {
         val layout = LayoutInflater.from(view.context).inflate(R.layout.available_list_items, view, false)
@@ -25,10 +23,5 @@ class AvailableServiceAdapter (val context: Context, val branchItemClickListener
     override fun onBindViewHolder(view: AvailableServiceHolder, position: Int) {
 
         view.index(services[position])
-    }
-
-    fun setNewData(servicesList: ArrayList<Service_List>){
-        services = servicesList
-        notifyDataSetChanged()
     }
 }

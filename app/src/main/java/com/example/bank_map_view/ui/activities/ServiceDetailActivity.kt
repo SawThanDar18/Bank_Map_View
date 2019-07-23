@@ -17,8 +17,6 @@ import com.example.bank_map_view.mvp.view.ServiceDetailView
 import com.example.bank_map_view.network.response.ServiceResponse
 import kotlinx.android.synthetic.main.activity_scrolling.*
 
-
-
 class ServiceDetailActivity : AppCompatActivity(), ServiceDetailView {
 
     private lateinit var bundle: Bundle

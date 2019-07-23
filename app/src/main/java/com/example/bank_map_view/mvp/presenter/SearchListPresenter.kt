@@ -30,6 +30,8 @@ class SearchListPresenter constructor(val searchListView: SearchListView) : Base
     fun onSuccess(event : RestApiEvents.ShowSearchList){
         searchListView.dismissLoading()
         searchListView.showSearchList(event.searchResponse)
+        searchListView.retrieveFromDB()
+        searchListView.searchFromDB()
     }
 
     @Subscribe

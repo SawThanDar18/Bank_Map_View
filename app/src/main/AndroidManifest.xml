@@ -35,7 +35,6 @@
         <activity android:name=".ui.activities.ServiceDetailActivity"/>
         <activity android:name=".ui.activities.SearchActivity"/>
         <activity android:name=".ui.activities.NearestExchangeActivity"/>
-        <activity android:name=".ui.activities.AvailableServicesActivity"/>
     </application>
 
 </manifest>
