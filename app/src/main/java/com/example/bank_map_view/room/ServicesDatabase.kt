@@ -1,11 +1,12 @@
-package com.example.bank_map_view.roomdb
+package com.example.bank_map_view.room
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
+import com.example.bank_map_view.network.model.Service_List
 
-@Database(entities = [Services::class], version = 1)
+@Database(entities = [Service_List::class], version = 1)
 abstract class ServicesDatabase : RoomDatabase() {
 
     abstract fun getServicesDao() : ServicesDao

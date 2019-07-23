@@ -168,12 +168,12 @@ open class DataImpl private constructor() : Data{
                  Log.i("login","if")
                  token = response.body()!!.access_token
                  getTouchPointList()
-                 getBranchDetail(value = "branchCode")
                  getCurrency()
                  getService()
-                 getServiceDetail(value = "service_code")
-                 getSearchList(value = "Keyword")
-                 getNearestExchange(value = "service_code")
+                 //getBranchDetail(value = "branchCode")
+                 //getServiceDetail(value = "service_code")
+                 //getSearchList(value = "Keyword")
+                 //getNearestExchange(value = "service_code")
 
              } else {
                  Log.i("login","else")

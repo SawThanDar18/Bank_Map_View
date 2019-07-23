@@ -1,6 +1,5 @@
 package com.example.bank_branch_details.mvp.model
 
-import android.provider.ContactsContract
 import com.example.bank_branch_details.network.DataImpl
 
 class BranchModel {

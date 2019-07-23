@@ -2,7 +2,6 @@ package com.example.bank_map_view.ui.activities
 
 import android.Manifest
 import android.app.ProgressDialog
-import android.arch.persistence.room.Room
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -54,8 +53,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.widget.Toast
 import android.support.v4.app.ActivityCompat
-import com.example.bank_map_view.roomdb.Services
-import com.example.bank_map_view.roomdb.ServicesDatabase
+import com.example.bank_map_view.room.ServicesDatabase
 
 class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, ServiceView, OnMapReadyCallback {
 
@@ -93,8 +91,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
     private lateinit var merchantAdapter : MerchantAdapter
     private lateinit var serviceAdapter: ServiceAdapter
 
-    private lateinit var servicesDatabase: ServicesDatabase
-    private lateinit var servicesList : ArrayList<Services>
+    private var servicesDatabase: ServicesDatabase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -595,20 +592,10 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
     override fun saveToRoomDb(serviceResponse: ServiceResponse) {
 
-        var service_code : String? = null
-        var title : String? = null
-        var services : Services? = null
-
         if(serviceResponse.service_List!!.size>0){
-            for(index in 0 until serviceResponse.service_List.size) {
-                service_code = serviceResponse.service_List[index].service_code!!
-                title = serviceResponse.service_List[index].title!!
-                services = Services(service_code, title)
-                servicesDatabase = ServicesDatabase.getDatabase(this)
-                servicesDatabase.getServicesDao().addServices(services)
 
-                Toast.makeText(applicationContext, "saved", Toast.LENGTH_LONG).show()
-            }
+            servicesDatabase = ServicesDatabase.getDatabase(this)
+            val addServices = servicesDatabase!!.getServicesDao().addServices(serviceResponse.service_List)
         }
     }
 
@@ -682,7 +669,6 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
         })
     }
 
-    //for bitmap icon
     private fun bitmapDescriptorFromVector(context: Context, vectorResId : Int) : BitmapDescriptor{
         var vectorDrawable = ContextCompat.getDrawable(context, vectorResId)
         vectorDrawable!!.setBounds(0, 0, vectorDrawable.intrinsicWidth * 2, vectorDrawable.intrinsicHeight * 2)
@@ -733,6 +719,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
 
         } else if(currecy_behavior!!.state == BottomSheetBehavior.STATE_EXPANDED) {
 
+
              bottom_sheet_currency.cardView.visibility = View.GONE
              currecy_behavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
 
@@ -740,6 +727,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
              clear_iv.visibility = View.GONE
 
          } else if(currecy_behavior!!.state == BottomSheetBehavior.STATE_COLLAPSED) {
+
              super.onBackPressed()
                 this.finish()
             }
@@ -806,7 +794,7 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
     private val onMyLocationClickListener = object : GoogleMap.OnMyLocationClickListener {
         override fun onMyLocationClick(location: Location) {
 
-            googleMap!!.setMinZoomPreference(12f)
+            /*googleMap!!.setMinZoomPreference(12f)
 
             val circleOptions = CircleOptions()
             circleOptions.center(
@@ -814,13 +802,13 @@ class MainActivity : AppCompatActivity(), TouchPointListView, CurrencyView, Serv
                     location.getLatitude(),
                     location.getLongitude()
                 )
-            )
+            )*/
 
-            circleOptions.radius(200.0)
-            circleOptions.fillColor(Color.RED)
-            circleOptions.strokeWidth(6f)
+            //circleOptions.radius(200.0)
+            //circleOptions.fillColor(Color.RED)
+            //circleOptions.strokeWidth(6f)
 
-            googleMap!!.addCircle(circleOptions)
+            //googleMap!!.addCircle(circleOptions)
         }
     }
 

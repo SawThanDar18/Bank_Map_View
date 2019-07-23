@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.TextView
 import com.example.bank_map_view.R
 import com.example.bank_map_view.network.BranchItemClickListener
-import com.example.bank_map_view.roomdb.Services
+import com.example.bank_map_view.network.model.Service_List
 
 class AvailableServiceHolder (itemView : View, private val context: Context, private val branchItemClickListener: BranchItemClickListener) : RecyclerView.ViewHolder(itemView){
 
@@ -16,12 +16,12 @@ class AvailableServiceHolder (itemView : View, private val context: Context, pri
         service_name = itemView.findViewById(R.id.service_name)
     }
 
-    fun index(services: Services) {
+    fun index(services: Service_List) {
 
         service_name.text = services.title
 
         itemView.setOnClickListener {
-            branchItemClickListener.onClicked(services.service_code)
+            branchItemClickListener.onClicked(services.service_code!!)
         }
     }
 }

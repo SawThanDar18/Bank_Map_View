@@ -22,5 +22,4 @@ object RestApiEvents {
     class ShowServiceDetail(val serviceResponse: ServiceResponse)
     class ShowSearchList(val searchResponse: SearchResponse)
     class ShowNearestCurrencyExchange(val nearestCurrencyExchangeResponse: NearestCurrencyExchangeResponse)
-
 }

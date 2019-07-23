@@ -17,7 +17,7 @@ class ServicePresenter constructor(val serviceView: ServiceView) : BasePresenter
 
     fun startLoadingServiceList(){
         serviceView.showLoading()
-        BranchModel.getInstance().getRequestAuth()
+        BranchModel.getInstance().getService()
     }
 
     override fun onStop(){

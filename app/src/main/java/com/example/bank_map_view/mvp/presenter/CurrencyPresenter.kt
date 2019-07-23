@@ -18,7 +18,7 @@ class CurrencyPresenter(val currencyView: CurrencyView) : BasePresenter() {
 
     fun startLoadingCurrencyDetails(){
         currencyView.showLoading()
-        BranchModel.getInstance().getRequestAuth()
+        BranchModel.getInstance().getCurrency()
     }
 
     override fun onStop(){
