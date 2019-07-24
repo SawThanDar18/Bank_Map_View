@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -96,6 +98,45 @@ class SearchActivity : AppCompatActivity(), SearchListView {
             return@setOnKeyListener false
         }
 
+        search.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchByKeyword(s.toString())
+            }
+
+        })
+
+    }
+
+    private fun searchByKeyword(keyword : String) {
+
+        var service = arrayListOf<Service_List>()
+        servicesDatabase = ServicesDatabase.getDatabase(this)
+        var getServices = servicesDatabase.getServicesDao().getServices()
+
+        for(services in getServices){
+            if(services.title!!.toLowerCase().contains(keyword.toLowerCase())){
+                service.add(services)
+            }
+        }
+
+        availableServiceAdapter = AvailableServiceAdapter(this, service, object : BranchItemClickListener {
+            override fun onClicked(id: String) {
+                val intent = Intent(applicationContext, ServiceDetailActivity::class.java)
+                intent.putExtra("service_code",id)
+                startActivity(intent)
+            }
+        })
+        var layoutManager = GridLayoutManager(this, 1, android.widget.GridLayout.VERTICAL, false)
+        roomRecyclerview!!.setLayoutManager(layoutManager)
+        roomRecyclerview!!.adapter = availableServiceAdapter
     }
 
     override fun showSearchList(searchResponse: SearchResponse) {
@@ -137,12 +178,6 @@ class SearchActivity : AppCompatActivity(), SearchListView {
         var layoutManager = GridLayoutManager(this, 1, android.widget.GridLayout.VERTICAL, false)
         roomRecyclerview!!.setLayoutManager(layoutManager)
         roomRecyclerview!!.adapter = availableServiceAdapter
-    }
-
-    override fun searchFromDB() {
-        servicesDatabase = ServicesDatabase.getDatabase(this)
-        var services : List<Service_List> = servicesDatabase.getServicesDao().getSearchResult(value!!)
-
     }
 
     override fun showPrompt(message: String) {

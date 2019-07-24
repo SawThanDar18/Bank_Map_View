@@ -9,5 +9,4 @@ interface SearchListView {
     fun dismissLoading()
     fun showSearchList(searchResponse: SearchResponse)
     fun retrieveFromDB()
-    fun searchFromDB()
 }

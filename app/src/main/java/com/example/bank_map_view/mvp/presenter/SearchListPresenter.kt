@@ -31,7 +31,6 @@ class SearchListPresenter constructor(val searchListView: SearchListView) : Base
         searchListView.dismissLoading()
         searchListView.showSearchList(event.searchResponse)
         searchListView.retrieveFromDB()
-        searchListView.searchFromDB()
     }
 
     @Subscribe

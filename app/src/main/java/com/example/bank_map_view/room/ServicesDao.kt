@@ -16,8 +16,4 @@ interface ServicesDao {
 
     @Query("SELECT * FROM service_list")
     fun getServices() : List<Service_List>
-
-    @Query("SELECT * FROM service_list where title LIKE :keyword")
-    fun getSearchResult(keyword: String): List<Service_List>
-
 }

@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#fff"
-        app:behavior_peekHeight="150dp"
+        app:behavior_peekHeight="200dp"
         app:behavior_hideable="true"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
@@ -33,9 +33,9 @@
 
             <android.support.v7.widget.CardView
                     android:visibility="gone"
-                    app:cardCornerRadius="30dp"
+                    app:cardCornerRadius="15dp"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     tools:ignore="MissingConstraints"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="8dp"
@@ -53,9 +53,9 @@
                     <ImageView
                             android:id="@+id/search_iv_currency"
                             android:src="@drawable/ic_search_black_24dp"
-                            android:layout_width="50dp"
+                            android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="8dp"
                             android:layout_weight="1"/>
 
                     <TextView
@@ -72,10 +72,10 @@
                     <ImageView
                             android:id="@+id/refresh_iv_currency"
                             android:src="@drawable/ic_refresh_black_24dp"
-                            android:layout_width="30dp"
+                            android:layout_width="20dp"
                             android:layout_height="30dp"
                             android:layout_marginRight="6dp"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="8dp"
                             android:layout_weight="1"/>
                 </LinearLayout>
 
