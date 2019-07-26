@@ -38,6 +38,7 @@ class SearchActivity : AppCompatActivity(), SearchListView {
 
     private var recyclerview : RecyclerView? = null
     private var roomRecyclerview : RecyclerView? = null
+    private var recentRecyclerview : RecyclerView? = null
 
     private lateinit var progressDialog : ProgressDialog
 
@@ -66,6 +67,8 @@ class SearchActivity : AppCompatActivity(), SearchListView {
         back_iv.setOnClickListener {
 
             progressDialog.show()
+            recent_tv.visibility = View.VISIBLE
+            recent_recyclerview.visibility = View.VISIBLE
             this.finish()
         }
 
@@ -124,6 +127,18 @@ class SearchActivity : AppCompatActivity(), SearchListView {
         for(services in getServices){
             if(services.title!!.toLowerCase().contains(keyword.toLowerCase())){
                 service.add(services)
+
+                recentRecyclerview = findViewById(R.id.recent_recyclerview)
+                availableServiceAdapter = AvailableServiceAdapter(this, services as ArrayList<Service_List>, object : BranchItemClickListener {
+                    override fun onClicked(id: String) {
+                        val intent = Intent(applicationContext, ServiceDetailActivity::class.java)
+                        intent.putExtra("service_code",id)
+                        startActivity(intent)
+                    }
+                })
+                var layoutManager = GridLayoutManager(this, 1, android.widget.GridLayout.VERTICAL, false)
+                recentRecyclerview!!.setLayoutManager(layoutManager)
+                recentRecyclerview!!.adapter = availableServiceAdapter
             }
         }
 
@@ -195,10 +210,6 @@ class SearchActivity : AppCompatActivity(), SearchListView {
     override fun onStart() {
         super.onStart()
         searchListPresenter.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onStop() {
