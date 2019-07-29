@@ -4,14 +4,14 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import com.example.bank_map_view.network.model.Service_List
-import android.arch.lifecycle.LiveData
+import com.example.bank_map_view.network.model.Recent
 
 @Dao
-interface ServicesDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addServices(services: List<Service_List>) : LongArray
+interface RecentDao {
 
-    @Query("SELECT * FROM service_list")
-    fun getServices() : List<Service_List>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addRecentWord(recent: Recent) : Long
+
+    @Query("SELECT * FROM recent")
+    fun getRecentWords() : List<Recent>
 }

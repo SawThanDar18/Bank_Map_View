@@ -1,7 +1,6 @@
 package com.example.bank_map_view.ui.activities
 
 import android.app.ProgressDialog
-import android.arch.lifecycle.LiveData
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -20,10 +19,13 @@ import com.example.bank_map_view.mvp.presenter.SearchListPresenter
 import com.example.bank_map_view.mvp.view.SearchListView
 import com.example.bank_map_view.network.BranchItemClickListener
 import com.example.bank_map_view.network.ClickListener
+import com.example.bank_map_view.network.model.Recent
 import com.example.bank_map_view.network.model.Service_List
 import com.example.bank_map_view.network.response.SearchResponse
+import com.example.bank_map_view.room.RecentDatabase
 import com.example.bank_map_view.room.ServicesDatabase
 import com.example.bank_map_view.ui.adapter.AvailableServiceAdapter
+import com.example.bank_map_view.ui.adapter.RecentAdapter
 import com.example.bank_map_view.ui.adapter.SearchAdapter
 import kotlinx.android.synthetic.main.search_activity.*
 
@@ -33,8 +35,10 @@ class SearchActivity : AppCompatActivity(), SearchListView {
 
     private lateinit var searchAdapter : SearchAdapter
     private lateinit var availableServiceAdapter: AvailableServiceAdapter
+    private lateinit var recentAdapter: RecentAdapter
 
     private lateinit var servicesDatabase : ServicesDatabase
+    private lateinit var recentDatabase: RecentDatabase
 
     private var recyclerview : RecyclerView? = null
     private var roomRecyclerview : RecyclerView? = null
@@ -67,8 +71,6 @@ class SearchActivity : AppCompatActivity(), SearchListView {
         back_iv.setOnClickListener {
 
             progressDialog.show()
-            recent_tv.visibility = View.VISIBLE
-            recent_recyclerview.visibility = View.VISIBLE
             this.finish()
         }
 
@@ -77,10 +79,13 @@ class SearchActivity : AppCompatActivity(), SearchListView {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH){
 
                     recyclerview!!.visibility = View.VISIBLE
+
                     available_tv!!.visibility = View.GONE
                     roomRecyclerview!!.visibility = View.GONE
 
-                    val value = search.text.toString()
+                    recent_tv.visibility = View.GONE
+
+                    var value = search.text.toString()
                     searchListPresenter.startLoadingSearchList(value)
 
                     return true
@@ -96,6 +101,17 @@ class SearchActivity : AppCompatActivity(), SearchListView {
                 recyclerview!!.visibility = View.GONE
                 available_tv!!.visibility = View.VISIBLE
                 roomRecyclerview!!.visibility = View.VISIBLE
+                recent_tv.visibility = View.VISIBLE
+                //recentRecyclerview!!.visibility = View.VISIBLE
+
+                /*recentDatabase = RecentDatabase.getDatabase(this)
+                var recent : List<Recent> = recentDatabase.getRecentDao().getRecentWords()
+
+                recentRecyclerview = findViewById(R.id.recent_recyclerview)
+                recentAdapter = RecentAdapter(recent as ArrayList<Recent>, this)
+                var layoutManager = GridLayoutManager(this, 1, android.widget.GridLayout.VERTICAL, false)
+                recentRecyclerview!!.setLayoutManager(layoutManager)
+                recentRecyclerview!!.adapter = recentAdapter*/
             }
 
             return@setOnKeyListener false
