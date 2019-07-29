@@ -127,18 +127,6 @@ class SearchActivity : AppCompatActivity(), SearchListView {
         for(services in getServices){
             if(services.title!!.toLowerCase().contains(keyword.toLowerCase())){
                 service.add(services)
-
-                recentRecyclerview = findViewById(R.id.recent_recyclerview)
-                availableServiceAdapter = AvailableServiceAdapter(this, services as ArrayList<Service_List>, object : BranchItemClickListener {
-                    override fun onClicked(id: String) {
-                        val intent = Intent(applicationContext, ServiceDetailActivity::class.java)
-                        intent.putExtra("service_code",id)
-                        startActivity(intent)
-                    }
-                })
-                var layoutManager = GridLayoutManager(this, 1, android.widget.GridLayout.VERTICAL, false)
-                recentRecyclerview!!.setLayoutManager(layoutManager)
-                recentRecyclerview!!.adapter = availableServiceAdapter
             }
         }
 
