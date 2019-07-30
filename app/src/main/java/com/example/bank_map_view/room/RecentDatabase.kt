@@ -13,7 +13,7 @@ abstract class RecentDatabase : RoomDatabase() {
 
     companion object{
 
-        private const val DB_NAME = "recent.db"
+        private const val DB_NAME = "recent_words.db"
         private var INSTANCE : RecentDatabase? = null
 
         fun getDatabase(context: Context) : RecentDatabase{

@@ -56,6 +56,18 @@ class SearchActivity : AppCompatActivity(), SearchListView {
         progressDialog.setMessage("loading")
         progressDialog.setCancelable(false)
 
+        recyclerview = findViewById(R.id.recycler)
+        roomRecyclerview = findViewById(R.id.recycler_service)
+        recentRecyclerview = findViewById(R.id.recent_recyclerview)
+
+        recyclerview!!.visibility = View.INVISIBLE
+
+        available_tv.visibility = View.VISIBLE
+        roomRecyclerview!!.visibility = View.VISIBLE
+
+        recent_tv.visibility = View.VISIBLE
+        recentRecyclerview!!.visibility = View.VISIBLE
+
         searchListPresenter = SearchListPresenter(this)
         searchListPresenter.startLoadingSearchList(search.text.toString())
 
@@ -80,13 +92,18 @@ class SearchActivity : AppCompatActivity(), SearchListView {
 
                     recyclerview!!.visibility = View.VISIBLE
 
-                    available_tv!!.visibility = View.GONE
-                    roomRecyclerview!!.visibility = View.GONE
+                    available_tv!!.visibility = View.INVISIBLE
+                    roomRecyclerview!!.visibility = View.INVISIBLE
 
-                    recent_tv.visibility = View.GONE
+                    recent_tv.visibility = View.INVISIBLE
+                    recentRecyclerview!!.visibility = View.INVISIBLE
 
-                    var value = search.text.toString()
+                    var value = search.text.toString().trim()
                     searchListPresenter.startLoadingSearchList(value)
+
+                    var recent = Recent(value)
+                    var recentDatabase = RecentDatabase.getDatabase(this@SearchActivity)
+                    var addRecent = recentDatabase.getRecentDao().addRecentWord(recent)
 
                     return true
                 }
@@ -98,20 +115,35 @@ class SearchActivity : AppCompatActivity(), SearchListView {
 
         search.setOnKeyListener { v, keyCode, event ->
             if(keyCode == KeyEvent.KEYCODE_DEL){
-                recyclerview!!.visibility = View.GONE
+
+                recyclerview!!.visibility = View.INVISIBLE
+
                 available_tv!!.visibility = View.VISIBLE
                 roomRecyclerview!!.visibility = View.VISIBLE
-                recent_tv.visibility = View.VISIBLE
-                //recentRecyclerview!!.visibility = View.VISIBLE
 
-                /*recentDatabase = RecentDatabase.getDatabase(this)
-                var recent : List<Recent> = recentDatabase.getRecentDao().getRecentWords()
+                recent_tv.visibility = View.VISIBLE
+
+                recentDatabase = RecentDatabase.getDatabase(this)
+                var getRecent = recentDatabase.getRecentDao().getRecentWords()
 
                 recentRecyclerview = findViewById(R.id.recent_recyclerview)
-                recentAdapter = RecentAdapter(recent as ArrayList<Recent>, this)
+                recentAdapter = RecentAdapter(getRecent as ArrayList<Recent>, this, object : BranchItemClickListener{
+                    override fun onClicked(id: String) {
+                        var code = id
+                        search.setText(code)
+
+                        searchListPresenter.startLoadingSearchList(code)
+                        recyclerview!!.visibility = View.VISIBLE
+                        roomRecyclerview!!.visibility = View.INVISIBLE
+                        recent_tv.visibility = View.INVISIBLE
+                        recentRecyclerview!!.visibility = View.INVISIBLE
+                    }
+
+                })
+
                 var layoutManager = GridLayoutManager(this, 1, android.widget.GridLayout.VERTICAL, false)
                 recentRecyclerview!!.setLayoutManager(layoutManager)
-                recentRecyclerview!!.adapter = recentAdapter*/
+                recentRecyclerview!!.adapter = recentAdapter
             }
 
             return@setOnKeyListener false
@@ -197,6 +229,29 @@ class SearchActivity : AppCompatActivity(), SearchListView {
         var layoutManager = GridLayoutManager(this, 1, android.widget.GridLayout.VERTICAL, false)
         roomRecyclerview!!.setLayoutManager(layoutManager)
         roomRecyclerview!!.adapter = availableServiceAdapter
+
+        recentDatabase = RecentDatabase.getDatabase(this)
+        var getRecent = recentDatabase.getRecentDao().getRecentWords()
+
+        if(getRecent.isNotEmpty()){
+            recentRecyclerview = findViewById(R.id.recent_recyclerview)
+            recentAdapter = RecentAdapter(getRecent as ArrayList<Recent>, this, object : BranchItemClickListener{
+                override fun onClicked(id: String) {
+                    var code = id
+                    search.setText(code)
+                    searchListPresenter.startLoadingSearchList(code)
+                    recyclerview!!.visibility = View.VISIBLE
+                    roomRecyclerview!!.visibility = View.INVISIBLE
+                    recent_tv.visibility = View.INVISIBLE
+                    recentRecyclerview!!.visibility = View.INVISIBLE
+                }
+
+            })
+
+            var recentLayoutManager = GridLayoutManager(this, 1, android.widget.GridLayout.VERTICAL, false)
+            recentRecyclerview!!.setLayoutManager(recentLayoutManager)
+            recentRecyclerview!!.adapter = recentAdapter
+        }
     }
 
     override fun showPrompt(message: String) {

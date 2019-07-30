@@ -5,9 +5,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
 import com.example.bank_map_view.R
+import com.example.bank_map_view.network.BranchItemClickListener
 import com.example.bank_map_view.network.model.Recent
 
-class RecentHolder (itemView : View, private val context: Context) : RecyclerView.ViewHolder(itemView){
+class RecentHolder (itemView : View, private val context: Context, private val itemClickListener: BranchItemClickListener) : RecyclerView.ViewHolder(itemView){
 
     private val recent_name : TextView
 
@@ -17,5 +18,9 @@ class RecentHolder (itemView : View, private val context: Context) : RecyclerVie
 
     fun index(recent : Recent){
         recent_name.text = recent.name
+
+        itemView.setOnClickListener{
+            itemClickListener.onClicked(recent.name)
+        }
     }
 }
