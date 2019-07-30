@@ -122,6 +122,7 @@ class SearchActivity : AppCompatActivity(), SearchListView {
                 roomRecyclerview!!.visibility = View.VISIBLE
 
                 recent_tv.visibility = View.VISIBLE
+                recentRecyclerview!!.visibility = View.VISIBLE
 
                 recentDatabase = RecentDatabase.getDatabase(this)
                 var getRecent = recentDatabase.getRecentDao().getRecentWords()
@@ -134,6 +135,7 @@ class SearchActivity : AppCompatActivity(), SearchListView {
 
                         searchListPresenter.startLoadingSearchList(code)
                         recyclerview!!.visibility = View.VISIBLE
+                        available_tv.visibility = View.INVISIBLE
                         roomRecyclerview!!.visibility = View.INVISIBLE
                         recent_tv.visibility = View.INVISIBLE
                         recentRecyclerview!!.visibility = View.INVISIBLE
@@ -241,6 +243,7 @@ class SearchActivity : AppCompatActivity(), SearchListView {
                     search.setText(code)
                     searchListPresenter.startLoadingSearchList(code)
                     recyclerview!!.visibility = View.VISIBLE
+                    available_tv.visibility = View.INVISIBLE
                     roomRecyclerview!!.visibility = View.INVISIBLE
                     recent_tv.visibility = View.INVISIBLE
                     recentRecyclerview!!.visibility = View.INVISIBLE
